@@ -17,9 +17,7 @@ describe 'maestro::lucee_demo_compositions' do
     it "should generate ivy demo composition without sonar goals using install" do
       file_content("antwithivy").should include 'tasks":{"required":true,"type":"Array","value":["install"]}'
     end
-    it "should use the right agent home directory" do
-      file_content("antwithivy").should include '/var/local/maestro-agent/ant.xml'
-
+    it "should use the right working copy directory" do
       file_content("antwithivy").should include '/var/local/maestro-agent/wc'
       file_content("centrepoint").should include '/var/local/maestro-agent/wc'
       file_content("wordpress").should include '/var/local/maestro-agent/wc'

@@ -8,7 +8,9 @@ class maestro::lucee_demo_compositions(
   $jenkins_host = "localhost",
   $jenkins_port = "8181",
   $sonar_host = "localhost",
-  $sonar_port = "9000") {
+  $sonar_port = "9000",
+  $working_copy_dir = "/var/local/maestro-agent/wc",
+  $demo_keypair = "/var/local/maestro-agent/.ssh/lucee-demo-keypair.pem") {
 
   maestro::lucee_demo_composition { 'antwithivy': }
   maestro::lucee_demo_composition { 'centrepoint': }

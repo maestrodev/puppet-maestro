@@ -9,13 +9,9 @@ define maestro::lucee_demo_composition(
   $jenkins_host = $maestro::lucee_demo_compositions::jenkins_host,
   $jenkins_port = $maestro::lucee_demo_compositions::jenkins_port,
   $sonar_host = $maestro::lucee_demo_compositions::sonar_host,
-  $sonar_port = $maestro::lucee_demo_compositions::sonar_port) {
-
-  if defined(Class["agent_module"]) {
-    $agent_home_dir = "${agent_module::run_as_home_real}"
-  } else {
-    $agent_home_dir = "/var/local/maestro-agent"
-  }
+  $sonar_port = $maestro::lucee_demo_compositions::sonar_port,
+  $working_copy_dir = $maestro::lucee_demo_compositions::working_copy_dir,
+  $demo_keypair = $maestro::lucee_demo_compositions::demo_keypair) {
 
   if $use_sonar == undef {
     $sonar = defined(Service['sonar'])
