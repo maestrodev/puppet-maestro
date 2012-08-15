@@ -9,13 +9,16 @@ Simple configuration
 First, declare the variables that will be used across both nodes.
 
 ```
-  $maestro_version = "4.3.2"
-  $maestro_db_password = "..."
+  $maestro_version = '4.3.2'
+  $maestro_db_password = '...'
+  # note that admin password needs to validate against the password rules (letters+numbers by default)
+  $maestro_admin_password = '...'
   $repo = {
-    url => "https://repo.maestrodev.com/archiva/repository/all/",
-    username => "...",
-    password => "...",
+    url      => 'https://repo.maestrodev.com/archiva/repository/all/',
+    username => '...',
+    password => '...',
   }
+  $mail_from = '...'
 ```
 
 On the Maestro node, you'll need Maestro and ActiveMQ:
@@ -24,32 +27,31 @@ On the Maestro node, you'll need Maestro and ActiveMQ:
   include maestro
 
   class { 'maestro::maestro' :
-    repo => $repo,
+    repo               => $repo,
+    admin_password     => $maestro_admin_password,
     db_server_password => $maestro_db_password,
-    basedir => "/var/local/maestro",
-    mail_from => $mail_from,
-    version => $maestro_version,
-    maxmemory => 512,
+    basedir            => '/var/local/maestro',
+    mail_from          => $mail_from,
+    version            => $maestro_version,
+    maxmemory          => 512,
   }
 
   # ActiveMQ
-  class { "activemq":
-    version => "5.5.0",
-    max_memory => "256"
+  class { 'activemq':
+    version    => '5.5.0',
+    max_memory => '256'
   }
 
-  augeas { "configure-activemq":
+  augeas { 'configure-activemq':
     changes => [
-      "rm beans/import",
-      "set beans/broker/transportConnectors/transportConnector/#attribute/name
-stomp+nio",
-      "set beans/broker/transportConnectors/transportConnector/#attribute/uri
-stomp+nio://0.0.0.0:61613?transport.closeAsync=false",
+      'rm beans/import',
+      'set beans/broker/transportConnectors/transportConnector/#attribute/name stomp+nio',
+      'set beans/broker/transportConnectors/transportConnector/#attribute/uri stomp+nio://0.0.0.0:61613?transport.closeAsync=false',
     ],
-    incl => "/opt/activemq/conf/activemq.xml",
-    lens => "Xml.lns",
-    require => File["/opt/activemq"],
-    notify  => Service["activemq"],
+    incl    => '/opt/activemq/conf/activemq.xml',
+    lens    => 'Xml.lns',
+    require => File['/opt/activemq'],
+    notify  => Service['activemq'],
   }
 ```
 
@@ -57,7 +59,7 @@ On the agent node(s), install the agent.
 
 ```
   class { 'maestro::agent':
-    agent_version  => "0.1.6",
+    agent_version  => '0.1.6',
     repo           => $repo,
   }
 ```
