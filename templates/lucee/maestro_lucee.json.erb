@@ -1,0 +1,37 @@
+{
+  <%- if has_variable?('is_demo') -%>
+  "is_demo":<%= is_demo %>,
+  <%- end -%>
+  "lucee": {
+    "log" : {
+      "level": "<%= log_level %>"
+    },
+    <%- if has_variable?('eui') -%>
+    "eui": {
+      "display": <%= eui %>
+    },<%- else -%>
+    "eui": {
+      "display": <%= is_demo %>
+    },<%- end %>
+    "agent_auto_activate": true,
+	"agent_timeout": 300,
+    "username": "maestro",
+    "password": "maestro",
+    "database": {
+      "server": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "user": "<%= db_username %>",
+      "pass": "<%= db_password %>",
+      "database_name": "<%= db_name %>"
+    },
+    "stomp": {
+      "host": "127.0.0.1",
+      "port": 61613,
+      "user": "",
+      "passcode": "",
+      "reliable": true
+    },
+    "internal_agent":<%= scope.lookupvar('maestro::lucee::config::internal_agent') %>
+  }
+}

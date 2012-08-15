@@ -1,0 +1,88 @@
+{
+    "compositions": [
+        {
+            "agent_facts": {}, 
+            "agent_pool_id": null, 
+            "composition_tasks": [
+                {
+                    "composition_id": 8, 
+                    "created_at": "2011-11-16T16:18:16-05:00", 
+                    "id": 119, 
+                    "name": "git clone", 
+                    "options": {"path":{"value":"<%= agent_home_dir %>/wc/hello-ivy","required":true,"type":"String"},"branch":{"value":"master","required":false,"type":"String"},"url":{"value":"https://github.com/maestrodev/hello-ivy.git","required":true,"type":"Url"},"clean_working_copy":{"required":false,"type":"Boolean","value":false}}, 
+                    "position": 1, 
+                    "source": null, 
+                    "task_id": 2, 
+                    "updated_at": "2012-02-10T14:22:43-05:00"
+                }, 
+                {
+                    "composition_id": 8, 
+                    "created_at": "2011-11-16T16:19:23-05:00", 
+                    "id": 120, 
+                    "name": "ant", 
+                    "options": {"environment":{"value":"","required":false,"type":"String"},"path":{"value":"<%= agent_home_dir %>/wc/hello-ivy","required":true,"type":"String"},"tasks":{"value":["<%= "sonar " if sonar %><%= goal %>"],"required":true,"type":"Array"},"propertyfile":{"value":"<%= agent_home_dir %>/ant.xml","required":false,"type":"String"}}, 
+                    "position": 2, 
+                    "source": null, 
+                    "task_id": 26, 
+                    "updated_at": "2012-02-10T14:22:43-05:00"
+                }
+            ], 
+            "created_at": "2011-11-16T16:15:28-05:00", 
+            "description": "Demonstrate an Ant and Ivy project build and deployment", 
+            "fail_type": "fast", 
+            "fail_type_id": 1, 
+            "id": 8, 
+            "name": "Ant with Ivy", 
+            "on_error_composition": null, 
+            "on_error_id": null, 
+            "reuse_agent": true, 
+            "schedule": "", 
+            "sources": [], 
+            "state": null, 
+            "tasks": [
+                {
+                    "code": null, 
+                    "command": "/git/clone", 
+                    "created_at": "2011-08-04T18:31:28-04:00", 
+                    "dependencies": null, 
+                    "description": "Clone A Git Repository <br>[path] Is The Local Path<br>[url] Remote Location Of The Git Repositiory<br>[branch] Branch Of The Repository To Checkout", 
+                    "id": 2, 
+                    "klass": null, 
+                    "language": null, 
+                    "name": "git clone", 
+                    "options": {"path":{"required":true,"type":"String","value":""},"url":{"required":true,"type":"Url","value":""},"branch":{"required":false,"type":"String","value":""},"clean_working_copy":{"required":false,"type":"Boolean","value":false}}, 
+                    "pom": null, 
+                    "position": 1, 
+                    "tool_name": "SCM", 
+                    "type": "remote", 
+                    "updated_at": "2012-02-07T00:29:27-05:00"
+                }, 
+                {
+                    "code": null, 
+                    "command": "/ant/execute", 
+                    "created_at": "2011-10-14T18:31:29-04:00", 
+                    "dependencies": null, 
+                    "description": "Run A Specified Set Of Ant Tasks <br>[path]  Location To Run Ant <br>[tasks] Set Of Ant Tasks <br>[environment] Environment Variables <br>[path] Local Path To Files <br>[propertyfile] Location Of The Ant Property File", 
+                    "id": 26, 
+                    "klass": null, 
+                    "language": null, 
+                    "name": "ant", 
+                    "options": {"path":{"required":true,"type":"String","value":""},"tasks":{"required":true,"type":"Array","value":["<%= "sonar " if sonar %><%= goal %>"]},"environment":{"required":false,"type":"String","value":""},"propertyfile":{"required":false,"type":"String","value":""}}, 
+                    "pom": null, 
+                    "position": 1, 
+                    "tool_name": "Shell", 
+                    "type": "remote", 
+                    "updated_at": "2012-02-07T00:29:31-05:00"
+                }
+            ], 
+            "updated_at": "2012-02-07T00:29:51-05:00"
+        }
+    ], 
+    "created_at": "2011-09-15T18:26:06-04:00", 
+    "description": "Hello-Ivy is a Ant-built Java example project, that gets dependencies with Ivy.", 
+    "home_url": "https://github.com/maestrodev/hello-ivy", 
+    "id": 4, 
+    "name": "Hello_Ivy", 
+    "scm_url": "https://github.com/maestrodev/hello-ivy.git", 
+    "updated_at": "2012-02-07T00:29:51-05:00"
+}
