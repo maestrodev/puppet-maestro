@@ -1,0 +1,34 @@
+{
+"agent": {
+  "log": {
+    "email": {
+      "level": "ERROR",
+      "server": "localhost",
+      "port": 25,
+      "domain": "maestrodev.com",
+      "from": "dev@maestrodev.com",
+      "to": "maestro-commits@maestrodev.com",
+      "authtype": "plain"
+    },
+    "level":"DEBUG"
+  },
+  "name": "<%= agent_name %>",
+  "stomp": {
+<% if has_variable?("stomp_host") and stomp_host != "" -%>
+    "host": "<%= stomp_host %>",
+<% else -%>
+    "host": "<%= fqdn.gsub(/\.agent\w*/,'') %>",
+<% end -%>
+    "port": 61613,
+    "user": "",
+    "passcode": "",
+    "reliable": true
+    },
+    "facts_dir" : "/etc/facts.d",
+<% if has_variable?("facter") and facter == true -%>
+    "facter": true
+<% else -%>
+    "facter": false
+<% end -%>
+  }
+}

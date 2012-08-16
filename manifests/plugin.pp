@@ -1,4 +1,5 @@
-define maestro::plugin($version, $user_home = "/home/maestro") {
+define maestro::plugin($version) {
+  $user_home = $maestro::params::user_home
 
   # If the version is a Maven snapshot, transform the base version to it's
   # SNAPSHOT indicator

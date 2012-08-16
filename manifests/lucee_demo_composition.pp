@@ -31,8 +31,8 @@ define maestro::lucee_demo_composition(
   }
 
   file { "${maestro::maestro::homedir}/apps/lucee/WEB-INF/config/demo/${name}.json":
-    owner   => $maestro::maestro::run_as,
-    group   => $maestro::maestro::run_as,
+    owner   => $maestro::params::user,
+    group   => $maestro::params::group,
     mode    => 644,
     before  => Service['maestro'],
     require => Exec['maestro'],

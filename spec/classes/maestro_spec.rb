@@ -1,24 +1,25 @@
 require 'spec_helper'
 
-DEFAULT_PARAMS = {
-    :db_server_password => 'myserverpassword',
-    :db_password => 'mydbpassword',
-    :admin_password => 'myadminpassword',
-    :repo => {
-        'id' => 'maestro-mirror',
-        'username' => 'u',
-        'password' => 'p',
-        'url' => 'https://repo.maestrodev.com/archiva/repository/all'
-    }
-}
-
 describe 'maestro::maestro' do
+
+  DEFAULT_PARAMS = {
+      :db_server_password => 'myserverpassword',
+      :db_password => 'mydbpassword',
+      :admin_password => 'myadminpassword',
+      :repo => {
+          'id' => 'maestro-mirror',
+          'username' => 'u',
+          'password' => 'p',
+          'url' => 'https://repo.maestrodev.com/archiva/repository/all'
+      }
+  }
+
   let(:params) { DEFAULT_PARAMS }
 
   context "when using a custom home directory" do
-    let(:params) { {
-        :run_as_home => '/var/local/u',
-    }.merge(DEFAULT_PARAMS) }
+    let(:pre_condition) { %Q[
+      class { 'maestro::params': user_home => '/var/local/u' } 
+    ]}
     let(:facts) { {:hostname => 'test-host-name'} }
 
     it { should contain_file('/var/local/u/.maestro/plugins') }
@@ -32,8 +33,10 @@ describe 'maestro::maestro' do
   end
 
   context "when using a custom home directory without lucee" do
+    let(:pre_condition) { %Q[
+      class { 'maestro::params': user_home => '/var/local/u' } 
+    ]}
     let(:params) { {
-        :run_as_home => '/var/local/u',
         :lucee => false
     }.merge(DEFAULT_PARAMS) }
 

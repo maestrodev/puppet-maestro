@@ -1,7 +1,6 @@
 fixtures:
   repositories:
-    wget: git://github.com/maestrodev/puppet-wget.git
-    postgres: git://github.com/maestrodev/puppet-postgres.git
-    agent_module: git://github.com/maestrodev/puppet-agent_module.git
+    wget: http://github.com/maestrodev/puppet-wget.git
+    postgres: http://github.com/maestrodev/puppet-postgres.git
   symlinks:
     maestro: "#{source_dir}"

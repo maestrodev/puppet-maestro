@@ -4,18 +4,16 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $ldap = {}, $enabled = true, $lucee = true,
   $admin = 'admin',
   $admin_password = $maestro_adminpassword,
-  $master_password = 'maestro',
+  $master_password = $maestro_master_password,
+  $db_server_password = $maestro_db_server_password,
+  $db_password = $maestro_db_password,
   $db_version = '',
   $db_allowed_rules = [],
   $db_datadir = '/var/lib/pgsql/data',
-  $db_password = $maestro_db_password,
-  $db_server_password,
   $homedir = "/usr/local/maestro",
-  $basedir = "/var/maestro",
+  $basedir = "/var/local/maestro",
   $is_demo = false,
   $log_level = "UNSET",
-  $run_as = 'maestro',
-  $run_as_home = 'UNSET',
   $initmemory = '512',
   $maxmemory = '1536',
   $permsize = '384m',
@@ -27,15 +25,15 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $mail_from = {
     name    => 'Maestro',
     address => 'info@maestrodev.com'
-  }) {
-
+  }) inherits maestro::params {
+  
   $srcdir = "/usr/local/src"
   $installdir = "/usr/local"
-
+  
   Exec { path => "/bin/:/usr/bin", }
   File {
-    owner => $run_as,
-    group => $run_as,
+    owner => $user,
+    group => $group,
   }
 
   # TODO: put this in a library so it can be reused
@@ -46,13 +44,6 @@ class maestro::maestro( $repo = $maestrodev_repo,
   } else {
     $base_version = $version
   } 
-
-  if $run_as_home == "UNSET" {
-    $run_as_homedir = "/home/${run_as}"
-  }
-  else {
-    $run_as_homedir = $run_as_home
-  }
 
   if $log_level == "UNSET" {
     if $is_demo {
@@ -94,11 +85,11 @@ class maestro::maestro( $repo = $maestrodev_repo,
     } 
 
     # plugin folder
-    file { "$run_as_homedir/.maestro" :
+    file { "$user_home/.maestro" :
       ensure => directory,
-      require => User[$run_as],
+      require => User[$user],
     } ->
-    file { "$run_as_homedir/.maestro/plugins" :
+    file { "$user_home/.maestro/plugins" :
       ensure => directory,
     }
   }
@@ -108,7 +99,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
     password      => $db_server_password,
     db_password   => $db_password,
     allowed_rules => $db_allowed_rules,
-    datadir      => $db_datadir,
+    datadir       => $db_datadir,
   }
 
   wget::authfetch { "fetch-maestro":
@@ -125,8 +116,8 @@ class maestro::maestro( $repo = $maestrodev_repo,
     creates => "$installdir/maestro-$base_version",
     cwd => $installdir,
   } ->
-  exec { "chown -R ${run_as} ${installdir}/maestro-$base_version":
-    require => User[$run_as],
+  exec { "chown -R ${user} ${installdir}/maestro-$base_version":
+    require => User[$user],
   } ->
   file { "$installdir/maestro-$base_version/bin":
     mode => 755,
@@ -178,7 +169,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
     mode    =>  "0600",
     content =>  template("maestro/plexus.xml.erb"),
   } ->
-  exec { "chown -R ${run_as} ${basedir}":
+  exec { "chown -R ${user} ${basedir}":
   } ->
   file { "$basedir/conf/wrapper.conf":
     ensure => link,
@@ -195,7 +186,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
   } ->
   augeas { "update-default-configurations":
     changes => [
-      "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] ${maestro::admin_password}",
+      "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] ${admin_password}",
       "rm default-configuration/users/*[username/#text != 'admin']",
     ],
     incl => "${homedir}/conf/default-configurations.xml",

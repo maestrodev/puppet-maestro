@@ -1,8 +1,9 @@
-class maestro::maestro-test-remote-control( $repo = $maestrodev_repo, $version = '1.0.8.2', $run_as = 'maestro', $master_host = 'localhost' ) {
-
+class maestro::maestro-test-remote-control( $repo = $maestrodev_repo, $version = '1.0.8.2', $master_host = 'localhost' ) {
   $firefox_version = '10'
   $selenium_environment = "Firefox ${firefox_version} on Linux, Firefox ${firefox_version} on Linux, Firefox ${firefox_version} on Linux"
   $installdir = '/usr/local/maestro-test-remote-control'
+  $user = $maestro::params::user
+  $group = $maestro::params::group
 
   wget::authfetch { "fetch-test-remote-control":
     user => $repo['username'],
@@ -18,8 +19,8 @@ class maestro::maestro-test-remote-control( $repo = $maestrodev_repo, $version =
   } ->
 
   file { "/var/maestro-test-remote-control/conf/wrapper.conf":
-    owner   =>  $run_as,
-    group   =>  $run_as,
+    owner   =>  $user,
+    group   =>  $group,
     mode    =>  "0644",
     content =>  template("maestro/test/remote-control-wrapper.erb"),
   } ->
@@ -50,7 +51,7 @@ class maestro::maestro-test-remote-control( $repo = $maestrodev_repo, $version =
   exec { "/usr/bin/xhost +":
     alias       => "xhost",
     environment => "DISPLAY=:0.0",
-    user        =>  $run_as,
+    user        =>  $user,
     unless      =>  "/bin/ps -fea | grep Xvfb",
   } ->
   exec { "/usr/bin/Xvfb :0 -screen 0 800x600x16 &":

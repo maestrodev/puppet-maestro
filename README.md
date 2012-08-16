@@ -10,15 +10,21 @@ First, declare the variables that will be used across both nodes.
 
 ```
   $maestro_version = '4.3.2'
-  $maestro_db_password = '...'
+  $agent_version   = '0.1.6'
+  
+  # Choose the following passwords as you wish  
   # note that admin password needs to validate against the password rules (letters+numbers by default)
-  $maestro_admin_password = '...'
+  $maestro_db_server_password = '...'   # Password on the Postgres admin user
+  $maestro_db_password        = '...'   # Password on the Maestro database user
+  $maestro_master_password    = '...'   # Password used to encrypt other passwords
+  $maestro_admin_password     = '...'   # Initial Maestro administrator user password
+  
+  # Use credentials provided by MaestroDev for trial / subscription
   $repo = {
     url      => 'https://repo.maestrodev.com/archiva/repository/all/',
     username => '...',
     password => '...',
   }
-  $mail_from = '...'
 ```
 
 On the Maestro node, you'll need Maestro and ActiveMQ:
@@ -27,20 +33,12 @@ On the Maestro node, you'll need Maestro and ActiveMQ:
   include maestro
 
   class { 'maestro::maestro' :
-    repo               => $repo,
-    admin_password     => $maestro_admin_password,
-    db_server_password => $maestro_db_password,
-    basedir            => '/var/local/maestro',
-    mail_from          => $mail_from,
-    version            => $maestro_version,
-    maxmemory          => 512,
+    repo      => $repo,
+    version   => $maestro_version,
   }
 
-  # ActiveMQ
-  class { 'activemq':
-    version    => '5.5.0',
-    max_memory => '256'
-  }
+  # ActiveMQ, with Stomp connector enabled
+  include activemq
 
   augeas { 'configure-activemq':
     changes => [
@@ -59,8 +57,8 @@ On the agent node(s), install the agent.
 
 ```
   class { 'maestro::agent':
-    agent_version  => '0.1.6',
     repo           => $repo,
+    agent_version  => $agent_version,
   }
 ```
 
