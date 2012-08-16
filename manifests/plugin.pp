@@ -1,6 +1,8 @@
 define maestro::plugin($version) {
   $user_home = $maestro::params::user_home
 
+  Exec { path => "/bin:/usr/bin" }
+
   # If the version is a Maven snapshot, transform the base version to it's
   # SNAPSHOT indicator
   if $version =~ /^(.*)-[0-9]{8}\.[0-9]{6}-[0-9]+$/ {
