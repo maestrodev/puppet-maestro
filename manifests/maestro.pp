@@ -22,6 +22,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $lucee_url = "http://localhost:8080/lucee/api/v0/",
   $lucee_password = "maestro",
   $lucee_username = "maestro",
+  $jetty_forwarded = $::jetty_forwarded,
   $mail_from = {
     name    => 'Maestro',
     address => 'info@maestrodev.com'

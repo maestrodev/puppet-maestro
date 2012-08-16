@@ -16,6 +16,13 @@ describe 'maestro::maestro' do
 
   let(:params) { DEFAULT_PARAMS }
 
+  context "when using defaults" do
+    it "should not enable fowarding in jetty.xml" do                                  
+      content = catalogue.resource("file", "/var/local/maestro/conf/jetty.xml").send(:parameters)[:content]
+      content.should_not =~ %r[<Set name="forwarded">true</Set>]                      
+    end 
+  end
+
   context "when using a custom home directory" do
     let(:pre_condition) { %Q[
       class { 'maestro::params': user_home => '/var/local/u' } 
@@ -97,5 +104,15 @@ describe 'maestro::maestro' do
       content.should =~ %r["is_demo":false]
       content.should =~ %r["level": "ERROR"]
     end
+  end
+
+  context "when using a reverse proxy" do
+    let(:params) { { 
+      :jetty_forwarded => true
+    }.merge(DEFAULT_PARAMS) }
+    it "should enable fowarding in jetty.xml" do                                  
+      content = catalogue.resource("file", "/var/local/maestro/conf/jetty.xml").send(:parameters)[:content]
+      content.should =~ %r[<Set name="forwarded">true</Set>]                      
+    end 
   end
 end
