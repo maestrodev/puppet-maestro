@@ -12,10 +12,6 @@ class maestro::lucee_demo_compositions(
   $working_copy_dir = "/var/local/maestro-agent/wc",
   $demo_keypair = "/var/local/maestro-agent/.ssh/lucee-demo-keypair.pem") {
 
-  class { 'maestro::logging':
-    level => 'DEBUG',
-  }
-
   augeas { 'maestro-demo':
     changes => [
       'set dict/entry[.="is_demo"]/const true',
