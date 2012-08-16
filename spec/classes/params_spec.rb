@@ -9,7 +9,8 @@ describe 'maestro::params' do
     let(:params) { {
         :user => 'u'
     } }
-    it { should contain_user("u").with_home("/var/local/u") }
+    #it { should contain_user("u").with_home("/var/local/u") }
+    it { should contain_user("u").with_home("/var/local/maestro") }
   end
 
   context "when using custom username and home directory" do
