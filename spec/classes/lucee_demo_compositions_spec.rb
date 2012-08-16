@@ -8,7 +8,6 @@ describe 'maestro::lucee_demo_compositions' do
   end
 
   context "when using demo compositions" do
-    it { should contain_augeas("maestro-logging").with_changes(/ DEBUG$/)}
     it { should contain_augeas("maestro-demo").with_changes(/ true$/)}
   end
 
