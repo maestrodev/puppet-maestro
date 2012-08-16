@@ -30,6 +30,8 @@ First, declare the variables that will be used across both nodes.
 On the Maestro node, you'll need Maestro and ActiveMQ:
 
 ```
+  class { java: distribution => 'java-1.6.0-openjdk' }
+
   include maestro
 
   class { 'maestro::maestro' :
@@ -56,11 +58,17 @@ On the Maestro node, you'll need Maestro and ActiveMQ:
 On the agent node(s), install the agent.
 
 ```
+  class { java: distribution => 'java-1.6.0-openjdk-devel' }
+
   class { 'maestro::agent':
     repo           => $repo,
     agent_version  => $agent_version,
   }
 ```
+
+(The -devel alternate packaging is only needed if you are developing Java
+software that will build on the agent. If not, you can use
+java-1.6.0-openjdk).
 
 You can then proceed to install other software as needed on the nodes - for
 example Jenkins, Archiva and Sonar on the Maestro node (or standalone nodes
