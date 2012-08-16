@@ -17,7 +17,7 @@ First, declare the variables that will be used across both nodes.
   $maestro_db_server_password = '...'   # Password on the Postgres admin user
   $maestro_db_password        = '...'   # Password on the Maestro database user
   $maestro_master_password    = '...'   # Password used to encrypt other passwords
-  $maestro_admin_password     = '...'   # Initial Maestro administrator user password
+  $maestro_adminpassword      = '...'   # Initial Maestro administrator user password
   
   # Use credentials provided by MaestroDev for trial / subscription
   $repo = {
