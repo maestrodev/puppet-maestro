@@ -70,9 +70,12 @@ On the agent node(s), install the agent.
 software that will build on the agent. If not, you can use
 java-1.6.0-openjdk).
 
-You will need a user authentication source. LDAP can be configured, or
-Maestro can share the user store for Archiva (which is often set up as an
-artifact repository). Install Archiva on the Maestro node:
+You can then proceed to install other software as needed on the nodes - for
+example Jenkins, Archiva or Sonar on the Maestro node (or standalone nodes if
+required), and Maven, rake, and CI agents on the agent nodes.
+
+For example, the following installs Archiva, sharing the user database with
+Maestro:
 
 ```
   $jdbc_driver_url = "${repo['url']}/postgresql/postgresql/8.4-702.jdbc3/postgresql-8.4-702.jdbc3.jar"
@@ -93,6 +96,4 @@ artifact repository). Install Archiva on the Maestro node:
   }
 ```
 
-You can then proceed to install other software as needed on the nodes - for
-example Jenkins and Sonar on the Maestro node (or standalone nodes if
-required), and Maven, rake, and CI agents on the agent nodes.
+Other modules describe how to install that particular package.
