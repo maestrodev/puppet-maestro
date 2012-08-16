@@ -53,6 +53,9 @@ On the Maestro node, you'll need Maestro and ActiveMQ:
     require => File['/opt/activemq'],
     notify  => Service['activemq'],
   }
+
+  # demo compositions
+  class { 'maestro::lucee_demo_compositions': }
 ```
 
 On the agent node(s), install the agent.
