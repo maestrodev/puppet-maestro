@@ -12,8 +12,6 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $db_datadir = '/var/lib/pgsql/data',
   $homedir = "/usr/local/maestro",
   $basedir = "/var/local/maestro",
-  $is_demo = false,
-  $log_level = "UNSET",
   $initmemory = '512',
   $maxmemory = '1536',
   $permsize = '384m',
@@ -46,17 +44,6 @@ class maestro::maestro( $repo = $maestrodev_repo,
     $base_version = $version
   } 
 
-  if $log_level == "UNSET" {
-    if $is_demo {
-      $log_level_real = "DEBUG"
-    } else {
-      $log_level_real = "INFO"
-    }
-  }
-  else {
-    $log_level_real = $log_level
-  }
-
   if $lucee {
     package { [ 'libxslt-devel', 'libxml2-devel' ]: ensure => installed }
 
@@ -74,8 +61,6 @@ class maestro::maestro( $repo = $maestrodev_repo,
       require        => Package[ 'libxslt-devel', 'libxml2-devel' ],
       before         => Service['maestro'],
       eui            => true,
-      is_demo        => $is_demo,
-      log_level      => $log_level_real,
     }
 
     file { "${basedir}/lucee-lib.json":

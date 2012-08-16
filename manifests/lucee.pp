@@ -2,8 +2,6 @@ class maestro::lucee(
   $db_username = 'maestro',
   $db_password = 'maestro',
   $db_name = 'luceedb',
-  $is_demo = false,
-  $log_level = "INFO",
   $eui = false ) {
 
   file { '/etc/maestro_lucee.json':

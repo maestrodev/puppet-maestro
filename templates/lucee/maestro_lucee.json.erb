@@ -1,10 +1,8 @@
 {
-  <%- if has_variable?('is_demo') -%>
-  "is_demo":<%= is_demo %>,
-  <%- end -%>
+  "is_demo":false,
   "lucee": {
     "log" : {
-      "level": "<%= log_level %>"
+      "level": "INFO"
     },
     <%- if has_variable?('eui') -%>
     "eui": {
