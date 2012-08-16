@@ -1,9 +1,9 @@
 class maestro::params(
   $user = 'maestro',
-  $group = $user,
-  $user_home = "/var/local/$user", 
+  $group = 'maestro',
+  $user_home = "/var/local/maestro", 
   $agent_user = "maestro_agent",
-  $agent_group = $agent_user,
+  $agent_group = "maestro_agent",
   $agent_user_home = "/var/local/maestro-agent") {
   
   if ! defined(User[$user]) {
