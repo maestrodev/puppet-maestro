@@ -40,19 +40,8 @@ On the Maestro node, you'll need Maestro and ActiveMQ:
   }
 
   # ActiveMQ, with Stomp connector enabled
-  include activemq
-
-  augeas { 'configure-activemq':
-    changes => [
-      'rm beans/import',
-      'set beans/broker/transportConnectors/transportConnector/#attribute/name stomp+nio',
-      'set beans/broker/transportConnectors/transportConnector/#attribute/uri stomp+nio://0.0.0.0:61613?transport.closeAsync=false',
-    ],
-    incl    => '/opt/activemq/conf/activemq.xml',
-    lens    => 'Xml.lns',
-    require => File['/opt/activemq'],
-    notify  => Service['activemq'],
-  }
+  class { 'activemq': }
+  class { 'activemq::stomp': }
 
   # demo compositions
   class { 'maestro::lucee_demo_compositions': }
