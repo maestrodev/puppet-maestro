@@ -9,6 +9,6 @@ class maestro::lucee(
     group   => root,
     content => template('maestro/lucee/maestro_lucee.json.erb'),
     notify  => Service['maestro'],
-    require => Package['maestro'],
+    require => Exec['maestro'],
   }
 }
