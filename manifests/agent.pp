@@ -113,8 +113,8 @@ class maestro::agent( $repo = $maestrodev_repo,
     content => "${timestamp_version}\n",
   } ->
   # Touch the installation package even if current, so that it isn't deleted
-  #exec { "touch $srcdir/agent-${timestamp_version}-bin.tar.gz":
-  #} ->
+  exec { "touch $srcdir/agent-${timestamp_version}-bin.tar.gz":
+  }# ->
   #tidy { "tidy-agents":
     #age => "1d",
     #matches => "agent-*",
