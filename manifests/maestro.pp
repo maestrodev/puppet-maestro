@@ -28,7 +28,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $installdir = "/usr/local"
   # These are no longer class parameters because the RPM has those as hard-coded values.
   $homedir = "/usr/local/maestro"
-  $basedir = "/var/maestro"
+  $basedir = "/var/local/maestro"
   
   Exec { path => "/bin/:/usr/bin", }
   File {
