@@ -39,6 +39,11 @@ class maestro::maestro-postgres(
     postgres::createdb { "archiva":owner=> "maestro", require => Postgres::Createuser["maestro"], } ->
     postgres::createdb { "sonar":owner=> "maestro", require => Postgres::Createuser["maestro"], }
 
+    # set the db password in maestro_lucee.json
+    class { 'maestro::lucee::db':
+      password => $db_password,
+    }
+
   }
   else {
     service { postgresql:

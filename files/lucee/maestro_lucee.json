@@ -4,24 +4,20 @@
     "log" : {
       "level": "INFO"
     },
-    <%- if has_variable?('eui') -%>
     "eui": {
-      "display": <%= eui %>
-    },<%- else -%>
-    "eui": {
-      "display": false
-    },<%- end %>
+      "display": true
+    },
     "agent_auto_activate": true,
-	"agent_timeout": 300,
+	  "agent_timeout": 300,
     "username": "maestro",
     "password": "maestro",
     "database": {
       "server": "postgres",
       "host": "localhost",
       "port": 5432,
-      "user": "<%= db_username %>",
-      "pass": "<%= db_password %>",
-      "database_name": "<%= db_name %>"
+      "user": "maestro",
+      "pass": "maestro",
+      "database_name": "luceedb"
     },
     "stomp": {
       "host": "127.0.0.1",
@@ -30,6 +26,6 @@
       "passcode": "",
       "reliable": true
     },
-    "internal_agent":<%= scope.lookupvar('maestro::lucee::config::internal_agent') %>
+    "internal_agent": false
   }
 }

@@ -47,20 +47,9 @@ class maestro::maestro( $repo = $maestrodev_repo,
   if $lucee {
     package { [ 'libxslt-devel', 'libxml2-devel' ]: ensure => installed }
 
-    if !defined(Class['maestro::lucee::config']) {
-      # set lucee config defaults if not set already
-      class { 'maestro::lucee::config':
-        before => Class['maestro::lucee'],
-      }
-    }
-
     class { 'maestro::lucee':
-      db_username    => 'maestro',
-      db_password    => $db_password,
-      db_name        => 'luceedb',
-      require        => Package[ 'libxslt-devel', 'libxml2-devel' ],
-      before         => Service['maestro'],
-      eui            => true,
+      require => Package[ 'libxslt-devel', 'libxml2-devel' ],
+      before  => Service['maestro'],
     }
 
     file { "${basedir}/lucee-lib.json":
