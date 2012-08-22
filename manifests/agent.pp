@@ -109,12 +109,12 @@ class maestro::agent( $repo = $maestrodev_repo,
     content => template("maestro/agent/maestro-agent.erb"),
   }
 
-  exec { "echo $timestamp_version >$srcdir/maestro-agent.version":
-    require => Exec[agent],
-  } ->
+  file { "$srcdir/maestro-agent.version":
+    content => "${timestamp_version}\n",
+  }
   # Touch the installation package even if current, so that it isn't deleted
-  exec { "touch $srcdir/agent-${timestamp_version}-bin.tar.gz":
-  }# ->
+#  exec { "touch $srcdir/agent-${timestamp_version}-bin.tar.gz":
+ # } ->
   #tidy { "tidy-agents":
     #age => "1d",
     #matches => "agent-*",
