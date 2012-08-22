@@ -67,7 +67,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
     file { "${basedir}/lucee-lib.json":
       mode    =>  "0600",
       content =>  template("maestro/lucee-lib.json.erb"),
-      require => Package["maestro"],
+      require => Exec["maestro"],
       notify  => Service[maestro],
     } 
 
