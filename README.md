@@ -89,3 +89,33 @@ Maestro:
 ```
 
 Other modules describe how to install that particular package.
+
+Installing plugins
+------------------
+Plugins can be installed from the Maestro Web UI or be automatically installed using the `maestro::plugin` definition in Puppet.
+
+For example to install some common plugins, add this to the Maestro node.
+
+```
+  maestro::plugin { 'maestro-irc-plugin':
+    version => '1.1-20120524.074920-16',
+  }
+  maestro::plugin { 'maestro-continuum-plugin':
+    version => '1.2',
+  }
+  maestro::plugin { 'maestro-scm-plugin':
+    version => '1.0-20120710.051326-11',
+  }
+  maestro::plugin { 'maestro-jenkins-plugin':
+    version => '1.0-20120727.034606-12',
+  }
+  maestro::plugin { 'maestro-bamboo-plugin':
+    version => '1.0-20120706.180758-20',
+  }
+  maestro::plugin { 'maestro-bamboo-plugin':
+    version => '1.0-20120706.180758-20',
+  }
+  maestro::plugin { 'maestro-fog-plugin':
+    version => '1.0-20120718.205852-1',
+  }
+```
