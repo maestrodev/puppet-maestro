@@ -1,4 +1,34 @@
-# note that admin_password needs to validate against the password rules (letters+numbers by default)
+# This class is used to install and configure the Maestro server.
+#
+#  Note that admin_password needs to validate against the password rules (letters+numbers by default)
+#
+# ==Parameters
+#
+# [repo]  A hash containing the artifact repository URL and credentials.
+# [version] The version to install
+# [package_type] Selects the type of package to use for the install. Either rpm, or tarball.
+# [ldap] A hash containing the LDAP connection parameters. hostname, ssl, port, dn, bind_dn, bind_password, admin_user
+# [enabled] Enables/disables the service
+# [lucee] Set to true to install lucee locally.
+# [admin] the maestro admin user
+# [admin_password] the maestro admin user password
+# [master_password] the master password
+# [db_server_password] the database server password
+# [db_password] the database user password
+# [db_version] the PostgreSQL version.
+# [db_allowed_rules] an array used to configure PostgreSQL access control.
+# [db_datadir] the data directory used by PostgreSQL
+# [initmemory] configures the initial memory for the JVM running Maestro
+# [maxmemory] configures the max memory for the JVM running Maestro
+# [permsize] configures the initial permsize for the JVM running Maestro
+# [maxpermsize] configures the max permsize for the JVM running Maestro
+# [port] the port maestro should be configured to listen on.
+# [lucee_url] the URL for the LUCEE API
+# [lucee_password] the lucee user password
+# [lucee_username] the lucee user name
+# [jetty_forwarded] set to true to indicate that jetty is being forwarded by a proxy.
+# [mail_from] A hash containing the origin information for emails sent by maestro. name, address.
+#
 class maestro::maestro( $repo = $maestrodev_repo,
   $version = $maestro_version,
   $package_type = 'tarball',
