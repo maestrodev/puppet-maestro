@@ -9,7 +9,28 @@
                     "created_at": "2011-10-10T17:51:37-04:00", 
                     "id": 32, 
                     "name": "svn checkout", 
-                    "options": {"path":{"value":"<%= working_copy_dir %>/wordpress","type":"String","required":true},"url":{"value":"http://core.svn.wordpress.org/trunk/","type":"Url","required":true},"options":{"required":false,"type":"String","value":""},"clean_working_copy":{"required":false,"type":"Boolean","value":false}}, 
+                    "options": {
+                        "clean_working_copy": {
+                            "required": false, 
+                            "type": "Boolean", 
+                            "value": false
+                        }, 
+                        "options": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/wordpress"
+                        }, 
+                        "url": {
+                            "required": true, 
+                            "type": "Url", 
+                            "value": "http://core.svn.wordpress.org/trunk/"
+                        }
+                    }, 
                     "position": 1, 
                     "source": null, 
                     "task_id": 5, 
@@ -20,7 +41,28 @@
                     "created_at": "2011-10-10T18:13:39-04:00", 
                     "id": 33, 
                     "name": "zip", 
-                    "options": {"path":{"value":"<%= working_copy_dir %>/wordpress","type":"String","required":true},"filename":{"value":"wordpress","type":"String","required":true},"type":{"value":"zip","type":"String","required":true},"destination":{"value":"<%= working_copy_dir %>","type":"String","required":true}}, 
+                    "options": {
+                        "destination": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>"
+                        }, 
+                        "filename": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "wordpress"
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/wordpress"
+                        }, 
+                        "type": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "zip"
+                        }
+                    }, 
                     "position": 2, 
                     "source": null, 
                     "task_id": 15, 
@@ -31,7 +73,95 @@
                     "created_at": "2012-02-08T15:51:57-05:00", 
                     "id": 135, 
                     "name": "ec2 provision", 
-                    "options": {"provision_command":{"value":"","type":"String","required":false},"private_key_path":{"value":"config/lucee-demo-keypair.pem","type":"String","required":false},"flavor_id":{"value":"t1.micro","type":"String","required":true},"availability_zone":{"value":"us-east-1a","type":"String","required":true},"bootstrap":{"value":"","type":"String","required":false},"key_name":{"value":"lucee-demo-keypair","type":"String","required":true},"ssh_commands":{"value":["ls"],"type":"Array","required":false},"hostname":{"value":"","type":"String","required":false},"ssh_user":{"value":"root","type":"String","required":true},"type":{"value":"AWS","type":"String","required":true},"image_id":{"value":"ami-d7e925be","type":"String","required":true},"key_id":{"value":"<%= ec2_key_id %>","type":"Password","required":true},"user_data":{"value":"","type":"String","required":false},"deprovision_command":{"value":"","type":"String","required":false},"domain":{"value":"demo","type":"String","required":true},"key":{"value":"<%= ec2_key %>","type":"Password","required":true},"groups":{"value":"quick-start-1","type":"String","required":true}}, 
+                    "options": {
+                        "availability_zone": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "us-east-1a"
+                        }, 
+                        "bootstrap": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "deprovision_command": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "domain": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "demo"
+                        }, 
+                        "flavor_id": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "t1.micro"
+                        }, 
+                        "groups": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "quick-start-1"
+                        }, 
+                        "hostname": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "image_id": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "ami-d7e925be"
+                        }, 
+                        "key": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key %>"
+                        }, 
+                        "key_id": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key_id %>"
+                        }, 
+                        "key_name": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "lucee-demo-keypair"
+                        }, 
+                        "private_key_path": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "config/lucee-demo-keypair.pem"
+                        }, 
+                        "provision_command": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "ssh_commands": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "ls"
+                            ]
+                        }, 
+                        "ssh_user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }, 
+                        "type": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "AWS"
+                        }, 
+                        "user_data": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "position": 3, 
                     "source": null, 
                     "task_id": 18, 
@@ -42,7 +172,38 @@
                     "created_at": "2011-10-11T19:16:41-04:00", 
                     "id": 37, 
                     "name": "scp upload", 
-                    "options": {"host":{"value":"#{fields[:instance_dns]}","type":"String","required":true},"remote_path":{"value":"/tmp","type":"String","required":true},"path":{"value":"<%= working_copy_dir %>/wordpress.zip","type":"String","required":true},"key_type":{"value":"","type":"String","required":false},"user":{"value":"root","type":"String","required":true},"key_path":{"value":"<%= demo_keypair %>","type":"String","required":true}}, 
+                    "options": {
+                        "host": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/wordpress.zip"
+                        }, 
+                        "remote_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "/tmp"
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 4, 
                     "source": null, 
                     "task_id": 25, 
@@ -53,7 +214,37 @@
                     "created_at": "2011-10-10T21:18:49-04:00", 
                     "id": 34, 
                     "name": "ssh execute (agent)", 
-                    "options": {"host":{"value":"#{fields[:instance_dns]}","type":"String","required":false},"commands":{"value":["rm -rf /var/www/html/*","unzip -o /tmp/wordpress.zip","mv wordpress/* /var/www/html"],"type":"Array","required":true},"key_type":{"value":"","type":"String","required":false},"user":{"value":"root","type":"String","required":true},"key_path":{"value":"<%= demo_keypair %>","type":"String","required":true}}, 
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "rm -rf /var/www/html/*", 
+                                "unzip -o /tmp/wordpress.zip", 
+                                "mv wordpress/* /var/www/html"
+                            ]
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 5, 
                     "source": null, 
                     "task_id": 23, 
@@ -64,7 +255,38 @@
                     "created_at": "2011-10-11T17:59:42-04:00", 
                     "id": 35, 
                     "name": "ssh execute (agent)", 
-                    "options": {"host":{"value":"#{fields[:instance_dns]}","type":"String","required":false},"commands":{"value":["mkdir /var/www/html/wp-content/uploads /var/www/html/wp-content/cache","chown apache:apache /var/www/html/wp-content/uploads /var/www/html/wp-content/cache","cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php","chcon -R -t httpd_sys_content_t /var/www/html"],"type":"Array","required":true},"key_type":{"value":"","type":"String","required":false},"user":{"value":"root","type":"String","required":true},"key_path":{"value":"<%= demo_keypair %>","type":"String","required":true}}, 
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "mkdir /var/www/html/wp-content/uploads /var/www/html/wp-content/cache", 
+                                "chown apache:apache /var/www/html/wp-content/uploads /var/www/html/wp-content/cache", 
+                                "cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php", 
+                                "chcon -R -t httpd_sys_content_t /var/www/html"
+                            ]
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 6, 
                     "source": null, 
                     "task_id": 23, 
@@ -75,7 +297,37 @@
                     "created_at": "2011-10-11T18:07:25-04:00", 
                     "id": 36, 
                     "name": "ssh execute (agent)", 
-					"options": {"host":{"value":"#{fields[:instance_dns]}","type":"String","required":false},"commands":{"value":["sed -i -e \"s@password_here@wordpress@\" /var/www/html/wp-config.php","sed -i -e \"s@username_here@wordpress@\" /var/www/html/wp-config.php","sed -i -e \"s@database_name_here@wordpress@\" /var/www/html/wp-config.php"],"type":"Array","required":true},"key_type":{"value":"","type":"String","required":false},"user":{"value":"root","type":"String","required":true},"key_path":{"value":"<%= demo_keypair %>","type":"String","required":true}},                   
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "sed -i -e \"s@password_here@wordpress@\" /var/www/html/wp-config.php", 
+                                "sed -i -e \"s@username_here@wordpress@\" /var/www/html/wp-config.php", 
+                                "sed -i -e \"s@database_name_here@wordpress@\" /var/www/html/wp-config.php"
+                            ]
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 7, 
                     "source": null, 
                     "task_id": 23, 
@@ -86,7 +338,18 @@
                     "created_at": "2011-10-11T19:42:49-04:00", 
                     "id": 38, 
                     "name": "confirmation", 
-                    "options": {"body":{"value":"Validation complete of <a href=http://#{fields[:instance_dns]}:#{fields[:port]}#{fields[:web_path]}>http://#{fields[:instance_dns]}:#{fields[:port]}#{fields[:web_path]}</a>?","type":"String","required":true},"fail_on_cancel":{"value":false,"type":"Boolean","required":false}}, 
+                    "options": {
+                        "body": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "Validation complete of <a href=http://#{fields[:instance_dns]}:#{fields[:port]}#{fields[:web_path]}>http://#{fields[:instance_dns]}:#{fields[:port]}#{fields[:web_path]}</a>?"
+                        }, 
+                        "fail_on_cancel": {
+                            "required": false, 
+                            "type": "Boolean", 
+                            "value": false
+                        }
+                    }, 
                     "position": 9, 
                     "source": null, 
                     "task_id": 7, 
@@ -97,7 +360,35 @@
                     "created_at": "2012-02-08T16:14:22-05:00", 
                     "id": 147, 
                     "name": "ec2 deprovision", 
-                    "options": {"key_name":{"value":"lucee-demo-keypair","required":true,"type":"String"},"ssh_commands":{"value":["ls"],"required":true,"type":"Array"},"ssh_user":{"value":"root","required":true,"type":"String"},"key_id":{"value":"<%= ec2_key_id %>","required":true,"type":"Password"},"key":{"value":"<%= ec2_key %>","required":true,"type":"Password"}}, 
+                    "options": {
+                        "key": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key %>"
+                        }, 
+                        "key_id": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key_id %>"
+                        }, 
+                        "key_name": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "lucee-demo-keypair"
+                        }, 
+                        "ssh_commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "ls"
+                            ]
+                        }, 
+                        "ssh_user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 10, 
                     "source": null, 
                     "task_id": 19, 
@@ -110,7 +401,7 @@
             "fail_type_id": 1, 
             "id": 2, 
             "name": "Wordpress", 
-            "on_error_composition":null, 
+            "on_error_composition": null, 
             "on_error_id": null, 
             "reuse_agent": true, 
             "schedule": "", 
@@ -127,7 +418,28 @@
                     "klass": null, 
                     "language": null, 
                     "name": "svn checkout", 
-                    "options": {"path":{"required":true,"type":"String","value":""},"url":{"required":true,"type":"Url","value":""},"options":{"required":false,"type":"String","value":""},"clean_working_copy":{"required":false,"type":"Boolean","value":false}}, 
+                    "options": {
+                        "clean_working_copy": {
+                            "required": false, 
+                            "type": "Boolean", 
+                            "value": false
+                        }, 
+                        "options": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "url": {
+                            "required": true, 
+                            "type": "Url", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "SCM", 
@@ -144,7 +456,13 @@
                     "klass": null, 
                     "language": null, 
                     "name": "confirmation", 
-                    "options": {"body":{"required":true,"type":"String","value":""}}, 
+                    "options": {
+                        "body": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "Actions", 
@@ -161,7 +479,28 @@
                     "klass": null, 
                     "language": null, 
                     "name": "zip", 
-                    "options": {"type":{"required":true,"type":"String","value":"zip"},"path":{"required":true,"type":"String","value":""},"destination":{"required":true,"type":"String","value":""},"filename":{"required":true,"type":"String","value":""}}, 
+                    "options": {
+                        "destination": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "filename": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "type": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "zip"
+                        }
+                    }, 
                     "pom": null, 
                     "position": 5, 
                     "tool_name": "Package", 
@@ -178,7 +517,33 @@
                     "klass": null, 
                     "language": null, 
                     "name": "ssh execute (agent)", 
-                    "options": {"host":{"required":false,"type":"String","value":"localhost"},"user":{"required":true,"type":"String","value":""},"key_path":{"required":true,"type":"String","value":""},"key_type":{"required":false,"type":"String","value":""},"commands":{"required":true,"type":"Array","value":[]}}, 
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": []
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "localhost"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "Shell", 
@@ -195,7 +560,38 @@
                     "klass": null, 
                     "language": null, 
                     "name": "scp upload", 
-                    "options": {"host":{"required":true,"type":"String","value":"localhost"},"user":{"required":true,"type":"String","value":""},"key_path":{"required":true,"type":"String","value":""},"key_type":{"required":false,"type":"String","value":""},"path":{"required":true,"type":"String","value":""},"remote_path":{"required":true,"type":"String","value":""}}, 
+                    "options": {
+                        "host": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "localhost"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "remote_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "Shell", 

@@ -9,7 +9,28 @@
                     "created_at": "2011-10-14T15:39:34-04:00", 
                     "id": 4, 
                     "name": "svn checkout", 
-                    "options": {"path":{"value":"<%= working_copy_dir %>/redmine","required":true,"type":"String"},"url":{"value":"http://redmine.rubyforge.org/svn/tags/1.2.0/","required":true,"type":"Url"},"options":{"required":false,"type":"String","value":""},"clean_working_copy":{"required":false,"type":"Boolean","value":false}}, 
+                    "options": {
+                        "clean_working_copy": {
+                            "required": false, 
+                            "type": "Boolean", 
+                            "value": false
+                        }, 
+                        "options": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/redmine"
+                        }, 
+                        "url": {
+                            "required": true, 
+                            "type": "Url", 
+                            "value": "http://redmine.rubyforge.org/svn/tags/1.2.0/"
+                        }
+                    }, 
                     "position": 1, 
                     "source": null, 
                     "task_id": 5, 
@@ -20,7 +41,18 @@
                     "created_at": "2011-10-14T15:41:02-04:00", 
                     "id": 5, 
                     "name": "shell execute", 
-                    "options": {"command_string":{"value":"cp <%= working_copy_dir %>/redmine/config/database.yml.example <%= working_copy_dir %>/redmine/config/database.yml","required":true,"type":"String"},"environment":{"required":false,"type":"String","value":""}}, 
+                    "options": {
+                        "command_string": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "cp <%= working_copy_dir %>/redmine/config/database.yml.example <%= working_copy_dir %>/redmine/config/database.yml"
+                        }, 
+                        "environment": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "position": 2, 
                     "source": null, 
                     "task_id": 30, 
@@ -31,7 +63,18 @@
                     "created_at": "2011-10-14T16:17:10-04:00", 
                     "id": 8, 
                     "name": "shell execute", 
-                    "options": {"command_string":{"value":"sed -i -e \"s@password:@password: foobar99@\" <%= working_copy_dir %>/redmine/config/database.yml","required":true,"type":"String"},"environment":{"required":false,"type":"String","value":""}}, 
+                    "options": {
+                        "command_string": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "sed -i -e \"s@password:@password: foobar99@\" <%= working_copy_dir %>/redmine/config/database.yml"
+                        }, 
+                        "environment": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "position": 3, 
                     "source": null, 
                     "task_id": 30, 
@@ -42,7 +85,54 @@
                     "created_at": "2011-10-14T12:38:19-04:00", 
                     "id": 1, 
                     "name": "rake", 
-                    "options": {"rubygems_version":{"value":"1.6.1","type":"String","required":false},"gems":{"value":["mysql","rails -v=2.3.11","-v=0.4.2 i18n"],"type":"Array","required":false},"environment":{"value":"CC=/usr/bin/gcc-4.2","type":"String","required":false},"ruby_version":{"value":"1.8.7","type":"String","required":false},"path":{"value":"<%= working_copy_dir %>/redmine","type":"String","required":true},"tasks":{"value":["gems:install RAILS_ENV=test"],"type":"Array","required":false},"use_bundle":{"value":"false","type":"Boolean","required":true},"use_rvm":{"value":"false","type":"Boolean","required":true}}, 
+                    "options": {
+                        "environment": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "CC=/usr/bin/gcc-4.2"
+                        }, 
+                        "gems": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "mysql", 
+                                "rails -v=2.3.11", 
+                                "-v=0.4.2 i18n"
+                            ]
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/redmine"
+                        }, 
+                        "ruby_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "1.8.7"
+                        }, 
+                        "rubygems_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "1.6.1"
+                        }, 
+                        "tasks": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "gems:install RAILS_ENV=test"
+                            ]
+                        }, 
+                        "use_bundle": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }, 
+                        "use_rvm": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }
+                    }, 
                     "position": 4, 
                     "source": null, 
                     "task_id": 28, 
@@ -53,7 +143,52 @@
                     "created_at": "2011-10-14T15:22:41-04:00", 
                     "id": 3, 
                     "name": "rake", 
-                    "options": {"rubygems_version":{"value":"1.6.1","type":"String","required":false},"gems":{"value":["mysql"],"type":"Array","required":false},"environment":{"value":"CC=/usr/bin/gcc-4.2","type":"String","required":false},"ruby_version":{"value":"1.8.7","type":"String","required":false},"path":{"value":"<%= working_copy_dir %>/redmine","type":"String","required":true},"tasks":{"value":["RAILS_ENV=test db:create db:migrate"],"type":"Array","required":false},"use_bundle":{"value":"false","type":"Boolean","required":true},"use_rvm":{"value":"false","type":"Boolean","required":true}}, 
+                    "options": {
+                        "environment": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "CC=/usr/bin/gcc-4.2"
+                        }, 
+                        "gems": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "mysql"
+                            ]
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/redmine"
+                        }, 
+                        "ruby_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "1.8.7"
+                        }, 
+                        "rubygems_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "1.6.1"
+                        }, 
+                        "tasks": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "RAILS_ENV=test db:create db:migrate"
+                            ]
+                        }, 
+                        "use_bundle": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }, 
+                        "use_rvm": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }
+                    }, 
                     "position": 5, 
                     "source": null, 
                     "task_id": 28, 
@@ -64,7 +199,52 @@
                     "created_at": "2011-10-14T14:43:13-04:00", 
                     "id": 2, 
                     "name": "rake", 
-                    "options": {"rubygems_version":{"value":"1.6.1","type":"String","required":false},"gems":{"value":["mysql"],"type":"Array","required":false},"environment":{"value":"CC=/usr/bin/gcc-4.2","type":"String","required":false},"ruby_version":{"value":"1.8.7","type":"String","required":false},"path":{"value":"<%= working_copy_dir %>/redmine","type":"String","required":true},"tasks":{"value":["--version"],"type":"Array","required":false},"use_bundle":{"value":"false","type":"Boolean","required":true},"use_rvm":{"value":"false","type":"Boolean","required":true}}, 
+                    "options": {
+                        "environment": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "CC=/usr/bin/gcc-4.2"
+                        }, 
+                        "gems": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "mysql"
+                            ]
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/redmine"
+                        }, 
+                        "ruby_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "1.8.7"
+                        }, 
+                        "rubygems_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "1.6.1"
+                        }, 
+                        "tasks": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "--version"
+                            ]
+                        }, 
+                        "use_bundle": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }, 
+                        "use_rvm": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }
+                    }, 
                     "position": 6, 
                     "source": null, 
                     "task_id": 28, 
@@ -75,7 +255,28 @@
                     "created_at": "2011-10-14T15:54:55-04:00", 
                     "id": 6, 
                     "name": "zip", 
-                    "options": {"path":{"value":"<%= working_copy_dir %>/redmine","required":true,"type":"String"},"filename":{"value":"redmine","required":true,"type":"String"},"type":{"value":"zip","required":true,"type":"String"},"destination":{"value":"<%= working_copy_dir %>","required":true,"type":"String"}}, 
+                    "options": {
+                        "destination": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>"
+                        }, 
+                        "filename": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "redmine"
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/redmine"
+                        }, 
+                        "type": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "zip"
+                        }
+                    }, 
                     "position": 7, 
                     "source": null, 
                     "task_id": 15, 
@@ -86,7 +287,95 @@
                     "created_at": "2012-02-08T17:32:24-05:00", 
                     "id": 148, 
                     "name": "ec2 provision", 
-                    "options": {"provision_command":{"value":"","required":false,"type":"String"},"private_key_path":{"value":"config/lucee-demo-keypair.pem","required":false,"type":"String"},"flavor_id":{"value":"t1.micro","required":true,"type":"String"},"availability_zone":{"value":"us-east-1a","required":true,"type":"String"},"bootstrap":{"value":"","required":false,"type":"String"},"key_name":{"value":"lucee-demo-keypair","required":true,"type":"String"},"ssh_commands":{"value":["ls"],"required":false,"type":"Array"},"hostname":{"value":"","required":false,"type":"String"},"ssh_user":{"value":"root","required":true,"type":"String"},"type":{"value":"AWS","required":true,"type":"String"},"image_id":{"value":"ami-036da16a","required":true,"type":"String"},"key_id":{"value":"<%= ec2_key_id %>","required":true,"type":"Password"},"user_data":{"value":"","required":false,"type":"String"},"deprovision_command":{"value":"","required":false,"type":"String"},"domain":{"value":"redmine","required":true,"type":"String"},"groups":{"value":"quick-start-1","required":true,"type":"String"},"key":{"value":"<%= ec2_key %>","required":true,"type":"Password"}}, 
+                    "options": {
+                        "availability_zone": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "us-east-1a"
+                        }, 
+                        "bootstrap": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "deprovision_command": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "domain": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "redmine"
+                        }, 
+                        "flavor_id": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "t1.micro"
+                        }, 
+                        "groups": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "quick-start-1"
+                        }, 
+                        "hostname": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "image_id": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "ami-036da16a"
+                        }, 
+                        "key": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key %>"
+                        }, 
+                        "key_id": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key_id %>"
+                        }, 
+                        "key_name": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "lucee-demo-keypair"
+                        }, 
+                        "private_key_path": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "config/lucee-demo-keypair.pem"
+                        }, 
+                        "provision_command": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "ssh_commands": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": [
+                                "ls"
+                            ]
+                        }, 
+                        "ssh_user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }, 
+                        "type": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "AWS"
+                        }, 
+                        "user_data": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "position": 8, 
                     "source": null, 
                     "task_id": 18, 
@@ -97,7 +386,38 @@
                     "created_at": "2011-10-14T16:28:17-04:00", 
                     "id": 9, 
                     "name": "scp upload", 
-                    "options": {"host":{"value":"#{fields[:instance_dns]}","required":true,"type":"String"},"remote_path":{"value":"/tmp","required":true,"type":"String"},"path":{"value":"<%= working_copy_dir %>/redmine.zip","required":true,"type":"String"},"key_type":{"value":"","required":false,"type":"String"},"user":{"value":"root","required":true,"type":"String"},"key_path":{"value":"<%= demo_keypair %>","required":true,"type":"String"}}, 
+                    "options": {
+                        "host": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= working_copy_dir %>/redmine.zip"
+                        }, 
+                        "remote_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "/tmp"
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 9, 
                     "source": null, 
                     "task_id": 25, 
@@ -108,7 +428,35 @@
                     "created_at": "2011-10-14T16:43:41-04:00", 
                     "id": 12, 
                     "name": "ssh execute (agent)", 
-                    "options": {"host":{"value":"#{fields[:instance_dns]}","type":"String","required":false},"commands":{"value":["unzip -o /tmp/redmine.zip"],"type":"Array","required":true},"key_type":{"value":"","type":"String","required":false},"user":{"value":"root","type":"String","required":true},"key_path":{"value":"<%= demo_keypair %>","type":"String","required":true}}, 
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "unzip -o /tmp/redmine.zip"
+                            ]
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 10, 
                     "source": null, 
                     "task_id": 23, 
@@ -119,7 +467,37 @@
                     "created_at": "2011-10-14T17:06:04-04:00", 
                     "id": 13, 
                     "name": "ssh execute (agent)", 
-                    "options": {"host":{"value":"#{fields[:instance_dns]}","type":"String","required":false},"commands":{"value":["cd redmine && rake generate_session_store","cd redmine && RAILS_ENV=production rake db:create db:migrate","cd redmine && RAILS_ENV=production rake redmine:load_default_data REDMINE_LANG=en"],"type":"Array","required":true},"key_type":{"value":"","type":"String","required":false},"user":{"value":"root","type":"String","required":true},"key_path":{"value":"<%= demo_keypair %>","type":"String","required":true}}, 
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "cd redmine && rake generate_session_store", 
+                                "cd redmine && RAILS_ENV=production rake db:create db:migrate", 
+                                "cd redmine && RAILS_ENV=production rake redmine:load_default_data REDMINE_LANG=en"
+                            ]
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 11, 
                     "source": null, 
                     "task_id": 23, 
@@ -130,7 +508,36 @@
                     "created_at": "2011-10-14T23:48:23-04:00", 
                     "id": 14, 
                     "name": "ssh execute (agent)", 
-                    "options": {"host":{"value":"#{fields[:instance_dns]}","type":"String","required":false},"commands":{"value":["chown -R apache:apache redmine","mv redmine /var/www/html"],"type":"Array","required":true},"key_type":{"value":"","type":"String","required":false},"user":{"value":"root","type":"String","required":true},"key_path":{"value":"<%= demo_keypair %>","type":"String","required":true}}, 
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "chown -R apache:apache redmine", 
+                                "mv redmine /var/www/html"
+                            ]
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "#{fields[:instance_dns]}"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "<%= demo_keypair %>"
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 12, 
                     "source": null, 
                     "task_id": 23, 
@@ -141,7 +548,18 @@
                     "created_at": "2011-10-14T16:30:27-04:00", 
                     "id": 10, 
                     "name": "confirmation", 
-                    "options": {"body":{"value":"Validation complete?","type":"String","required":true},"fail_on_cancel":{"value":false,"type":"Boolean","required":false}}, 
+                    "options": {
+                        "body": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "Validation complete?"
+                        }, 
+                        "fail_on_cancel": {
+                            "required": false, 
+                            "type": "Boolean", 
+                            "value": false
+                        }
+                    }, 
                     "position": 14, 
                     "source": null, 
                     "task_id": 7, 
@@ -152,7 +570,35 @@
                     "created_at": "2011-10-14T16:31:01-04:00", 
                     "id": 11, 
                     "name": "ec2 deprovision", 
-                    "options": {"key_name":{"value":"lucee-demo-keypair","type":"String","required":true},"ssh_commands":{"value":["ls"],"type":"Array","required":true},"ssh_user":{"value":"root","type":"String","required":true},"key_id":{"value":"<%= ec2_key_id %>","type":"Password","required":true},"key":{"value":"<%= ec2_key %>","type":"Password","required":true}}, 
+                    "options": {
+                        "key": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key %>"
+                        }, 
+                        "key_id": {
+                            "required": true, 
+                            "type": "Password", 
+                            "value": "<%= ec2_key_id %>"
+                        }, 
+                        "key_name": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "lucee-demo-keypair"
+                        }, 
+                        "ssh_commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "ls"
+                            ]
+                        }, 
+                        "ssh_user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "root"
+                        }
+                    }, 
                     "position": 16, 
                     "source": null, 
                     "task_id": 19, 
@@ -182,7 +628,28 @@
                     "klass": null, 
                     "language": null, 
                     "name": "svn checkout", 
-                    "options": {"path":{"required":true,"type":"String","value":""},"url":{"required":true,"type":"Url","value":""},"options":{"required":false,"type":"String","value":""},"clean_working_copy":{"required":false,"type":"Boolean","value":false}}, 
+                    "options": {
+                        "clean_working_copy": {
+                            "required": false, 
+                            "type": "Boolean", 
+                            "value": false
+                        }, 
+                        "options": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "url": {
+                            "required": true, 
+                            "type": "Url", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "SCM", 
@@ -199,7 +666,13 @@
                     "klass": null, 
                     "language": null, 
                     "name": "confirmation", 
-                    "options": {"body":{"required":true,"type":"String","value":""}}, 
+                    "options": {
+                        "body": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "Actions", 
@@ -216,7 +689,28 @@
                     "klass": null, 
                     "language": null, 
                     "name": "zip", 
-                    "options": {"type":{"required":true,"type":"String","value":"zip"},"path":{"required":true,"type":"String","value":""},"destination":{"required":true,"type":"String","value":""},"filename":{"required":true,"type":"String","value":""}}, 
+                    "options": {
+                        "destination": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "filename": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "type": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "zip"
+                        }
+                    }, 
                     "pom": null, 
                     "position": 5, 
                     "tool_name": "Package", 
@@ -233,7 +727,33 @@
                     "klass": null, 
                     "language": null, 
                     "name": "ssh execute (agent)", 
-                    "options": {"host":{"required":false,"type":"String","value":"localhost"},"user":{"required":true,"type":"String","value":""},"key_path":{"required":true,"type":"String","value":""},"key_type":{"required":false,"type":"String","value":""},"commands":{"required":true,"type":"Array","value":""}}, 
+                    "options": {
+                        "commands": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": ""
+                        }, 
+                        "host": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": "localhost"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "Shell", 
@@ -250,7 +770,38 @@
                     "klass": null, 
                     "language": null, 
                     "name": "scp upload", 
-                    "options": {"host":{"required":true,"type":"String","value":"localhost"},"user":{"required":true,"type":"String","value":""},"key_path":{"required":true,"type":"String","value":""},"key_type":{"required":false,"type":"String","value":""},"path":{"required":true,"type":"String","value":""},"remote_path":{"required":true,"type":"String","value":""}}, 
+                    "options": {
+                        "host": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": "localhost"
+                        }, 
+                        "key_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "key_type": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "remote_path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "user": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
                     "tool_name": "Shell", 
@@ -267,10 +818,51 @@
                     "klass": null, 
                     "language": null, 
                     "name": "rake", 
-                    "options": {"path":{"required":true,"type":"String","value":""},"tasks":{"required":false,"type":"Array","value":""},"use_rvm":{"required":true,"type":"Boolean","value":"false"},"ruby_version":{"required":false,"type":"String","value":""},"rubygems_version":{"required":false,"type":"String","value":""},"use_bundle":{"required":true,"type":"Boolean","value":"false"},"environment":{"required":false,"type":"String","value":""},"gems":{"required":false,"type":"Array","value":""}}, 
+                    "options": {
+                        "environment": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "gems": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": ""
+                        }, 
+                        "path": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "ruby_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "rubygems_version": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "tasks": {
+                            "required": false, 
+                            "type": "Array", 
+                            "value": ""
+                        }, 
+                        "use_bundle": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }, 
+                        "use_rvm": {
+                            "required": true, 
+                            "type": "Boolean", 
+                            "value": "false"
+                        }
+                    }, 
                     "pom": null, 
                     "position": 1, 
-                    "tool_name": "Shell",
+                    "tool_name": "Shell", 
                     "type": "remote", 
                     "updated_at": "2012-02-07T00:29:31-05:00"
                 }, 
@@ -284,7 +876,18 @@
                     "klass": null, 
                     "language": null, 
                     "name": "shell execute", 
-                    "options": {"command_string":{"required":true,"type":"String","value":""},"environment":{"required":false,"type":"String","value":""}},
+                    "options": {
+                        "command_string": {
+                            "required": true, 
+                            "type": "String", 
+                            "value": ""
+                        }, 
+                        "environment": {
+                            "required": false, 
+                            "type": "String", 
+                            "value": ""
+                        }
+                    }, 
                     "pom": null, 
                     "position": 5, 
                     "tool_name": "Shell", 
