@@ -1,6 +1,8 @@
 define maestro::plugin($version) {
   $user_home = $maestro::params::user_home
 
+  
+
   Exec { path => "/bin:/usr/bin" }
 
   # If the version is a Maven snapshot, transform the base version to it's
@@ -12,6 +14,12 @@ define maestro::plugin($version) {
   }
 
   # download the plugin to /usr/local/src
+  if ! defined(File['/usr/local/src']) {
+    file {'/usr/local/src':
+      ensure => directory,
+      before => Wget::Authfetch["fetch-maestro-plugin-${name}"],
+    }
+  }
   wget::authfetch { "fetch-maestro-plugin-${name}":
     user => $maestro::repo['username'],
     password => $maestro::repo['password'],

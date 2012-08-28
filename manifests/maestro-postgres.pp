@@ -1,10 +1,11 @@
 class maestro::maestro-postgres(
-  $version = '',
-  $password,
-  $db_password,
-  $datadir = '/var/lib/pgsql/data',
-  $allowed_rules = [],
+  version       = $maestro::maestro::db_version,
+  password      = $maestro::maestro::db_server_password,
+  db_password   = $maestro::maestro::db_password,
+  allowed_rules = $maestro::maestro::db_allowed_rules,
+  datadir       = $maestro::maestro::db_datadir,
   $enabled = true) {
+
 
   # $version = case $operatingsystem {
   #   centos: {

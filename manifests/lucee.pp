@@ -9,5 +9,6 @@ class maestro::lucee() {
     source  => 'puppet:///modules/maestro/lucee/maestro_lucee.json',
     notify  => Service['maestro'],
     require => Class['maestro::package'],
+    replace => false,
   }
 }

@@ -66,7 +66,12 @@ class maestro::agent( $repo = $maestrodev_repo,
   Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
   
   $wrapper = "$basedir/conf/wrapper.conf"
-
+  if ! defined(File[$srcdir]) {
+    file {$srcdir:
+      ensure => directory,
+      before => Wget::Authfetch["fetch-agent"],
+    }
+  }
   wget::authfetch { "fetch-agent":
     user        => $repo['username'],
     password    => $repo['password'],

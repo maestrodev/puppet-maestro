@@ -1,4 +1,4 @@
-class maestro::package::tarball(
+class maestro::maestro::package::tarball(
   $repo,
   $version,
   $base_version,
@@ -6,7 +6,12 @@ class maestro::package::tarball(
   $homedir,
   $basedir)
 {
-  
+  if ! defined(File[$srcdir]) {
+    file {$srcdir:
+      ensure => directory,
+      before => Wget::Authfetch["fetch-maestro"],
+    }
+  }
   wget::authfetch { "fetch-maestro":
      user => $repo['username'],
      password => $repo['password'],

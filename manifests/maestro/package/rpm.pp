@@ -1,4 +1,4 @@
-class maestro::package::rpm(
+class maestro::maestro::package::rpm(
   $repo,
   $version,
   $base_version
