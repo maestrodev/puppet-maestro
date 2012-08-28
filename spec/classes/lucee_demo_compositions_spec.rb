@@ -19,7 +19,13 @@ describe 'maestro::lucee_demo_compositions' do
       file_content("centrepoint").should_not include "org.codehaus.mojo:sonar-maven-plugin:2.0:sonar"
     end
     it "should generate ivy demo composition without sonar goals using install" do
-      file_content("antwithivy").should include 'tasks":{"required":true,"type":"Array","value":["install"]}'
+      file_content("antwithivy").should include '"tasks": {
+                            "required": true, 
+                            "type": "Array", 
+                            "value": [
+                                "install"
+                            ]
+                        }'
     end
     it "should use the right working copy directory" do
       file_content("antwithivy").should include '/var/local/maestro-agent/wc'
