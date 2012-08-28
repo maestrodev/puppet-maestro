@@ -1,7 +1,10 @@
 # note that admin_password needs to validate against the password rules (letters+numbers by default)
 class maestro::maestro( $repo = $maestrodev_repo,
   $version = $maestro_version,
-  $ldap = {}, $enabled = true, $lucee = true,
+  $package_type = 'tarball',
+  $ldap = {}, 
+  $enabled = true, 
+  $lucee = true,
   $admin = 'admin',
   $admin_password = $maestro_adminpassword,
   $master_password = $maestro_master_password,
@@ -10,8 +13,6 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $db_version = '',
   $db_allowed_rules = [],
   $db_datadir = '/var/lib/pgsql/data',
-  $homedir = "/usr/local/maestro",
-  $basedir = "/var/local/maestro",
   $initmemory = '512',
   $maxmemory = '1536',
   $permsize = '384m',
@@ -28,6 +29,8 @@ class maestro::maestro( $repo = $maestrodev_repo,
   
   $srcdir = "/usr/local/src"
   $installdir = "/usr/local"
+  $basedir = "/var/maestro"
+  $homedir = "/usr/local/maestro"
   
   Exec { path => "/bin/:/usr/bin", }
   File {
@@ -55,7 +58,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
     file { "${basedir}/lucee-lib.json":
       mode    =>  "0600",
       content =>  template("maestro/lucee-lib.json.erb"),
-      require => Exec["maestro"],
+      require => Class['maestro::package'],
       notify  => Service[maestro],
     } 
 
@@ -76,89 +79,56 @@ class maestro::maestro( $repo = $maestrodev_repo,
     allowed_rules => $db_allowed_rules,
     datadir       => $db_datadir,
   }
-
-  wget::authfetch { "fetch-maestro":
-    user => $repo['username'],
-    password => $repo['password'],
-    source => "${repo['url']}/com/maestrodev/maestro/maestro-jetty/$base_version/maestro-jetty-${version}-bin.tar.gz",
-    destination => "$srcdir/maestro-jetty-${version}-bin.tar.gz",
-  } ->
-  exec {"rm -rf $installdir/maestro-${base_version}":
-     unless => "egrep \"^${version}$\" $srcdir/maestro-jetty.version",
-  } ->
-  exec { "maestro":
-    command => "tar zxvf $srcdir/maestro-jetty-${version}-bin.tar.gz",
-    creates => "$installdir/maestro-$base_version",
-    cwd => $installdir,
-  } ->
-  exec { "chown -R ${user} ${installdir}/maestro-$base_version":
-    require => User[$user],
-  } ->
-  file { "$installdir/maestro-$base_version/bin":
-    mode => 755,
-    recurse => true,
-  } ->
-  file { "$homedir":
-    ensure => link,
-    target => "$installdir/maestro-$base_version"
-  } ->
-  file { "${homedir}/apps/maestro/WEB-INF/users.properties":
-    mode    =>  "0600",
-    content =>  template("maestro/users.properties.erb"),
-  }
-
-  exec { "echo $version >$srcdir/maestro-jetty.version":
-    require => Exec[maestro],
-  } ->
-  # Touch the installation package even if current, so that it isn't deleted
-  exec { "touch $srcdir/maestro-jetty-${version}-bin.tar.gz":
-  } ->
-  tidy { "tidy-maestro":
-    age => "1d",
-    matches => "maestro-jetty-*",
-    recurse => true,
-    path => $srcdir,
-  }
-
+  # Create the basedir. Where config and logs belong for this
+  # particular maestro instance.
+  
   file { $basedir:
-    ensure => directory,
-  } ->
-  file { "$basedir/conf":
-    ensure => directory,
-  } ->
-  file { "$basedir/logs":
-    ensure => directory,
-  } ->
-  file { "$basedir/tmp":
-    ensure => directory,
-  } ->
+     ensure => directory,
+   } ->
+   file { "$basedir/conf":
+     ensure => directory,
+   } ->
+   file { "$basedir/logs":
+     ensure => directory,
+   } ->
+   file { "$basedir/tmp":
+     ensure => directory,
+   }
+   
+   # Install the package
+   class { 'maestro::package':
+    type => $package_type,
+    repo => $repo,
+    version => $version,
+    base_version => $base_version,
+    srcdir => $srcdir,
+    homedir => $homedir,
+    basedir => $basedir,
+  }
+  
+  # Configure Maestro
   file { "${basedir}/conf/security.properties":
     mode    =>  "0644",
     content =>  template("maestro/security.properties.erb"),
-  } ->
+    require => File["${basedir}/conf"],
+  }
   file { "${basedir}/conf/jetty.xml":
     mode    =>  "0600",
     content =>  template("maestro/jetty.xml.erb"),
-  } ->
+    require => File["${basedir}/conf"],
+  }
   file { "${basedir}/conf/plexus.xml":
     mode    =>  "0600",
     content =>  template("maestro/plexus.xml.erb"),
-  } ->
-  exec { "chown -R ${user} ${basedir}":
-  } ->
-  file { "$basedir/conf/wrapper.conf":
-    ensure => link,
-    target => "$homedir/conf/wrapper.conf",
-    require => File[$homedir],
-  } ->
-  file { "$basedir/conf/webdefault.xml":
-    ensure => link,
-    target => "$homedir/conf/webdefault.xml"
-  } ->
-  file { "$basedir/conf/jetty-jmx.xml":
-    ensure => link,
-    target => "$homedir/conf/jetty-jmx.xml"
-  } ->
+    require => File["${basedir}/conf"],
+  }  
+  file { "${homedir}/apps/maestro/WEB-INF/users.properties":
+    mode    =>  "0600",
+    content =>  template("maestro/users.properties.erb"),
+    require => Class['maestro::package'],
+  }
+  
+  # This requires something, but what? ->
   augeas { "update-default-configurations":
     changes => [
       "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] ${admin_password}",
@@ -166,9 +136,11 @@ class maestro::maestro( $repo = $maestrodev_repo,
     ],
     incl => "${homedir}/conf/default-configurations.xml",
     lens => "Xml.lns",
+    require => Class['maestro::package'],
   } ->
   file { "${basedir}/conf/default-configurations.xml":
     source  => "${homedir}/conf/default-configurations.xml",
+    require => File["${basedir}/conf"],
   }
 
   # Until Augeas has the properties files fixes, use a custom version
@@ -186,13 +158,13 @@ class maestro::maestro( $repo = $maestrodev_repo,
     incl      => "${homedir}/apps/maestro/WEB-INF/classes/filterValues.properties",
     changes   => "set artifactVersion ${version}",
     load_path => '/tmp/augeas/maestro',
-    require   => File[$homedir],
+    require => Class['maestro::package'],
   }
 
   if $::architecture == "x86_64" {
     file { "${homedir}/bin/wrapper-linux-x86-32":
       ensure => absent,
-      require => Exec['maestro'],
+      require => Class['maestro::package'],
       before => Service[maestro],
     }
   }
@@ -202,13 +174,13 @@ class maestro::maestro( $repo = $maestrodev_repo,
   exec { 'maestro-memory-init':
     command => "sed -i 's/wrapper\.java\.initmemory=.*$/wrapper\.java\.initmemory=${initmemory}/' ${wrapper}",
     unless  => "grep 'wrapper.java.initmemory=${initmemory}' ${wrapper}",
-    require => File[$homedir],
+    require => Class['maestro::package'],
     notify  => Service['maestro'],
   }
   exec { 'maestro-memory-max':
     command => "sed -i 's/wrapper\.java\.maxmemory=.*$/wrapper\.java\.maxmemory=${maxmemory}/' ${wrapper}",
     unless  => "grep 'wrapper.java.maxmemory=${maxmemory}' ${wrapper}",
-    require => File[$homedir],
+    require => Class['maestro::package'],
     notify  => Service['maestro'],
   }
 
@@ -216,7 +188,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
     owner => "root",
     mode  => "0755",
     content => template("maestro/maestro.erb"),
-    require => Exec["maestro"],
+    require => Class['maestro::package'],
   }
 
   # do this only for binary installations, not for webapp deployments
@@ -246,9 +218,8 @@ class maestro::maestro( $repo = $maestrodev_repo,
     hasstatus => true,
     enable => $enabled,
     ensure => $enabled ? { true => running, false => stopped, },
-    require => [Exec["maestro"],
-                File["/etc/init.d/maestro"], 
-                Class["maestro::maestro-postgres"]],
+    require => [File["/etc/init.d/maestro"], 
+                Class["maestro::package", "maestro::maestro-postgres"]],
     subscribe => [File["${basedir}/conf/jetty.xml"], 
                   File["${basedir}/conf/security.properties"]],
   }  

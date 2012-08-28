@@ -35,7 +35,7 @@ define maestro::lucee_demo_composition(
     group   => $maestro::params::group,
     mode    => 644,
     before  => Service['maestro'],
-    require => Exec['maestro'],
+    require => File['/etc/maestro_lucee.json'],
     content => template("maestro/lucee/demo/${name}.json.erb"),
   }
 }

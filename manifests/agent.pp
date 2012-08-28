@@ -107,8 +107,7 @@ class maestro::agent( $repo = $maestrodev_repo,
     group   => $agent_group,
     mode    => 755,
     content => template("maestro/agent/maestro-agent.erb"),
-  }
-
+  }->
   file { "$srcdir/maestro-agent.version":
     content => "${timestamp_version}\n",
   }
