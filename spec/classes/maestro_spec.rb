@@ -23,6 +23,7 @@ describe 'maestro::maestro' do
       should contain_file("/var/local/maestro/conf/jetty.xml")
       should_not contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end
+    it { should contain_exec("maestro") }
   end
 
   context "when using a custom home directory" do
@@ -65,5 +66,12 @@ describe 'maestro::maestro' do
     it "should enable fowarding in jetty.xml" do                                  
       should contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end 
+  end
+
+  context "when using rpm package" do
+    let(:params) { { 
+      :package_type => 'rpm'
+    }.merge(DEFAULT_PARAMS) }
+    it { should contain_package("maestro") }
   end
 end
