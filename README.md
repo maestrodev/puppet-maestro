@@ -112,9 +112,6 @@ For example to install some common plugins, add this to the Maestro node.
   maestro::plugin { 'maestro-bamboo-plugin':
     version => '1.0-20120706.180758-20',
   }
-  maestro::plugin { 'maestro-bamboo-plugin':
-    version => '1.0-20120706.180758-20',
-  }
   maestro::plugin { 'maestro-fog-plugin':
     version => '1.0-20120718.205852-1',
   }
