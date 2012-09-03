@@ -118,8 +118,8 @@ class maestro::maestro( $repo = $maestrodev_repo,
     }
   }
 
-  include maestro::maestro::config
-  class { 'maestro::maestro-postgres': } ->
-  class { 'maestro::maestro::package': } ->
-  class { 'maestro::maestro::service': }
+  class { 'maestro::maestro-postgres':  } ->   
+  class { 'maestro::maestro::package': } -> class { 'maestro::maestro::config': } -> class { 'maestro::maestro::service': }
+
+  
 }
