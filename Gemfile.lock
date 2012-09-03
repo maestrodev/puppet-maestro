@@ -6,7 +6,7 @@ GEM
     metaclass (0.0.1)
     mocha (0.12.3)
       metaclass (~> 0.0.1)
-    puppet (2.7.18)
+    puppet (2.7.19)
       facter (~> 1.5)
     puppet-lint (0.1.13)
     puppetlabs_spec_helper (0.3.0)
