@@ -4,6 +4,7 @@ class maestro::maestro-postgres(
   db_password   = $maestro::maestro::db_password,
   allowed_rules = $maestro::maestro::db_allowed_rules,
   datadir       = $maestro::maestro::db_datadir,
+  lucee         = $maestro::maestro::lucee,
   $enabled = true) {
 
 
@@ -41,8 +42,10 @@ class maestro::maestro-postgres(
     postgres::createdb { "sonar":owner=> "maestro", require => Postgres::Createuser["maestro"], }
 
     # set the db password in maestro_lucee.json
-    class { 'maestro::lucee::db':
-      password => $db_password,
+    if $lucee == true {
+      class { 'maestro::lucee::db':
+        password => $db_password,
+      }
     }
 
   }
