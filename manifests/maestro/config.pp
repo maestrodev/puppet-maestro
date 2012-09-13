@@ -51,6 +51,25 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
         content =>  template("maestro/users.properties.erb"),
         require => Class['maestro::maestro::package'],
       }
+      
+      file { "$basedir/conf/wrapper.conf":
+         ensure => link,
+         target => "$homedir/conf/wrapper.conf",
+         require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
+       }
+
+       file { "$basedir/conf/webdefault.xml":
+         ensure => link,
+         target => "$homedir/conf/webdefault.xml",
+         require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
+       }
+
+       file { "$basedir/conf/jetty-jmx.xml":
+         ensure => link,
+         target => "$homedir/conf/jetty-jmx.xml",
+         require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
+       }
+
 
       # This requires something, but what? ->
       augeas { "update-default-configurations":

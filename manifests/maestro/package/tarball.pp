@@ -50,23 +50,5 @@ class maestro::maestro::package::tarball(
      path => $srcdir,
    }
 
-   file { "$basedir/conf/wrapper.conf":
-     ensure => link,
-     target => "$homedir/conf/wrapper.conf",
-     require => File[$homedir,"${basedir}/conf"],
-   }
-   
-   file { "$basedir/conf/webdefault.xml":
-     ensure => link,
-     target => "$homedir/conf/webdefault.xml",
-     require => File[$homedir,"${basedir}/conf"],
-   }
-   
-   file { "$basedir/conf/jetty-jmx.xml":
-     ensure => link,
-     target => "$homedir/conf/jetty-jmx.xml",
-     require => File[$homedir,"${basedir}/conf"],
-   }
-   
    
 }

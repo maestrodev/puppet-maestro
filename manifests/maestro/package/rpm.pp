@@ -1,7 +1,7 @@
 class maestro::maestro::package::rpm(
   $repo,
   $version,
-  $base_version
+  $base_version,
   )
 {
 
@@ -17,4 +17,5 @@ class maestro::maestro::package::rpm(
    source => $maestro_source,
    provider => rpm,
   }
+  
 }
