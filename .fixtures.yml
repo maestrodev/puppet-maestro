@@ -2,5 +2,6 @@ fixtures:
   repositories:
     wget: http://github.com/maestrodev/puppet-wget.git
     postgres: http://github.com/maestrodev/puppet-postgres.git
+    stdlib: http://github.com/puppetlabs/puppetlabs-stdlib.git
   symlinks:
     maestro: "#{source_dir}"

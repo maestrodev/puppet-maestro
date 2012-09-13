@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'maestro::maestro' do
 
   DEFAULT_PARAMS = {
+      :version => '1.0',
       :db_server_password => 'myserverpassword',
       :db_password => 'mydbpassword',
       :admin_password => 'myadminpassword',
@@ -17,10 +18,12 @@ describe 'maestro::maestro' do
   let(:params) { DEFAULT_PARAMS }
 
   context "when using defaults" do
+    it { should contain_file '/var/local/maestro' }
     it "should not enable fowarding in jetty.xml" do                                  
-      content = catalogue.resource("file", "/var/local/maestro/conf/jetty.xml").send(:parameters)[:content]
-      content.should_not =~ %r[<Set name="forwarded">true</Set>]                      
-    end 
+      should contain_file("/var/local/maestro/conf/jetty.xml")
+      should_not contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
+    end
+    it { should contain_exec("maestro") }
   end
 
   context "when using a custom home directory" do
@@ -34,8 +37,7 @@ describe 'maestro::maestro' do
 
     it { should contain_file("/etc/init.d/maestro")}
     it "should set the HOME variable correctly in the startup script" do
-      content = catalogue.resource('file', '/etc/init.d/maestro').send(:parameters)[:content]
-      content.should =~ %r[export HOME=/var/local/u]
+      should contain_file('/etc/init.d/maestro').with_content =~ %r[export HOME=/var/local/u]
     end
   end
 
@@ -62,8 +64,14 @@ describe 'maestro::maestro' do
       :jetty_forwarded => true
     }.merge(DEFAULT_PARAMS) }
     it "should enable fowarding in jetty.xml" do                                  
-      content = catalogue.resource("file", "/var/local/maestro/conf/jetty.xml").send(:parameters)[:content]
-      content.should =~ %r[<Set name="forwarded">true</Set>]                      
+      should contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end 
+  end
+
+  context "when using rpm package" do
+    let(:params) { { 
+      :package_type => 'rpm'
+    }.merge(DEFAULT_PARAMS) }
+    it { should contain_package("maestro") }
   end
 end

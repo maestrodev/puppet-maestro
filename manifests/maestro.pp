@@ -59,7 +59,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
   
   $srcdir = "/usr/local/src"
   $installdir = "/usr/local"
-  $basedir = "/var/maestro"
+  $basedir = "/var/local/maestro"
   $homedir = "/usr/local/maestro"
   
   Exec { path => "/bin/:/usr/bin", }
