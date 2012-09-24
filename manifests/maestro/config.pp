@@ -5,7 +5,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $lucee = $maestro::maestro::lucee,
     $admin = $maestro::maestro::admin,
     $admin_password = $maestro::maestro::admin_password,
-    $master_password = $maestro::maestro::master_password,
     $db_server_password = $maestro::maestro::db_server_password,
     $db_password = $maestro::maestro::db_password,
     $db_version = $maestro::maestro::db_version,
@@ -20,7 +19,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $lucee_password = $maestro::maestro::lucee_password,
     $lucee_username = $maestro::maestro::lucee_username,
     $jetty_forwarded = $maestro::maestro::jetty_forwarded,
-    $mail_from = $maestro::maestro::mail_from,
     $srcdir = $maestro::maestro::srcdir,
     $installdir = $maestro::maestro::installdir,
     $basedir = $maestro::maestro::basedir,
@@ -31,11 +29,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
         group => $group,
       }
       # Configure Maestro
-      file { "${basedir}/conf/security.properties":
-        mode    =>  "0644",
-        content =>  template("maestro/security.properties.erb"),
-        require => File["${basedir}/conf"],
-      }
       file { "${basedir}/conf/jetty.xml":
         mode    =>  "0600",
         content =>  template("maestro/jetty.xml.erb"),
