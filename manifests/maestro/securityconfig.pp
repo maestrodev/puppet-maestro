@@ -1,4 +1,4 @@
-class maestro::maestro::config(
+class maestro::maestro::securityconfig(
     $ldap = $maestro::maestro::ldap, 
     $master_password = $maestro::maestro::master_password,
     $mail_from = $maestro::maestro::mail_from,
