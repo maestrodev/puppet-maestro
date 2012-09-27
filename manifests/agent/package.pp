@@ -2,13 +2,24 @@ class maestro::agent::package(
   $type = $maestro::agent::package_type,
   $repo = $maestro::agent::repo,
   $version = $maestro::agent::agent_version,
-  $base_version = $maestro::agent::base_version,
-  $timestamp_version = $maestro::agent::timestamp_version,
   $srcdir = $maestro::agent::srcdir,
   $basedir = $maestro::agent::basedir,
   $agent_user = $maestro::agent::agent_user,
   $agent_group = $maestro::agent::agent_group,
   $agent_user_home = $maestro::agent::agent_user_home) {
+  
+  
+  # TODO: put this in a library so it can be reused
+  # If the version is a Maven snapshot, transform the base version to it's
+   # SNAPSHOT indicator
+   if $version =~ /^(.*)-[0-9]{8}\.[0-9]{6}-[0-9]+$/ {
+     $base_version = "${1}-SNAPSHOT"
+     $timestamp_version = $version
+   } else {
+     $base_version = $version
+     $timestamp_version = $version # version is a release
+   }
+
   
   if ! defined(File[$srcdir]) {
     file {$srcdir:
@@ -57,14 +68,14 @@ class maestro::agent::package(
         force   => true,
       }
     }
-    # 'rpm': {
-    #    anchor { 'maestro::agent::package::begin': } -> Class['maestro::agent::package::rpm'] -> anchor { 'maestro::agent::package::end': }
-    #    class { 'maestro::agent::package::rpm':
-    #       repo => $repo,
-    #       version => $version,
-    #       base_version => $base_version,
-    #     }
-    # }
+    'rpm': {
+       anchor { 'maestro::agent::package::begin': } -> Class['maestro::agent::package::rpm'] -> anchor { 'maestro::agent::package::end': }
+       class { 'maestro::agent::package::rpm':
+          repo => $repo,
+          timestamp_version => $timestamp_version,
+          base_version => $base_version,
+        }
+    }
     default: {
       fail("Invalid Maestro package type: ${type}")
     }    

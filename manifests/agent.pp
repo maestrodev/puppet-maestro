@@ -25,17 +25,7 @@ class maestro::agent(
   $basedir = "/usr/local/maestro-agent"
   $srcdir = "/usr/local/src"
 
-  # TODO: put this in a library so it can be reused
-  # If the version is a Maven snapshot, transform the base version to it's
-  # SNAPSHOT indicator
-  if $agent_version =~ /^(.*)-[0-9]{8}\.[0-9]{6}-[0-9]+$/ {
-    $base_version = "${1}-SNAPSHOT"
-    $timestamp_version = $agent_version
-  } else {
-    $base_version = $agent_version
-    $timestamp_version = $agent_version # version is a release
-  }
-
+ 
   # Note that later pieces assume basedir ends in maestro-agent, would need a
   # different approach
 
