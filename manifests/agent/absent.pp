@@ -22,6 +22,11 @@ class maestro::agent::absent(
       force   => true,
     }
   }
+  
+  package { 'maestro-agent':
+    ensure => absent,
+    require => Service['maestro-agent'],
+  }
 
   file { ['/root/.gemrc', "/usr/local/src/agent-${version}.tar.gz", '/usr/local/src/maestro-agent.version', '/etc/init.d/maestro-agent']:
     ensure  => absent,

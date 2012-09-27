@@ -23,7 +23,7 @@ describe 'maestro::maestro' do
       should contain_file("/var/local/maestro/conf/jetty.xml")
       should_not contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end
-    it { should contain_exec("maestro") }
+    it { should contain_exec("unpack-maestro") }
   end
 
   context "when using a custom home directory" do

@@ -7,6 +7,7 @@ describe 'maestro::agent::absent' do
     it { should contain_file("/home/agent").with_ensure('absent') }
     it { should contain_file("/var/maestro-agent").with_ensure('absent') }
     it { should contain_file("/usr/local/src/agent-0.1.0.tar.gz").with_ensure('absent') }
+    it { should contain_package("maestro-agent").with_ensure('absent')}
   end
 
   context "with custom parameters" do
@@ -19,5 +20,6 @@ describe 'maestro::agent::absent' do
     it { should contain_user("maestro_agent").with_ensure('absent') }
     it { should contain_file("/var/local/maestro-agent").with_ensure('absent') }
     it { should contain_file("/usr/local/src/agent-1.0.0.tar.gz").with_ensure('absent') }
+    it { should contain_package("maestro-agent").with_ensure('absent')}
   end
 end

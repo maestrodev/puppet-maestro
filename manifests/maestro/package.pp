@@ -1,11 +1,11 @@
 class maestro::maestro::package(
-  type = $maestro::maestro::package_type,
-  repo = $maestro::maestro::repo,
-  version = $maestro::maestro::version,
-  base_version = $maestro::maestro::base_version,
-  srcdir = $maestro::maestro::srcdir,
-  homedir = $maestro::maestro::homedir,
-  basedir = $maestro::maestro::basedir) {
+  $type = $maestro::maestro::package_type,
+  $repo = $maestro::maestro::repo,
+  $version = $maestro::maestro::version,
+  $base_version = $maestro::maestro::base_version,
+  $srcdir = $maestro::maestro::srcdir,
+  $homedir = $maestro::maestro::homedir,
+  $basedir = $maestro::maestro::basedir) {
   
   case $type {
     'tarball': {

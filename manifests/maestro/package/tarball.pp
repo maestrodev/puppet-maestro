@@ -21,7 +21,7 @@ class maestro::maestro::package::tarball(
    exec {"rm -rf $installdir/maestro-${base_version}":
       unless => "egrep \"^${version}$\" $srcdir/maestro-jetty.version",
    } ->
-   exec { "maestro":
+   exec { "unpack-maestro":
      command => "tar zxvf $srcdir/maestro-jetty-${version}-bin.tar.gz",
      creates => "$installdir/maestro-$base_version",
      cwd => $installdir,

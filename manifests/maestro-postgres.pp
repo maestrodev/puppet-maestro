@@ -1,11 +1,11 @@
 class maestro::maestro-postgres(
-  version       = $maestro::maestro::db_version,
-  password      = $maestro::maestro::db_server_password,
-  db_password   = $maestro::maestro::db_password,
-  allowed_rules = $maestro::maestro::db_allowed_rules,
-  datadir       = $maestro::maestro::db_datadir,
-  lucee         = $maestro::maestro::lucee,
-  $enabled = true) {
+  $version       = $maestro::maestro::db_version,
+  $password      = $maestro::maestro::db_server_password,
+  $db_password   = $maestro::maestro::db_password,
+  $allowed_rules = $maestro::maestro::db_allowed_rules,
+  $datadir       = $maestro::maestro::db_datadir,
+  $lucee         = $maestro::maestro::lucee,
+  $enabled       = true) {
 
 
   # $version = case $operatingsystem {

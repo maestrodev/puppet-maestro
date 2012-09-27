@@ -108,13 +108,13 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
       # set memory configuration
       $wrapper = "${homedir}/conf/wrapper.conf"
       exec { 'maestro-memory-init':
-        command => "sed -i 's/wrapper\.java\.initmemory=.*$/wrapper\.java\.initmemory=${initmemory}/' ${wrapper}",
+        command => "sed -i 's/wrapper\\.java\\.initmemory=.*$/wrapper\\.java\\.initmemory=${initmemory}/' ${wrapper}",
         unless  => "grep 'wrapper.java.initmemory=${initmemory}' ${wrapper}",
         require => Class['maestro::maestro::package'],
         notify  => Service['maestro'],
       }
       exec { 'maestro-memory-max':
-        command => "sed -i 's/wrapper\.java\.maxmemory=.*$/wrapper\.java\.maxmemory=${maxmemory}/' ${wrapper}",
+        command => "sed -i 's/wrapper\\.java\\.maxmemory=.*$/wrapper\\.java\\.maxmemory=${maxmemory}/' ${wrapper}",
         unless  => "grep 'wrapper.java.maxmemory=${maxmemory}' ${wrapper}",
         require => Class['maestro::maestro::package'],
         notify  => Service['maestro'],

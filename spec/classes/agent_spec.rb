@@ -16,8 +16,6 @@ describe 'maestro::agent' do
 
   let(:params) { DEFAULT_AGENT_PARAMS }
   
-  it { should contain_exec("agent").with_cwd('/usr/local') }
-
   it { should contain_file("/var/local/maestro-agent").with(
     :ensure => :directory,
     :owner  => DEFAULT_USER)
@@ -43,10 +41,19 @@ describe 'maestro::agent' do
   context "when rvm fact is not set" do
     it { should contain_user(DEFAULT_USER).with_groups('root') }
   end
+  
+  # ================================================ Tarball install =========================================
+
+  context "when installing from a tarball" do
+    let(:params) { DEFAULT_AGENT_PARAMS.merge({
+      :package_type => 'tarball'
+    }) }
+    it { should contain_exec("unpack-agent").with_cwd('/usr/local') }
+  end
 
   context "when passing only agent snapshot version" do
     let(:params) { DEFAULT_AGENT_PARAMS.merge({
-      :agent_version => '0.1.1-20120430.110153-41'
+      :agent_version => '0.1.1-20120430.110153-41',
     }) }
     it { should contain_wget__authfetch("fetch-agent").with(
       'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/0.1.1-SNAPSHOT/agent-0.1.1-20120430.110153-41-bin.tar.gz",
@@ -56,7 +63,7 @@ describe 'maestro::agent' do
 
   context "when passing a release version" do
     let(:params) { DEFAULT_AGENT_PARAMS.merge({
-      :agent_version => '0.1.1'
+      :agent_version => '0.1.1',
     }) }
     it { should contain_wget__authfetch("fetch-agent").with(
       'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/0.1.1/agent-0.1.1-bin.tar.gz",
@@ -98,5 +105,8 @@ describe 'maestro::agent' do
     let(:facts) { {:operatingsystem => 'windows', :kernel => 'windows', :osfamily => 'windows'} }
     let(:params) { DEFAULT_AGENT_PARAMS }
   end
-
+  
+  
+  
+  
 end
