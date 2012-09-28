@@ -9,11 +9,11 @@ class maestro::agent::package::rpm (
     } 
 
     # When we have a proper yum repo, this variable can go away.
-     $maestro_source = "https://${repo['username']}:${repo['password']}@${uri}/com/maestrodev/lucee/agent/${base_version}/agent-${timestamp_version}-rpm.rpm"
+     $maestro_agent_source = "https://${repo['username']}:${repo['password']}@${uri}/com/maestrodev/lucee/agent/${base_version}/agent-${timestamp_version}-rpm.rpm"
 
     package { 'maestro-agent':
      ensure => latest,
-     source => $maestro_source,
+     source => $maestro_agent_source,
      provider => rpm,
     }
 
