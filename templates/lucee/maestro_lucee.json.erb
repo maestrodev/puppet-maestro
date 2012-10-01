@@ -1,0 +1,31 @@
+{
+  "is_demo":false,
+  "lucee": {
+    "log" : {
+      "level": "INFO"
+    },
+    "eui": {
+      "display": true
+    },
+    "agent_auto_activate": <%= @agent_auto_activate %>,
+    "agent_timeout": 300,
+    "username": "maestro",
+    "password": "maestro",
+    "database": {
+      "server": "<%= @type %>",
+      "host": "<%= @host %>",
+      "port": <%= @port %>,
+      "user": "<%= @username %>",
+      "pass": "<%= @password %>",
+      "database_name": "<%= @database %>"
+    },
+    "stomp": {
+      "host": "127.0.0.1",
+      "port": 61613,
+      "user": "",
+      "passcode": "",
+      "reliable": true
+    },
+    "internal_agent": false
+  }
+}

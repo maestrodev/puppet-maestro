@@ -48,6 +48,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $permsize = '384m',
   $maxpermsize = '384m',
   $port = '8080',
+  $agent_auto_activate = false,
   $lucee_url = "http://localhost:8080/lucee/api/v0/",
   $lucee_password = "maestro",
   $lucee_username = "maestro",
@@ -97,6 +98,9 @@ class maestro::maestro( $repo = $maestrodev_repo,
     package { [ 'libxslt-devel', 'libxml2-devel' ]: ensure => installed }
 
     class { 'maestro::lucee':
+      agent_auto_activate => $agent_auto_activate,
+      password => $db_password,
+      
       require => Package[ 'libxslt-devel', 'libxml2-devel' ],
       before  => Service['maestro'],
     }
