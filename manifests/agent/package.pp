@@ -74,7 +74,21 @@ class maestro::agent::package(
           repo => $repo,
           timestamp_version => $timestamp_version,
           base_version => $base_version,
-        }
+      } ->
+      file { "${basedir}/logs":
+        ensure  => link,
+        target  => "${agent_user_home}/logs",
+        owner   => $agent_user,
+        group   => $agent_group,
+        force   => true,
+      } ->
+      # until maestro-agent properly sets the working directory / temp
+      # directory
+      file { "${basedir}/bin/tmp":
+        ensure => directory,
+        owner  => $agent_user,
+        group   => $agent_group,
+      }
     }
     default: {
       fail("Invalid Maestro package type: ${type}")
