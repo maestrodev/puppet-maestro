@@ -163,7 +163,7 @@
         <Arg>
           <New class="org.apache.commons.dbcp.BasicDataSource">
             <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>
-            <Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost:5432/maestro"/></Set>
+            <Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/maestro"/></Set>
             <Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>
             <Set name="password"><SystemProperty name="database.password" default="<%=scope.lookupvar('maestro::db_password')%>"/></Set>
             <Set name="testOnBorrow">true</Set>
@@ -192,7 +192,7 @@
         <Arg>
           <New class="org.apache.commons.dbcp.BasicDataSource">
             <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>
-            <Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost:5432/maestro"/></Set>
+            <Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/maestro"/></Set>
             <Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>
             <Set name="password"><SystemProperty name="database.password" default="<%=scope.lookupvar('maestro::db_password')%>"/></Set>
             <Set name="testOnBorrow">true</Set>
