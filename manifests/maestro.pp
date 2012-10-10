@@ -105,12 +105,18 @@ class maestro::maestro( $repo = $maestrodev_repo,
       before  => Service['maestro'],
     }
 
-    file { "${basedir}/lucee-lib.json":
+    file { "${basedir}/conf/lucee-lib.json":
       mode    =>  "0600",
       content =>  template("maestro/lucee-lib.json.erb"),
       require => Class['maestro::maestro::package'],
       notify  => Service[maestro],
-    } 
+    } ->
+    # legacy hardcoded location
+    file { "/var/maestro/lucee-lib.json":
+      ensure => link,
+      force  => true,
+      target => "${basedir}/conf/lucee-lib.json",
+    }
 
     # plugin folder
     file { "$user_home/.maestro" :

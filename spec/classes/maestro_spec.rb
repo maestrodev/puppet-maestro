@@ -34,7 +34,7 @@ describe 'maestro::maestro' do
     end
 
     it "should create the right LuCEE client configuration" do
-      content = catalogue.resource('file', '/var/local/maestro/lucee-lib.json').send(:parameters)[:content]
+      content = catalogue.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
       content.should =~ /"username": "maestro",$/
       content.should =~ /"password": "maestro"$/
     end
@@ -53,7 +53,7 @@ describe 'maestro::maestro' do
     end
 
     it "should create the right LuCEE client configuration" do
-      content = catalogue.resource('file', '/var/local/maestro/lucee-lib.json').send(:parameters)[:content]
+      content = catalogue.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
       content.should =~ /"username": "lucee",$/
       content.should =~ /"password": "my-lucee-passwd"$/
     end
