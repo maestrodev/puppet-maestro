@@ -112,6 +112,9 @@ class maestro::maestro( $repo = $maestrodev_repo,
       notify  => Service[maestro],
     } ->
     # legacy hardcoded location
+    file { "/var/maestro":
+      ensure => directory,
+    } ->
     file { "/var/maestro/lucee-lib.json":
       ensure => link,
       force  => true,
