@@ -6,6 +6,13 @@ class maestro::lucee($agent_auto_activate = false,
   $port = 5432,
   $database = 'luceedb') {
 
+  if defined (Class["maestro::lucee_demo_compositions"]) {
+    $is_demo = true
+  }
+  else {
+    $is_demo = false
+  }
+
   # We must make sure this file replaces the one installed
   # by the RPM package.
 
