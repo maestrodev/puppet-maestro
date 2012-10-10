@@ -24,9 +24,38 @@ describe 'maestro::maestro' do
       should_not contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end
     it { should contain_exec("unpack-maestro") }
-    it "should not auto activate agents" do
-      should contain_file('/etc/maestro_lucee.json').with_content(/"agent_auto_activate": false,$/)
-      should contain_file('/etc/maestro_lucee.json').with_content(/"pass": "mydbpassword",$/)      
+    
+    it "should create the right LuCEE configuration" do
+      content = catalogue.resource('file', '/etc/maestro_lucee.json').send(:parameters)[:content]
+      content.should =~ /"agent_auto_activate": false,$/
+      content.should =~ /"pass": "mydbpassword",$/
+      content.should =~ /"username": "maestro",$/
+      content.should =~ /"password": "maestro",$/
+    end
+
+    it "should create the right LuCEE client configuration" do
+      content = catalogue.resource('file', '/var/local/maestro/lucee-lib.json').send(:parameters)[:content]
+      content.should =~ /"username": "maestro",$/
+      content.should =~ /"password": "maestro"$/
+    end
+  end
+
+  context "when using custom lucee password" do
+    let(:params) { {
+        :lucee_username => "lucee",
+        :lucee_password => "my-lucee-passwd",
+    }.merge(DEFAULT_PARAMS) }
+
+    it "should create the right LuCEE configuration" do
+      content = catalogue.resource('file', '/etc/maestro_lucee.json').send(:parameters)[:content]
+      content.should =~ /"username": "lucee",$/
+      content.should =~ /"password": "my-lucee-passwd",$/
+    end
+
+    it "should create the right LuCEE client configuration" do
+      content = catalogue.resource('file', '/var/local/maestro/lucee-lib.json').send(:parameters)[:content]
+      content.should =~ /"username": "lucee",$/
+      content.should =~ /"password": "my-lucee-passwd"$/
     end
   end
 
