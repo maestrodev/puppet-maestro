@@ -85,14 +85,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
       ensure => directory,
     }
 
-  # TODO: put this in a library so it can be reused
-  # If the version is a Maven snapshot, transform the base version to it's
-  # SNAPSHOT indicator
-  if $version =~ /^(.*)-[0-9]{8}\.[0-9]{6}-[0-9]+$/ {
-    $base_version = "${1}-SNAPSHOT"
-  } else {
-    $base_version = $version
-  } 
+  $base_version = baseversion($version)
 
   if $lucee {
     package { [ 'libxslt-devel', 'libxml2-devel' ]: ensure => installed }

@@ -9,18 +9,9 @@ class maestro::agent::package(
   $agent_user_home = $maestro::agent::agent_user_home) {
   
   
-  # TODO: put this in a library so it can be reused
-  # If the version is a Maven snapshot, transform the base version to it's
-   # SNAPSHOT indicator
-   if $version =~ /^(.*)-[0-9]{8}\.[0-9]{6}-[0-9]+$/ {
-     $base_version = "${1}-SNAPSHOT"
-     $timestamp_version = $version
-   } else {
-     $base_version = $version
-     $timestamp_version = $version # version is a release
-   }
-
-  
+  $timestamp_version = $version # version is a release
+  $base_version = baseversion($version)
+    
   if ! defined(File[$srcdir]) {
     file {$srcdir:
       ensure => directory,
