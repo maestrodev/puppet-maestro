@@ -33,7 +33,6 @@ class maestro::agent::package(
     owner   => $agent_user,
     group   => $agent_group,
   }
-
   
   
   case $type {
@@ -65,7 +64,7 @@ class maestro::agent::package(
           repo => $repo,
           timestamp_version => $timestamp_version,
           base_version => $base_version,
-      } ->
+      } ->         
       file { "${basedir}/logs":
         ensure  => link,
         target  => "${agent_user_home}/logs",
@@ -75,6 +74,11 @@ class maestro::agent::package(
       } ->
       # until maestro-agent properly sets the working directory / temp
       # directory
+      file { "${basedir}/bin":
+              ensure  => directory,
+              owner   => $agent_user,
+              group   => $agent_group,
+      } ->
       file { "${basedir}/bin/tmp":
         ensure => directory,
         owner  => $agent_user,
