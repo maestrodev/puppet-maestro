@@ -7,10 +7,6 @@ describe 'maestro::lucee_demo_compositions' do
     catalogue.resource('file', "/apps/lucee/WEB-INF/config/demo/#{file}.json").send(:parameters)[:content]
   end
 
-  context "when using demo compositions" do
-    it { should contain_augeas("maestro-demo").with_changes(/ true$/)}
-  end
-
   context "when not using sonar, archiva or irc" do
     let(:params) {{ }}
 
