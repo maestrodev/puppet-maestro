@@ -29,6 +29,7 @@ class maestro::maestro::service(
     } ->
     exec { "check-data-upgrade":
       command   => "curl -X POST http://localhost:$port/api/v1/system/upgrade",
+      logoutput => "on_failure",
       tries     => 30,
       try_sleep => 1,
     }
