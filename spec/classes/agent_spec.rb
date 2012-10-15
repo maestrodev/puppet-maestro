@@ -82,8 +82,9 @@ describe 'maestro::agent' do
       :package_type => 'rpm'
     }) }
     it { should_not contain_exec("unpack-agent") }
-    $release_agent_rpm_source = "https://u:p@repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/1.0/agent-1.0-rpm.rpm"
-    it { should contain_package("maestro-agent").with({'source' => $release_agent_rpm_source, 'provider' => 'rpm' } )}
+    agent_rpm_source = "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/1.0/agent-1.0-rpm.rpm"
+    it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-1.0.rpm", 'provider' => 'rpm' } )}
+    it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
   end
 
   context "when installing a snapshot version from an rpm" do
@@ -92,8 +93,9 @@ describe 'maestro::agent' do
       :agent_version => '1.0.0-20120430.110153-41',
     }) }
     it { should_not contain_exec("unpack-agent") }
-    $snapshot_agent_rpm_source = "https://u:p@repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/1.0.0-SNAPSHOT/agent-1.0.0-20120430.110153-41-rpm.rpm"
-    it { should contain_package("maestro-agent").with('source' => $snapshot_agent_rpm_source )}
+    agent_rpm_source = "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/1.0.0-SNAPSHOT/agent-1.0.0-20120430.110153-41-rpm.rpm"
+    it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-1.0.0-20120430.110153-41.rpm", 'provider' => 'rpm' } )}
+    it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
   end
 
 
