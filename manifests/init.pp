@@ -15,10 +15,6 @@ class maestro {
   if ! defined(File['/usr/local/src']) {
     file {'/usr/local/src':
       ensure => directory,
-      before => [
-        Wget::Authfetch["fetch-maestro-rpm"],
-        Wget::Authfetch["fetch-maestro-agent-rpm"],
-      ],
     }
   }
 }
