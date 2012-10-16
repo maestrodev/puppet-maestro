@@ -18,11 +18,11 @@ define maestro::plugin($version) {
 
   # download the plugin to /usr/local/src
   wget::authfetch { "fetch-maestro-plugin-${name}":
-    user => $maestro::repo['username'],
-    password => $maestro::repo['password'],
-    source => "${maestro::repo['url']}/com/maestrodev/${name}/${base_version}/${name}-${version}-bin.zip",
+    user        => $maestro::repo['username'],
+    password    => $maestro::repo['password'],
+    source      => "${maestro::repo['url']}/com/maestrodev/${name}/${base_version}/${name}-${version}-bin.zip",
     destination => "/usr/local/src/${name}-${version}-bin.zip",
-    require => File["${user_home}/.maestro/plugins"],
+    require     => [File['/usr/local/src'], File["${user_home}/.maestro/plugins"]],
   } ->
 
   # copy to .maestro/plugins if it hasn't been installed already

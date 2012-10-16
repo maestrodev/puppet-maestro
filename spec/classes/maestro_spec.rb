@@ -24,6 +24,7 @@ describe 'maestro::maestro' do
       should_not contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end
     it { should contain_exec("unpack-maestro") }
+    it { should contain_file("/usr/local/src") }
     
     it "should create the right LuCEE configuration" do
       content = catalogue.resource('file', '/etc/maestro_lucee.json').send(:parameters)[:content]
