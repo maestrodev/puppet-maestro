@@ -17,12 +17,6 @@ define maestro::plugin($version) {
   $plugin_file = "${name}-${version}-bin.zip"
 
   # download the plugin to /usr/local/src
-  if ! defined(File['/usr/local/src']) {
-    file {'/usr/local/src':
-      ensure => directory,
-      before => Wget::Authfetch["fetch-maestro-plugin-${name}"],
-    }
-  }
   wget::authfetch { "fetch-maestro-plugin-${name}":
     user => $maestro::repo['username'],
     password => $maestro::repo['password'],
