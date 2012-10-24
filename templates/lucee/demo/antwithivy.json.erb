@@ -164,6 +164,212 @@
                 }
             ], 
             "updated_at": "2012-02-07T00:29:51-05:00"
+        },
+        {
+              "id": 22,
+              "name": "Jenkins Ant with Ivy",
+              "description": "Demonstrate an Ant and Ivy project build and deployment using Jenkins",
+              "schedule": "",
+              "enabled": true,
+              "state": null,
+              "agent_facts": {
+
+                                },
+              "tags": [
+
+              ],
+              "fail_on_cancel": false,
+              "reuse_agent": true,
+              "created_at": "2012-10-24T16:17:21+00:00",
+              "updated_at": "2012-10-24T16:17:21+00:00",
+              "agent_pool_id": 1,
+              "on_error_id": null,
+              "fail_type_id": 1,
+              "parent_id": null,
+              "composition_tasks": [
+                {
+                  "id": 88,
+                  "options": {
+                    "host": {
+                      "required": true,
+                      "type": "String",
+                      "value": "localhost"
+                                                                                            },
+                    "port": {
+                      "required": false,
+                      "type": "Integer",
+                      "value": 8181
+                                                                                            },
+                    "job": {
+                      "required": true,
+                      "type": "String",
+                      "value": "AntWithIvy"
+                                                                                            },
+                    "username": {
+                      "required": false,
+                      "type": "String",
+                      "value": ""
+                                                                                            },
+                    "password": {
+                      "required": false,
+                      "type": "Password",
+                      "value": ""
+                                                                                            },
+                    "use_ssl": {
+                      "required": true,
+                      "type": "Boolean",
+                      "value": false
+                                                                                            },
+                    "web_path": {
+                      "required": false,
+                      "type": "String",
+                      "value": ""
+                                                                                            },
+                    "scm_url": {
+                      "required": false,
+                      "type": "Url",
+                      "value": "https://github.com/maestrodev/hello-ivy.git"
+                                                                                            },
+                    "user_defined_axes": {
+                      "required": false,
+                      "type": "Array",
+                      "value": [
+
+                      ]
+                                                                                            },
+                    "label_axes": {
+                      "required": false,
+                      "type": "Array",
+                      "value": [
+
+                      ]
+                                                                                            },
+                    "steps": {
+                      "required": false,
+                      "type": "Array",
+                      "value": [
+                        "ant -propertyfile /var/local/maestro-agent/ant.xml deploy"
+                      ]
+                                                                                            },
+                    "override_existing": {
+                      "required": true,
+                      "type": "Boolean",
+                      "value": true
+                                                                                            }
+                                                                    },
+                  "position": 1,
+                  "name": "jenkins plugin",
+                  "is_from_parent": false,
+                  "created_at": "2012-10-24T16:18:03+00:00",
+                  "updated_at": "2012-10-24T16:18:45+00:00",
+                  "composition_id": 22,
+                  "task_id": 1,
+                  "sources": [
+
+                  ]
+                                                }
+              ],
+              "fail_type": "fast",
+              "on_error_composition": null,
+              "tasks": [
+                {
+                  "id": 1,
+                  "name": "jenkins plugin",
+                  "description": "Run A Set Of Work Steps In Jenkins, The Job Will Be Created If It Doesn't Exist<br>[host] Hostname Of The Jenkins Server<br>[port] Port Jenkins Is Running On<br>[username] Username for jenkins server<br>[password] Password for jenkins server<br>[job] Name Of The Jenkins Job<br>[web_path] context path of the jenkins server<br>[scm_url] Url Of The Source Code Repository<br>[steps] Set Of Steps To Be Executed By Jenkins",
+                  "position": 1,
+                  "options": {
+                    "host": {
+                      "required": true,
+                      "type": "String",
+                      "value": "localhost"
+                                                                                            },
+                    "port": {
+                      "required": false,
+                      "type": "Integer",
+                      "value": 8080
+                                                                                            },
+                    "job": {
+                      "required": true,
+                      "type": "String",
+                      "value": ""
+                                                                                            },
+                    "username": {
+                      "required": false,
+                      "type": "String",
+                      "value": ""
+                                                                                            },
+                    "password": {
+                      "required": false,
+                      "type": "Password",
+                      "value": ""
+                                                                                            },
+                    "use_ssl": {
+                      "required": true,
+                      "type": "Boolean",
+                      "value": false
+                                                                                            },
+                    "web_path": {
+                      "required": false,
+                      "type": "String",
+                      "value": ""
+                                                                                            },
+                    "scm_url": {
+                      "required": false,
+                      "type": "Url",
+                      "value": ""
+                                                                                            },
+                    "user_defined_axes": {
+                      "required": false,
+                      "type": "Array",
+                      "value": [
+
+                      ]
+                                                                                            },
+                    "label_axes": {
+                      "required": false,
+                      "type": "Array",
+                      "value": [
+
+                      ]
+                                                                                            },
+                    "steps": {
+                      "required": false,
+                      "type": "Array",
+                      "value": [
+
+                      ]
+                                                                                            },
+                    "override_existing": {
+                      "required": true,
+                      "type": "Boolean",
+                      "value": false
+                                                                                            }
+                                                                    },
+                  "type": "remote",
+                  "command": "/jenkinsplugin/build",
+                  "tool_name": [
+                    "Build"
+                  ],
+                  "code": null,
+                  "klass": "MaestroDev::JenkinsWorker",
+                  "dependencies": [
+                    {
+                      "name": "jenkins",
+                      "version": "0.6.8",
+                      "source": "http://rubygems.org/"
+                                                                                            }
+                  ],
+                  "language": "ruby",
+                  "pom": null,
+                  "image": null,
+                  "created_at": "2012-10-24T16:14:40+00:00",
+                  "updated_at": "2012-10-24T16:14:40+00:00",
+                  "plugin_id": 1
+                                                }
+              ],
+              "sources": [
+
+              ]
         }
     ], 
     "created_at": "2011-09-15T18:26:06-04:00", 
