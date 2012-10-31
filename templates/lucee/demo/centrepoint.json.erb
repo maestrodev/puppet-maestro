@@ -18,12 +18,12 @@
                         "clean_working_copy": {
                             "required": false, 
                             "type": "Boolean", 
-                            "value": false
+                            "value": true
                         }, 
                         "path": {
                             "required": true, 
                             "type": "String", 
-                            "value": "<%= working_copy_dir %>/centrepoint"
+                            "value": "<%= working_copy_dir %>/centrepoint-release"
                         }, 
                         "url": {
                             "required": true, 
@@ -45,7 +45,7 @@
                         "command_string": {
                             "required": true, 
                             "type": "String", 
-                            "value": "if [  ! -d <%= working_copy_dir %>/git ]\\n then\\n mkdir <%= working_copy_dir %>/git \\n fi\\n cd <%= working_copy_dir %>/git\\n if [ -d <%= working_copy_dir %>/git/centrepoint ]\\n then\\n rm -rf centrepoint \\nfi\\ngit clone file://localhost<%= working_copy_dir %>/centrepoint"
+                            "value": "rm -rf <%= working_copy_dir %>/git\nmkdir <%= working_copy_dir %>/git\ncd <%= working_copy_dir %>/git\ngit clone file://localhost<%= working_copy_dir %>/centrepoint-release centrepoint\n"
                         }, 
                         "environment": {
                             "required": false, 
@@ -80,7 +80,7 @@
                         "path": {
                             "required": true, 
                             "type": "String", 
-                            "value": "<%= working_copy_dir %>/git/centrepoint/centrepoint"
+                            "value": "<%= working_copy_dir %>/git/centrepoint"
                         }, 
                         "profiles": {
                             "required": false, 
@@ -182,13 +182,13 @@
                             "required": true, 
                             "type": "Array", 
                             "value": [
-                                "--batch-mode deploy -DaltDeploymentRepository=maestro-deploy::default::http://localhost:8082/archiva/repository/Test.Project.releases"
+                                "--batch-mode deploy -DrepositoryId=maestro-deploy -Durl=http://localhost:8082/archiva/repository/all -DaltDeploymentRepository=maestro-deploy::default::http://localhost:8082/archiva/repository/Test.Project.releases"
                             ]
                         }, 
                         "path": {
                             "required": true, 
                             "type": "String", 
-                            "value": "<%= working_copy_dir %>/git/centrepoint/centrepoint"
+                            "value": "<%= working_copy_dir %>/git/centrepoint"
                         }, 
                         "profiles": {
                             "required": false, 
@@ -233,7 +233,7 @@
                         "path": {
                             "required": true, 
                             "type": "String", 
-                            "value": "<%= working_copy_dir %>/git/centrepoint/centrepoint"
+                            "value": "<%= working_copy_dir %>/git/centrepoint"
                         }, 
                         "profiles": {
                             "required": false, 
