@@ -5,7 +5,7 @@ class maestro::agent::config(
   $agent_user = $maestro::agent::agent_user,
   $agent_group = $maestro::agent::agent_group,
   $maxmemory = $maestro::agent::maxmemory,
-  $timestamp_version = $maestro::agent::timestamp_version,
+  $timestamp_version = $maestro::agent::agent_version,
   $facter = $maestro::agent::facter,
   $stomp_host = $maestro::agent::stomp_host,
   $maven_servers = $maestro::agent::maven_servers,
