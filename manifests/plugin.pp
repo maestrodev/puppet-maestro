@@ -33,12 +33,14 @@ define maestro::plugin($version) {
   # verify that plugin has been installed correctly in Maestro
   exec { "wait-plugin-installed-${name}":
     command   => "test -s ${plugin_folder}/installed/${plugin_file} || test -s ${plugin_folder}/failed/${plugin_file}",
+    unless    => "test -s ${plugin_folder}/installed/${plugin_file} || test -s ${plugin_folder}/failed/${plugin_file}",
     tries     => 30,
     try_sleep => 4,
-    require => [Exec['startup_wait']],
+    require   => [Exec['startup_wait']],
   } ->
   exec { "assert-plugin-installed-${name}":
     command   => "test -s ${plugin_folder}/installed/${plugin_file}",
+    unless    => "test -s ${plugin_folder}/installed/${plugin_file}",
   }
 
 }
