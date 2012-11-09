@@ -41,7 +41,7 @@ class maestro::maestro::service(
     enable => $enabled,
     ensure => $enabled ? { true => running, false => stopped, },
     require => [File["/etc/init.d/maestro"], 
-                Class["maestro::maestro::package", "maestro::maestro-postgres"]],
+                Class["maestro::maestro::package", "maestro::maestro::db"]],
     subscribe => [File["${basedir}/conf/jetty.xml"], 
                   File["${basedir}/conf/security.properties"]],
   }

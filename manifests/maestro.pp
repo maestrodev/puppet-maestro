@@ -17,7 +17,6 @@
 # [db_password] the database user password
 # [db_version] the PostgreSQL version.
 # [db_allowed_rules] an array used to configure PostgreSQL access control.
-# [db_datadir] the data directory used by PostgreSQL
 # [initmemory] configures the initial memory for the JVM running Maestro
 # [maxmemory] configures the max memory for the JVM running Maestro
 # [permsize] configures the initial permsize for the JVM running Maestro
@@ -42,7 +41,6 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $db_password = $maestro_db_password,
   $db_version = '',
   $db_allowed_rules = [],
-  $db_datadir = '/var/lib/pgsql/data',
   $initmemory = '512',
   $maxmemory = '1536',
   $permsize = '384m',
@@ -124,7 +122,7 @@ class maestro::maestro( $repo = $maestrodev_repo,
     }
   }
 
-  class { 'maestro::maestro-postgres':  } ->   
+  class { 'maestro::maestro::db':  } ->   
   class { 'maestro::maestro::package': } -> 
   class { 'maestro::maestro::securityconfig': } -> 
   class { 'maestro::maestro::config': } -> 
