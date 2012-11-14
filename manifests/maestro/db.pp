@@ -6,10 +6,6 @@ class maestro::maestro::db(
   $lucee         = $maestro::maestro::lucee,
   $enabled       = true) {
 
-  class { 'postgresql::version':
-    version => '9.0',
-  }
-  
   class { 'postgresql::server':
     config_hash => {
       'ip_mask_deny_postgres_user' => '0.0.0.0/32',
