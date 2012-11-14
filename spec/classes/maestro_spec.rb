@@ -108,4 +108,14 @@ describe 'maestro::maestro' do
     }.merge(DEFAULT_PARAMS) }
     it { should contain_package("maestro") }
   end
+
+  context "when using tarball package" do
+    let(:params) { { 
+      :package_type => 'tarball'
+    }.merge(DEFAULT_PARAMS) }
+    it { should_not contain_package("maestro") }
+    it { should contain_wget__authfetch("fetch-maestro") }
+    it { should contain_exec("unpack-maestro").with_cwd("/usr/local") }
+  end
 end
+
