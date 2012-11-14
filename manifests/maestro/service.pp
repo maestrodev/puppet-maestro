@@ -24,7 +24,6 @@ class maestro::maestro::service(
     exec { "${startup_wait_script} ${db_password} >> ${basedir}/logs/maestro_initdb.log 2>&1":
       alias   => "startup_wait",
       timeout => 600,
-      #require => [File[$startup_wait_script], Service[maestro], Postgres::Createdb["sonar"]]
       require => [Service[maestro]]
     } ->
     exec { "check-data-upgrade":
