@@ -28,9 +28,6 @@ class maestro::maestro::db(
     postgresql::db{ 'maestro': }
     postgresql::db{ 'luceedb': }
     postgresql::db{ 'users': }
-    postgresql::db{ 'continuum': }
-    postgresql::db{ 'archiva': }
-    postgresql::db{ 'sonar': }
 
   }
   else {
