@@ -6,6 +6,8 @@ class maestro::maestro::package::tarball(
   $homedir,
   $basedir)
 {
+  $installdir = $maestro::maestro::installdir
+
   if ! defined(File[$srcdir]) {
     file {$srcdir:
       ensure => directory,
