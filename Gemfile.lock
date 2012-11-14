@@ -3,6 +3,11 @@ GEM
   specs:
     diff-lcs (1.1.3)
     facter (1.6.13)
+    json (1.7.5)
+    librarian-puppet-maestrodev (0.9.7.1)
+      json
+      puppet
+      thor (~> 0.15)
     metaclass (0.0.1)
     mocha (0.12.6)
       metaclass (~> 0.0.1)
@@ -25,12 +30,14 @@ GEM
     rspec-mocks (2.11.3)
     rspec-puppet (0.1.5)
       rspec
+    thor (0.16.0)
 
 PLATFORMS
   java
   ruby
 
 DEPENDENCIES
+  librarian-puppet-maestrodev (>= 0.9.7.1)
   puppet (~> 2.7.18)
   puppet-lint (~> 0.1.12)
   puppetlabs_spec_helper

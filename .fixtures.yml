@@ -1,7 +1,3 @@
 fixtures:
-  repositories:
-    wget: https://github.com/maestrodev/puppet-wget.git
-    postgresql: https://github.com/etiennep/puppet-postgresql.git
-    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
   symlinks:
     maestro: "#{source_dir}"

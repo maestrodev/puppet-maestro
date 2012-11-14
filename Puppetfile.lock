@@ -1,0 +1,21 @@
+FORGE
+  remote: http://forge.puppetlabs.com
+  specs:
+    maestrodev/wget (0.0.1)
+    puppetlabs/firewall (0.0.4)
+    puppetlabs/stdlib (2.5.1)
+
+GIT
+  remote: https://github.com/etiennep/puppet-postgresql.git
+  ref: master
+  sha: 5dcdffcf5bb2cb01eeb4d6f01d21aef06df621ce
+  specs:
+    postgresql (1.0.0)
+      puppetlabs/firewall (>= 0.0.4)
+      puppetlabs/stdlib (>= 2.0.0)
+
+DEPENDENCIES
+  maestrodev/wget (~> 0.0.1)
+  postgresql (>= 0)
+  puppetlabs/stdlib (~> 2.5.1)
+
