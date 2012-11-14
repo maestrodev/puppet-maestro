@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe 'maestro::maestro' do
+  let(:facts) { {
+      :operatingsystem => 'CentOS',
+      :kernel => 'Linux',
+      :osfamily => 'RedHat',
+      :postgres_default_version => '8.4',
+  } }
 
   DEFAULT_PARAMS = {
       :version => '1.0',
@@ -64,7 +70,12 @@ describe 'maestro::maestro' do
     let(:pre_condition) { %Q[
       class { 'maestro::params': user_home => '/var/local/u' } 
     ]}
-    let(:facts) { {:hostname => 'test-host-name'} }
+    let(:facts) { {
+        :hostname => 'test-host-name',
+        :operatingsystem => 'CentOS',
+        :kernel => 'Linux',
+        :osfamily => 'RedHat',
+        :postgres_default_version => '8.4',} }
 
     it { should contain_file('/var/local/u/.maestro/plugins') }
     it { should_not contain_file('/home/maestro/.maestro/plugins') }
@@ -76,6 +87,7 @@ describe 'maestro::maestro' do
   end
 
   context "when using a custom home directory without lucee" do
+
     let(:pre_condition) { %Q[
       class { 'maestro::params': user_home => '/var/local/u' } 
     ]}
