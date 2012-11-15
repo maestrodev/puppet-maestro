@@ -5,24 +5,24 @@ class maestro::test::remote-control( $repo = $maestrodev_repo, $version = '1.0.8
   $user = $maestro::params::user
   $group = $maestro::params::group
 
-  wget::authfetch { "fetch-test-remote-control":
-    user => $repo['username'],
-    password => $repo['password'],
-    source => "${repo['url']}/com/maestrodev/maestro/test/rpm/maestro-test-remote-control/${version}/maestro-test-remote-control-${version}.rpm",
+  wget::authfetch { 'fetch-test-remote-control':
+    user        => $repo['username'],
+    password    => $repo['password'],
+    source      => "${repo['url']}/com/maestrodev/maestro/test/rpm/maestro-test-remote-control/${version}/maestro-test-remote-control-${version}.rpm",
     destination => "/tmp/maestro-test-remote-control-${version}.rpm",
   } ->
 
-  package { "maestro-test-remote-control":
+  package { 'maestro-test-remote-control':
+    ensure   => latest,
     provider => rpm,
-    ensure => latest,
-    source => "file:///tmp/maestro-test-remote-control-${version}.rpm",
+    source   => "file:///tmp/maestro-test-remote-control-${version}.rpm",
   } ->
 
-  file { "/var/maestro-test-remote-control/conf/wrapper.conf":
-    owner   =>  $user,
-    group   =>  $group,
-    mode    =>  "0644",
-    content =>  template("maestro/test/remote-control-wrapper.erb"),
+  file { '/var/maestro-test-remote-control/conf/wrapper.conf':
+    owner   => $user,
+    group   => $group,
+    mode    => '0644',
+    content => template('maestro/test/remote-control-wrapper.erb'),
   } ->
 
   # Quick and dirty patch to upgrade selenium to 2.20.0 keeping our old RPM
@@ -34,15 +34,13 @@ class maestro::test::remote-control( $repo = $maestrodev_repo, $version = '1.0.8
     destination => "${installdir}/lib/selenium-server-standalone-2.20.0.jar",
   }
 
-
-
   # delete the 32 bit wrapper if running in 64 bits or startup will fail
-  if $::architecture == "x86_64" {
-    file { "$installdir/bin/wrapper-linux-x86-32":
+  if $::architecture == 'x86_64' {
+    file { "${installdir}/bin/wrapper-linux-x86-32":
       ensure  => absent,
       require => Package['maestro-test-remote-control'],
     } ->
-    file { "$installdir/lib/libwrapper-linux-x86-32.so":
+    file { "${installdir}/lib/libwrapper-linux-x86-32.so":
       ensure  => absent,
       notify  => Service['maestro-test-remote-control'],
     }
@@ -50,23 +48,23 @@ class maestro::test::remote-control( $repo = $maestrodev_repo, $version = '1.0.8
 
   class { 'maestro::test::dependencies': } ->
 
-  exec { "/usr/bin/xhost +":
-    alias       => "xhost",
-    environment => "DISPLAY=:0.0",
-    user        =>  $user,
-    unless      =>  "/bin/ps -fea | grep Xvfb",
+  exec { '/usr/bin/xhost +':
+    alias       => 'xhost',
+    environment => 'DISPLAY=:0.0',
+    user        => $user,
+    unless      => '/bin/ps -fea | grep Xvfb',
   } ->
-  exec { "/usr/bin/Xvfb :0 -screen 0 800x600x16 &":
-    alias  => "start-xvfb",
-    unless => "/bin/ps -fea | grep Xvfb | grep -v grep",
+  exec { '/usr/bin/Xvfb :0 -screen 0 800x600x16 &':
+    alias  => 'start-xvfb',
+    unless => '/bin/ps -fea | grep Xvfb | grep -v grep',
   } ->
 
-  service { maestro-test-remote-control:
+  service { 'maestro-test-remote-control':
     ensure     => running,
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    subscribe  => [File["/var/maestro-test-remote-control/conf/wrapper.conf"]]
+    subscribe  => File['/var/maestro-test-remote-control/conf/wrapper.conf']
   }
 
 }

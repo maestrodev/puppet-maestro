@@ -28,11 +28,12 @@
 # [jetty_forwarded] set to true to indicate that jetty is being forwarded by a proxy.
 # [mail_from] A hash containing the origin information for emails sent by maestro. name, address.
 #
-class maestro::maestro( $repo = $maestrodev_repo,
-  $version = $maestro_version,
+class maestro::maestro(
+  $repo = $::maestrodev_repo,
+  $version = $::maestro_version,
   $package_type = 'tarball',
-  $ldap = {}, 
-  $enabled = true, 
+  $ldap = {},
+  $enabled = true,
   $lucee = true,
   $admin = 'admin',
   $admin_password = $maestro_adminpassword,
@@ -47,41 +48,41 @@ class maestro::maestro( $repo = $maestrodev_repo,
   $maxpermsize = '384m',
   $port = '8080',
   $agent_auto_activate = false,
-  $lucee_url = "http://localhost:8080/lucee/api/v0/",
-  $lucee_password = "maestro",
-  $lucee_username = "maestro",
+  $lucee_url = 'http://localhost:8080/lucee/api/v0/',
+  $lucee_password = 'maestro',
+  $lucee_username = 'maestro',
   $jetty_forwarded = $::jetty_forwarded,
   $mail_from = {
     name    => 'Maestro',
     address => 'info@maestrodev.com'
   }) inherits maestro::params {
-  
-  $srcdir = "/usr/local/src"
-  $installdir = "/usr/local"
-  $basedir = "/var/local/maestro"
-  $homedir = "/usr/local/maestro"
-  
-  Exec { path => "/bin/:/usr/bin", }
-  File {
-    owner => $user,
-    group => $group,
-  }
-  
-  # Create the basedir. Where config and logs belong for this
-   # particular maestro instance.
 
-   file { $basedir:
-      ensure => directory,
-    } ->
-    file { "$basedir/conf":
-      ensure => directory,
-    } ->
-    file { "$basedir/logs":
-      ensure => directory,
-    } ->
-    file { "$basedir/tmp":
-      ensure => directory,
-    }
+  $srcdir = '/usr/local/src'
+  $installdir = '/usr/local'
+  $basedir = '/var/local/maestro'
+  $homedir = '/usr/local/maestro'
+
+  Exec { path => '/bin/:/usr/bin', }
+  File {
+    owner => $maestro::params::user,
+    group => $maestro::params::group,
+  }
+
+  # Create the basedir. Where config and logs belong for this
+  # particular maestro instance.
+
+  file { $basedir:
+    ensure => directory,
+  } ->
+  file { "${basedir}/conf":
+    ensure => directory,
+  } ->
+  file { "${basedir}/logs":
+    ensure => directory,
+  } ->
+  file { "${basedir}/tmp":
+    ensure => directory,
+  }
 
   $base_version = baseversion($version)
 
@@ -90,43 +91,41 @@ class maestro::maestro( $repo = $maestrodev_repo,
 
     class { 'maestro::lucee':
       agent_auto_activate => $agent_auto_activate,
-      password => $db_password,
-      
-      require => Package[ 'libxslt-devel', 'libxml2-devel' ],
-      before  => Service['maestro'],
+      password            => $db_password,
+      require             => Package[ 'libxslt-devel', 'libxml2-devel' ],
+      before              => Service['maestro'],
     }
 
     file { "${basedir}/conf/lucee-lib.json":
-      mode    =>  "0600",
-      content =>  template("maestro/lucee-lib.json.erb"),
+      mode    => '0600',
+      content => template('maestro/lucee-lib.json.erb'),
       require => Class['maestro::maestro::package'],
       notify  => Service[maestro],
     } ->
     # legacy hardcoded location
-    file { "/var/maestro":
+    file { '/var/maestro':
       ensure => directory,
     } ->
-    file { "/var/maestro/lucee-lib.json":
+    file { '/var/maestro/lucee-lib.json':
       ensure => link,
       force  => true,
       target => "${basedir}/conf/lucee-lib.json",
     }
 
     # plugin folder
-    file { "$user_home/.maestro" :
-      ensure => directory,
-      require => User[$user],
+    file { "${user_home}/.maestro" :
+      ensure  => directory,
+      require => User[$maestro::params::user],
     } ->
-    file { "$user_home/.maestro/plugins" :
+    file { "${user_home}/.maestro/plugins" :
       ensure => directory,
     }
   }
 
-  class { 'maestro::maestro::db':  } ->   
-  class { 'maestro::maestro::package': } -> 
-  class { 'maestro::maestro::securityconfig': } -> 
-  class { 'maestro::maestro::config': } -> 
+  class { 'maestro::maestro::db':  } ->
+  class { 'maestro::maestro::package': } ->
+  class { 'maestro::maestro::securityconfig': } ->
+  class { 'maestro::maestro::config': } ->
   class { 'maestro::maestro::service': }
 
-  
 }

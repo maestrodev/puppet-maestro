@@ -13,7 +13,8 @@ describe 'maestro::agent' do
   }
 
   DEFAULT_USER = "maestro_agent"
-
+  
+  let(:facts) { {:operatingsystem => 'CentOS', :kernel => 'Linux', :osfamily => 'RedHat'} }
   let(:params) { DEFAULT_AGENT_PARAMS }
   
   it { should contain_file("/var/local/maestro-agent").with(
@@ -29,12 +30,12 @@ describe 'maestro::agent' do
   # end
 
   context "when using rvm" do
-    let(:facts) {{:rvm_installed => 'true'}}
+    let(:facts) {{:operatingsystem => 'CentOS', :kernel => 'Linux', :osfamily => 'RedHat', :rvm_installed => 'true'}}
     it { should contain_user(DEFAULT_USER).with_groups(['root', 'rvm']) }
   end
 
   context "when not using rvm" do
-    let(:facts) {{:rvm_installed => 'false'}}
+    let(:facts) {{:operatingsystem => 'CentOS', :kernel => 'Linux', :osfamily => 'RedHat', :rvm_installed => 'false'}}
     it { should contain_user(DEFAULT_USER).with_groups('root') }
   end
 
@@ -102,7 +103,6 @@ describe 'maestro::agent' do
   # ================================================ Linux ================================================
 
   context "when running on CentOS" do
-    let(:facts) { {:operatingsystem => 'CentOS', :kernel => 'Linux', :osfamily => 'RedHat'} }
     let(:params) { DEFAULT_AGENT_PARAMS }
 
     it { should contain_file("/etc/init.d/maestro-agent") }
@@ -127,12 +127,7 @@ describe 'maestro::agent' do
     )}
   end
 
-  # ================================================ Windows ================================================
-
-  context "when running on Windows" do
-    let(:facts) { {:operatingsystem => 'windows', :kernel => 'windows', :osfamily => 'windows'} }
-    let(:params) { DEFAULT_AGENT_PARAMS }
-  end
+  
   
   
   

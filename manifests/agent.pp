@@ -12,54 +12,52 @@
 # [agent_name] the name this agent should identify itself with on the Maestro server
 # [maxmemory] the wrapper.java.maxmemory setting to configure in the wrapper.
 #
-class maestro::agent( 
+class maestro::agent(
+  $agent_version,
   $repo = $maestrodev_repo,
   $package_type = 'tarball',
-  $agent_version,
   $facter = true,
   $stomp_host = '',
   $maven_servers = '',
   $agent_name = 'maestro_agent',
   $maxmemory = '128') inherits maestro::params {
-  
-  $basedir = "/usr/local/maestro-agent"
-  $srcdir = "/usr/local/src"
 
- 
+  $basedir = '/usr/local/maestro-agent'
+  $srcdir = '/usr/local/src'
+
+
   # Note that later pieces assume basedir ends in maestro-agent, would need a
   # different approach
 
- 
-
-  if ! defined(User[$agent_user]) {
+  if ! defined(User[$maestro::params::agent_user]) {
 
     if $::rvm_installed == 'true' { # important to compare to string 'true'
       $groups = ['root', 'rvm']
     } elsif $::rvm_installed == 'false' {
-      $groups = "root"
+      $groups = 'root'
     } else {
       $msg = "Fact rvm_installed not defined or not true|false: '${::rvm_installed}'. Ensure puppet is run with --pluginsync"
       notify { $msg : }
       warning($msg)
-      $groups = "root"
+      $groups = 'root'
     }
 
-    group { $agent_group:
+    group { $maestro::params::agent_group:
       ensure => present,
     } ->
-    user { $agent_user:
+    user { $maestro::params::agent_user:
       ensure     => present,
-      managehome => $managehome,
-      home       => $agent_user_home,
-      shell      => "/bin/bash",
-      gid        => $agent_group,
+      managehome => $maestro::params::managehome,
+      home       => $maestro::params::agent_user_home,
+      shell      => '/bin/bash',
+      gid        => $maestro::params::agent_group,
       groups     => $groups,
       system     => true,
     }
   }
 
-  Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
-  
+  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
+
   class { 'maestro::agent::package': } -> class { 'maestro::agent::config': } -> class { 'maestro::agent::service': }
 
 }

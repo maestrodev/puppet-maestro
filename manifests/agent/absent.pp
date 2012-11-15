@@ -5,8 +5,8 @@ class maestro::agent::absent(
   $basedir = '/var/maestro-agent') {
 
   service { 'maestro-agent':
-   enable => false,
-   ensure => stopped,
+    ensure => stopped,
+    enable => false,
   }
 
   if ! defined(User[$user]) {
@@ -22,9 +22,9 @@ class maestro::agent::absent(
       force   => true,
     }
   }
-  
+
   package { 'maestro-agent':
-    ensure => absent,
+    ensure  => absent,
     require => Service['maestro-agent'],
   }
 

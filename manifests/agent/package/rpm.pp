@@ -5,13 +5,13 @@ class maestro::agent::package::rpm (
 {
 
   if $repo['url'] =~ /^(https:\/\/)(.*)$/ {
-    $uri = "${2}"
-  } 
+    $uri = $2
+  }
 
   # When we have a proper yum repo, this variable can go away.
   $maestro_agent_source = "https://${uri}/com/maestrodev/lucee/agent/${base_version}/agent-${timestamp_version}-rpm.rpm"
 
-  wget::authfetch { "fetch-agent-rpm":
+  wget::authfetch { 'fetch-agent-rpm':
     user        => $repo['username'],
     password    => $repo['password'],
     source      => $maestro_agent_source,

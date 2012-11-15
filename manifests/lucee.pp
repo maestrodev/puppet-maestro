@@ -1,12 +1,13 @@
-class maestro::lucee($agent_auto_activate = false,
+class maestro::lucee(
+  $agent_auto_activate = false,
   $username = 'maestro',
   $password = 'maestro',
-  $type = 'postgres',
-  $host = 'localhost',
-  $port = 5432,
+  $type     = 'postgres',
+  $host     = 'localhost',
+  $port     = 5432,
   $database = 'luceedb') {
 
-  if defined (Class["maestro::lucee::demo_compositions"]) {
+  if defined (Class['maestro::lucee::demo_compositions']) {
     $is_demo = true
   }
   else {
@@ -17,10 +18,10 @@ class maestro::lucee($agent_auto_activate = false,
   # by the RPM package.
 
   file { '/etc/maestro_lucee.json':
-    ensure => present,
+    ensure  => present,
     owner   => root,
     group   => root,
-    content =>  template("maestro/lucee/maestro_lucee.json.erb"),
+    content => template('maestro/lucee/maestro_lucee.json.erb'),
     notify  => Service['maestro'],
     require => Class['maestro::package'],
   }

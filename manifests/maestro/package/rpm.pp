@@ -5,13 +5,13 @@ class maestro::maestro::package::rpm(
 {
 
   if $repo['url'] =~ /^(https:\/\/)(.*)$/ {
-    $uri = "${2}"
-  } 
-  
+    $uri = $2
+  }
+
   # When we have a proper yum repo, this variable can go away.
   $maestro_source = "https://${uri}/com/maestrodev/maestro/rpm/maestro/${base_version}/maestro-${version}.rpm"
-  
-  wget::authfetch { "fetch-maestro-rpm":
+
+  wget::authfetch { 'fetch-maestro-rpm':
     user        => $repo['username'],
     password    => $repo['password'],
     source      => $maestro_source,
@@ -23,5 +23,5 @@ class maestro::maestro::package::rpm(
     source   => "/usr/local/src/maestro-${version}.rpm",
     provider => rpm,
   }
-  
+
 }

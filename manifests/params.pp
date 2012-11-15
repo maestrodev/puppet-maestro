@@ -1,17 +1,17 @@
 class maestro::params(
-  $user = 'maestro',
-  $group = 'maestro',
-  $user_home = "/var/local/maestro", 
-  $agent_user = "maestro_agent",
-  $agent_group = "maestro_agent",
-  $agent_user_home = "/var/local/maestro-agent") {
-  
+  $user            = 'maestro',
+  $group           = 'maestro',
+  $user_home       = '/var/local/maestro',
+  $agent_user      = 'maestro_agent',
+  $agent_group     = 'maestro_agent',
+  $agent_user_home = '/var/local/maestro-agent') {
+
   if ! defined(User[$user]) {
     user { $user:
       ensure     => present,
       home       => $user_home,
       managehome => true,
-      shell      => "/bin/bash",
+      shell      => '/bin/bash',
       system     => true,
       gid        => $group,
     }
@@ -19,8 +19,8 @@ class maestro::params(
 
   if ! defined(Group[$group]) {
     group { $group:
-      ensure     => present,
-      system     => true,
+      ensure => present,
+      system => true,
     }
   }
 }

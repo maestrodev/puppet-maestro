@@ -1,12 +1,15 @@
 class maestro::agent::service {
-   
-  case $::operatingsystem {
+
+  case $::kernel {
     'Darwin': {
       include maestro::agent::service::darwin
     }
-    default: {
+    'Linux': {
       include maestro::agent::service::linux
     }
+    default: {
+      fail('Unsupported operating system')
+    }
   }
-  
+
 }

@@ -21,7 +21,7 @@ class maestro::maestro::db(
   if $enabled {
 
     Postgresql::Db {
-      user => 'maestro',
+      user     => 'maestro',
       password => $db_password
     }
 
@@ -32,8 +32,8 @@ class maestro::maestro::db(
   }
   else {
     service { 'postgresql':
-      ensure => stopped,
-      enable => false,
+      ensure    => stopped,
+      enable    => false,
       hasstatus => true,
     }
   }
