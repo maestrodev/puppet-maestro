@@ -10,4 +10,4 @@ description 'Install and configure Maestro from MaestroDev'
 
 dependency 'maestrodev/wget', '~>0.0.1'
 dependency 'puppetlabs/stdlib', '~>2.5.1'
-dependency 'maestrodev/postgresql', '~>1.0.0'
+#dependency 'maestrodev/postgresql', '~>1.0.0'
