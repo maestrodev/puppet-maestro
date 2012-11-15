@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'maestro::lucee_demo_compositions' do
+describe 'maestro::lucee::demo_compositions' do
 
   def file_content(file)
     should contain_file("/apps/lucee/WEB-INF/config/demo/#{file}.json")

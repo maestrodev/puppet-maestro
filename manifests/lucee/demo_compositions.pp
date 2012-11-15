@@ -1,4 +1,4 @@
-class maestro::lucee_demo_compositions(
+class maestro::lucee::demo_compositions(
   $use_sonar = undef,
   $use_archiva = undef,
   $ec2_key_id = '',
@@ -12,9 +12,9 @@ class maestro::lucee_demo_compositions(
   $working_copy_dir = "/var/local/maestro-agent/wc",
   $demo_keypair = "/var/local/maestro-agent/.ssh/lucee-demo-keypair.pem") {
 
-  maestro::lucee_demo_composition { 'antwithivy': }
-  maestro::lucee_demo_composition { 'centrepoint': }
-  maestro::lucee_demo_composition { 'redmine': }
-  maestro::lucee_demo_composition { 'wordpress': }
-  maestro::lucee_demo_composition { 'android': }
+  maestro::lucee::demo_composition { 'antwithivy': }
+  maestro::lucee::demo_composition { 'centrepoint': }
+  maestro::lucee::demo_composition { 'redmine': }
+  maestro::lucee::demo_composition { 'wordpress': }
+  maestro::lucee::demo_composition { 'android': }
 }

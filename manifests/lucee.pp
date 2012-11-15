@@ -6,7 +6,7 @@ class maestro::lucee($agent_auto_activate = false,
   $port = 5432,
   $database = 'luceedb') {
 
-  if defined (Class["maestro::lucee_demo_compositions"]) {
+  if defined (Class["maestro::lucee::demo_compositions"]) {
     $is_demo = true
   }
   else {
