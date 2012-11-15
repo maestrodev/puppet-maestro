@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'maestro::maestro-test-remote-control' do
+describe 'maestro::test::remote-control' do
   let(:params) { {
     :repo               => {
       'id'       => 'maestro-mirror',

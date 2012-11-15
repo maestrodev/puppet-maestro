@@ -1,4 +1,4 @@
-class maestro::maestro-test-remote-control( $repo = $maestrodev_repo, $version = '1.0.8.2', $master_host = 'localhost' ) {
+class maestro::test::remote-control( $repo = $maestrodev_repo, $version = '1.0.8.2', $master_host = 'localhost' ) {
   $firefox_version = '10'
   $selenium_environment = "Firefox ${firefox_version} on Linux, Firefox ${firefox_version} on Linux, Firefox ${firefox_version} on Linux"
   $installdir = '/usr/local/maestro-test-remote-control'
@@ -34,6 +34,8 @@ class maestro::maestro-test-remote-control( $repo = $maestrodev_repo, $version =
     destination => "${installdir}/lib/selenium-server-standalone-2.20.0.jar",
   }
 
+
+
   # delete the 32 bit wrapper if running in 64 bits or startup will fail
   if $::architecture == "x86_64" {
     file { "$installdir/bin/wrapper-linux-x86-32":
@@ -46,7 +48,7 @@ class maestro::maestro-test-remote-control( $repo = $maestrodev_repo, $version =
     }
   }
 
-  class { 'maestro::selenium': } ->
+  class { 'maestro::test::dependencies': } ->
 
   exec { "/usr/bin/xhost +":
     alias       => "xhost",
