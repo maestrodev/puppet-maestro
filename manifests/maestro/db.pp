@@ -5,6 +5,12 @@ class maestro::maestro::db(
   $allowed_rules = $maestro::maestro::db_allowed_rules,
   $enabled       = true) {
 
+  if $version != undef {
+    class { 'postgresql::version':
+      version => $version,
+    }
+  }
+
   class { 'postgresql::server':
     config_hash => {
       'ip_mask_deny_postgres_user' => '0.0.0.0/32',
