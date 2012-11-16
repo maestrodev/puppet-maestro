@@ -29,8 +29,8 @@
 # [mail_from] A hash containing the origin information for emails sent by maestro. name, address.
 #
 class maestro::maestro(
-  $repo = $::maestrodev_repo,
-  $version = $::maestro_version,
+  $repo = $maestrodev_repo,
+  $version = $maestro_version,
   $package_type = 'tarball',
   $ldap = {},
   $enabled = true,
