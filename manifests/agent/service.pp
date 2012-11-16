@@ -1,10 +1,10 @@
 class maestro::agent::service {
 
-  case $::kernel {
+  case $::osfamily {
     'Darwin': {
       include maestro::agent::service::darwin
     }
-    'Linux': {
+    'RedHat', 'Debian': {
       include maestro::agent::service::linux
     }
     default: {
