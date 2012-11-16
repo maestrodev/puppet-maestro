@@ -3,7 +3,6 @@ class maestro::maestro::db(
   $password      = $maestro::maestro::db_server_password,
   $db_password   = $maestro::maestro::db_password,
   $allowed_rules = $maestro::maestro::db_allowed_rules,
-  $lucee         = $maestro::maestro::lucee,
   $enabled       = true) {
 
   class { 'postgresql::server':
