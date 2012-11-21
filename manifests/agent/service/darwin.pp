@@ -1,4 +1,7 @@
 class maestro::agent::service::darwin {
+
+  $basedir = $maestro::agent::basedir
+
   file { '/Library/LaunchDaemons/com.maestrodev.agent.plist':
     ensure  => present,
     content => template('maestro/agent/com.maestrodev.agent.plist.erb'),

@@ -5,9 +5,14 @@ class maestro::maestro::db(
   $allowed_rules = $maestro::maestro::db_allowed_rules,
   $enabled       = true) {
 
-  if $version != undef {
-    class { 'postgresql::version':
-      version => $version,
+  if ($version != '' AND $version != unset) {
+    yumrepo { 'postgresql-repo':
+      name     => "postgresql-${version}",
+      baseurl  => "http://yum.postgresql.org/${version}/redhat/rhel-\$releasever-\$basearch",
+      descr    => "Postgresql ${version} Yum Repo",
+      enabled  => 1,
+      gpgcheck => 0,
+      before => Class[postgresql::server],
     }
   }
 
@@ -27,7 +32,8 @@ class maestro::maestro::db(
 
     Postgresql::Db {
       user     => 'maestro',
-      password => $db_password
+      password => $db_password,
+      require => Class['postgresql::server'],
     }
 
     postgresql::db{ 'maestro': }
