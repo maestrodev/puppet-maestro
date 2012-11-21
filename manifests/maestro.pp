@@ -61,24 +61,7 @@ class maestro::maestro(
   $installdir = '/usr/local'
   $basedir = '/var/local/maestro'
   $homedir = '/usr/local/maestro'
-  
-  if ! defined(User[$maestro::params::user]) {
-    user { $maestro::params::user:
-      ensure     => present,
-      home       => $maestro::params::user_home,
-      managehome => true,
-      shell      => '/bin/bash',
-      system     => true,
-      gid        => $maestro::params::group,
-    }
-  }
 
-  if ! defined(Group[$maestro::params::group]) {
-    group { $maestro::params::group:
-      ensure => present,
-      system => true,
-    }
-  }
 
   Exec { path => '/bin/:/usr/bin', }
   File {
