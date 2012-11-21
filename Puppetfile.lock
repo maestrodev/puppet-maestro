@@ -8,7 +8,7 @@ FORGE
 GIT
   remote: https://github.com/etiennep/puppet-postgresql.git
   ref: master
-  sha: 5dcdffcf5bb2cb01eeb4d6f01d21aef06df621ce
+  sha: cc54d68578e72b70d4d0787cbe8e27a9ed9f9b32
   specs:
     postgresql (1.0.0)
       puppetlabs/firewall (>= 0.0.4)

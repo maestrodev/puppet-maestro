@@ -5,11 +5,15 @@ class maestro::maestro::db(
   $allowed_rules = $maestro::maestro::db_allowed_rules,
   $enabled       = true) {
 
-  if ($version != '' AND $version != unset) {
+  if ($version == '' or $version == unset) {
+    $version_real = $::postgres_default_version
+  }
+  else {
+    $version_real = $version
     yumrepo { 'postgresql-repo':
-      name     => "postgresql-${version}",
-      baseurl  => "http://yum.postgresql.org/${version}/redhat/rhel-\$releasever-\$basearch",
-      descr    => "Postgresql ${version} Yum Repo",
+      name     => "postgresql-${version_real}",
+      baseurl  => "http://yum.postgresql.org/${version_real}/redhat/rhel-\$releasever-\$basearch",
+      descr    => "Postgresql ${version_real} Yum Repo",
       enabled  => 1,
       gpgcheck => 0,
       before => Class[postgresql::server],
@@ -17,6 +21,7 @@ class maestro::maestro::db(
   }
 
   class { 'postgresql::server':
+    version => $version_real,
     config_hash => {
       'ip_mask_deny_postgres_user' => '0.0.0.0/32',
       'ip_mask_allow_all_users'    => '0.0.0.0/0',

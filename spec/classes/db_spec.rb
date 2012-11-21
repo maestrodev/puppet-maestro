@@ -2,27 +2,27 @@ require 'spec_helper'
 require 'pp'
 
 describe 'maestro::maestro::db' do
-  DEFAULT_DB_PARAMS = {
-    :db_password => "defaultpassword",
-  }
-
   let(:facts) { {
       :osfamily => 'RedHat',
       :postgres_default_version => '8.4',
   } }
-  let(:params) { DEFAULT_DB_PARAMS }
+  let(:params) { {
+    :version     => '',
+    :db_password => 'defaultpassword',
+  } }
 
   context "with default postgres version" do
-    it { should contain_class("postgresql::version").with_version("8.4") }
-    it { should contain_package("postgresql-server").with_name('postgresql-server') }
+    it { should contain_class('postgresql::server').with_version('8.4') }
   end
 
   context "with custom postgres version" do
     let(:params) { {
       :version => '9.0',
-    }.merge DEFAULT_DB_PARAMS }
+      :db_password => 'defaultpassword',
+    } }
 
-    it { should contain_class("postgresql::version").with_version("9.0") }
-    it { should contain_package("postgresql-server").with_name('postgresql90-server') }
+    it { should contain_class('postgresql::server').with_version('9.0') }
+    it { should contain_yumrepo('postgresql-repo').with_name('postgresql-9.0')}
+
   end
 end
