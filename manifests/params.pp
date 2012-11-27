@@ -6,26 +6,30 @@ class maestro::params(
   $agent_group     = 'maestro_agent',
   $agent_user_home = '/var/local/maestro-agent') {
 
-  $managehome = $::osfamily ? { 'Darwin' => unset, default => true }
-
-  user { $user:
-    ensure     => present,
-    home       => $maestro::params::user_home,
-    managehome => $managehome,
-    shell      => '/bin/bash',
-    system     => true,
-    gid        => $maestro::params::group,
-  }
-
 
   if ! defined(User[$user]) {
-    user { $user:
-      ensure     => present,
-      home       => $maestro::params::user_home,
-      managehome => $managehome,
-      shell      => '/bin/bash',
-      system     => true,
-      gid        => $maestro::params::group,
+
+    if $::osfamily == 'Darwin' {
+      # User creation is broken in Mountain Lion 
+      #user { $user:
+      #  ensure => present,
+      #  home   => $user_home,
+      #  shell  => '/bin/bash',
+      #  gid    => $group,
+      #  require => Group[$group],
+      #}
+    }
+    else 
+    {
+      user { $user:
+        ensure     => present,
+        home       => $user_home,
+        managehome => true,
+        shell      => '/bin/bash',
+        system     => true,
+        gid        => $group,
+        require    => Group[$group],
+      }
     }
   }
 
@@ -37,3 +41,4 @@ class maestro::params(
   }
 
 }
+

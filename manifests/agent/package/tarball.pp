@@ -23,7 +23,6 @@ class maestro::agent::package::tarball(
       creates => "${basedir}/lib",
       cwd     => '/usr/local', # TODO use $basedir instead of hardcoded
       path    => '/bin/:/usr/bin:/usr/sbin',
-      require => [User[$agent_user],File[$agent_user_home]],
       notify  => Service['maestro-agent'],
     }
 

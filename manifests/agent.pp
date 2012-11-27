@@ -44,17 +44,36 @@ class maestro::agent(
       $groups = $admin_group
     }
 
-    group { $maestro::params::agent_group:
-      ensure => present,
-    } ->
-    user { $maestro::params::agent_user:
-      ensure     => present,
-      managehome => $maestro::params::managehome,
-      home       => $maestro::params::agent_user_home,
-      shell      => '/bin/bash',
-      gid        => $maestro::params::agent_group,
-      groups     => $groups,
-      system     => true,
+    if ! defined(Group[$maestro::params::agent_group]) {
+      group { $maestro::params::agent_group:
+        ensure => present,
+        before => User[$maestro::params::agent_user],
+      }
+    }
+
+    if $::osfamily == 'Darwin' {
+      # User creation is broken in Mountain Lion
+      # user { $maestro::params::agent_user:
+      #  ensure     => present,
+      #  home       => $maestro::params::agent_user_home,
+      #  shell      => '/bin/bash',
+      #  gid        => $maestro::params::agent_group,
+      #  groups     => $groups,
+      #  before     => Class['maestro::agent::package'],
+      #}
+    } 
+    else
+    {
+      user { $maestro::params::agent_user:
+        ensure     => present,
+        managehome => true,
+        home       => $maestro::params::agent_user_home,
+        shell      => '/bin/bash',
+        gid        => $maestro::params::agent_group,
+        groups     => $groups,
+        system     => true,
+        before     => Class['maestro::agent::package'],
+      }
     }
   }
 
