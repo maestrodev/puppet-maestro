@@ -85,7 +85,7 @@ class maestro::maestro(
     ensure => directory,
   }
 
-  $base_version = baseversion($version)
+  $base_version = snapshotbaseversion($version)
 
   if $lucee {
     package { [ 'libxslt-devel', 'libxml2-devel' ]: ensure => installed }

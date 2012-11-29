@@ -10,7 +10,7 @@ class maestro::agent::package(
 
 
   $timestamp_version = $version # version is a release
-  $base_version = baseversion($version)
+  $base_version = snapshotbaseversion($version)
 
   if ! defined(File[$srcdir]) {
     file { $srcdir:

@@ -9,5 +9,6 @@ summary 'MaestroDev Maestro'
 description 'Install and configure Maestro from MaestroDev'
 
 dependency 'maestrodev/wget', '>=0.0.1'
+dependency 'maestrodev/maven', '>=0.0.2'
 dependency 'puppetlabs/stdlib', '>=2.5.1'
 #dependency 'puppetlabs/postgresql', '>=1.0.0'
