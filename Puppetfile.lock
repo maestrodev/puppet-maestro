@@ -14,7 +14,16 @@ GIT
       puppetlabs/firewall (>= 0.0.4)
       puppetlabs/stdlib (>= 2.0.0)
 
+GIT
+  remote: https://github.com/maestrodev/puppet-maven.git
+  ref: master
+  sha: f8e1a7285d8a1d1f5bfcbc4bcab14d87a170be6b
+  specs:
+    maestrodev/maven (0.0.2)
+      maestrodev/wget (>= 0.0.1)
+
 DEPENDENCIES
+  maestrodev/maven (>= 0)
   maestrodev/wget (~> 0.0.1)
   postgresql (>= 0)
   puppetlabs/stdlib (~> 2.5.1)
