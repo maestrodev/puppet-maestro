@@ -12,7 +12,7 @@ describe 'maestro::maestro::db' do
   } }
 
   context "with default postgres version" do
-    it { should contain_class('postgresql::server').with_version('8.4') }
+    it { should contain_class('postgresql').with_version('8.4') }
   end
 
   context "with custom postgres version" do
@@ -21,7 +21,7 @@ describe 'maestro::maestro::db' do
       :db_password => 'defaultpassword',
     } }
 
-    it { should contain_class('postgresql::server').with_version('9.0') }
+    it { should contain_class('postgresql').with_version('9.0') }
     it { should contain_yumrepo('postgresql-repo').with_name('postgresql-9.0')}
 
   end
