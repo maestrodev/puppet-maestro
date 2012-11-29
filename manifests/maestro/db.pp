@@ -20,8 +20,12 @@ class maestro::maestro::db(
     }
   }
 
-  class { 'postgresql::server':
+  class { 'postgresql':
     version => $version_real,
+  }
+
+  class { 'postgresql::server':
+
     config_hash => {
       'ip_mask_deny_postgres_user' => '0.0.0.0/32',
       'ip_mask_allow_all_users'    => '0.0.0.0/0',
