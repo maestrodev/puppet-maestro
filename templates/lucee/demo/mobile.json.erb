@@ -1,0 +1,458 @@
+{
+  "id": 16,
+  "name": "Mobile",
+  "description": "Mobile Application Examples",
+  "home_url": null,
+  "scm_url": null,
+  "tags": [
+    ""
+  ],
+  "created_at": "2012-11-13T07:03:26-08:00",
+  "updated_at": "2012-11-19T13:58:46-08:00",
+  "compositions": [
+    {
+      "id": 32,
+      "name": "iosched",
+      "description": "Google I/O app for Android",
+      "schedule": "",
+      "enabled": true,
+      "state": null,
+      "agent_facts": {
+
+                        },
+      "tags": [
+        ""
+      ],
+      "fail_on_cancel": false,
+      "reuse_agent": true,
+      "created_at": "2012-11-13T07:04:05-08:00",
+      "updated_at": "2012-11-13T09:22:28-08:00",
+      "agent_pool_id": 3,
+      "on_error_id": null,
+      "fail_type_id": null,
+      "parent_id": null,
+      "composition_tasks": [
+        {
+          "id": 133,
+          "options": {
+            "path": {
+              "description": "local file location",
+              "required": false,
+              "type": "String",
+              "value": "<%= working_copy_dir %>/iosched"
+                                                                                    },
+            "url": {
+              "description": "Remote Location Of The Git Repositiory",
+              "required": true,
+              "type": "Url",
+              "value": "https://code.google.com/p/iosched/"
+                                                                                    },
+            "branch": {
+              "description": "Branch Of The Repository To Checkout",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    },
+            "clean_working_copy": {
+              "description": "Remove Local Working Copy",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+                                                                                    }
+                                                            },
+          "position": 1,
+          "name": "git clone",
+          "is_from_parent": false,
+          "created_at": "2012-11-13T07:05:43-08:00",
+          "updated_at": "2012-11-30T07:36:03-08:00",
+          "composition_id": 32,
+          "task_id": 1,
+          "sources": [
+
+          ]
+                                        },
+        {
+          "id": 134,
+          "options": {
+            "path": {
+              "description": "Location To Run Ant ",
+              "required": false,
+              "type": "String",
+              "value": "<%= working_copy_dir %>/iosched/android"
+                                                                                    },
+            "tasks": {
+              "description": "Set Of Ant Tasks ",
+              "required": true,
+              "type": "Array",
+              "value": [
+                "clean",
+                "debug"
+              ]
+                                                                                    },
+            "environment": {
+              "description": "Environment Variables ",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    },
+            "propertyfile": {
+              "description": "Location Of The Ant Property File",
+              "required": false,
+              "type": "String",
+              "value": "/var/local/maestro-agent/androidsdk.properties"
+                                                                                    }
+                                                            },
+          "position": 2,
+          "name": "ant",
+          "is_from_parent": false,
+          "created_at": "2012-11-13T07:05:44-08:00",
+          "updated_at": "2012-11-30T07:36:03-08:00",
+          "composition_id": 32,
+          "task_id": 24,
+          "sources": [
+
+          ]
+                                        }
+      ],
+      "fail_type": null,
+      "on_error_composition": null,
+      "tasks": [
+        {
+          "id": 1,
+          "name": "git clone",
+          "description": "Clone A Git Repository",
+          "position": 1,
+          "options": {
+            "path": {
+              "description": "local file location",
+              "required": false,
+              "type": "String",
+              "value": null
+                                                                                    },
+            "url": {
+              "description": "Remote Location Of The Git Repositiory",
+              "required": true,
+              "type": "Url",
+              "value": null
+                                                                                    },
+            "branch": {
+              "description": "Branch Of The Repository To Checkout",
+              "required": false,
+              "type": "String",
+              "value": null
+                                                                                    },
+            "clean_working_copy": {
+              "description": "Remove Local Working Copy",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+                                                                                    }
+                                                            },
+          "type": "remote",
+          "command": "/git/clone",
+          "tool_name": [
+            "SCM"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2011-08-04T15:31:28-07:00",
+          "updated_at": "2012-11-27T05:21:39-08:00",
+          "plugin_id": null
+                                        },
+        {
+          "id": 24,
+          "name": "ant",
+          "description": "Run A Specified Set Of Ant Tasks",
+          "position": 1,
+          "options": {
+            "path": {
+              "description": "Location To Run Ant ",
+              "required": false,
+              "type": "String",
+              "value": null
+                                                                                    },
+            "tasks": {
+              "description": "Set Of Ant Tasks ",
+              "required": true,
+              "type": "Array",
+              "value": [
+
+              ]
+                                                                                    },
+            "environment": {
+              "description": "Environment Variables ",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    },
+            "propertyfile": {
+              "description": "Location Of The Ant Property File",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    }
+                                                            },
+          "type": "remote",
+          "command": "/ant/execute",
+          "tool_name": [
+            "Shell"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2011-10-14T15:31:29-07:00",
+          "updated_at": "2012-11-27T05:21:49-08:00",
+          "plugin_id": null
+                                        }
+      ],
+      "sources": [
+
+      ]
+            },
+    {
+      "id": 33,
+      "name": "Sidekick",
+      "description": "Build the Sidekick iOS app using Apache Maven",
+      "schedule": "",
+      "enabled": true,
+      "state": null,
+      "agent_facts": {
+
+                        },
+      "tags": [
+        ""
+      ],
+      "fail_on_cancel": false,
+      "reuse_agent": true,
+      "created_at": "2012-11-19T13:59:42-08:00",
+      "updated_at": "2012-11-30T07:34:33-08:00",
+      "agent_pool_id": 1,
+      "on_error_id": null,
+      "fail_type_id": 1,
+      "parent_id": null,
+      "composition_tasks": [
+        {
+          "id": 135,
+          "options": {
+            "path": {
+              "description": "local file location",
+              "required": false,
+              "type": "String",
+              "value": "/Users/maestrodev/wc/sidekick-mvn/Sidekick"
+                                                                                    },
+            "url": {
+              "description": "Remote Location Of The Git Repositiory",
+              "required": true,
+              "type": "Url",
+              "value": "git://github.com/maestrodev/Sidekick.git"
+                                                                                    },
+            "branch": {
+              "description": "Branch Of The Repository To Checkout",
+              "required": false,
+              "type": "String",
+              "value": "master"
+                                                                                    },
+            "clean_working_copy": {
+              "description": "Remove Local Working Copy",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+                                                                                    }
+                                                            },
+          "position": 1,
+          "name": "git clone",
+          "is_from_parent": false,
+          "created_at": "2012-11-19T14:03:20-08:00",
+          "updated_at": "2012-11-28T08:30:26-08:00",
+          "composition_id": 33,
+          "task_id": 1,
+          "sources": [
+
+          ]
+                                        },
+        {
+          "id": 136,
+          "options": {
+            "path": {
+              "description": "Location To Run Maven ",
+              "required": false,
+              "type": "String",
+              "value": "/Users/maestrodev/wc/sidekick-mvn/Sidekick"
+                                                                                    },
+            "goals": {
+              "description": "Set of Maven goals",
+              "required": true,
+              "type": "Array",
+              "value": [
+                "compile",
+                "deploy"
+              ]
+                                                                                    },
+            "environment": {
+              "description": "Environment Variables",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    },
+            "settingsfile": {
+              "description": "Location of a Maven settings.xml file",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    },
+            "profiles": {
+              "description": "Profiles To Activate",
+              "required": false,
+              "type": "Array",
+              "value": [
+
+              ]
+                                                                                    },
+            "properties": {
+              "description": "Settings To Pass Maven",
+              "required": false,
+              "type": "Array",
+              "value": [
+
+              ]
+                                                                                    }
+                                                            },
+          "position": 2,
+          "name": "maven",
+          "is_from_parent": false,
+          "created_at": "2012-11-19T14:04:59-08:00",
+          "updated_at": "2012-11-28T08:30:26-08:00",
+          "composition_id": 33,
+          "task_id": 25,
+          "sources": [
+
+          ]
+                                        }
+      ],
+      "fail_type": "fast",
+      "on_error_composition": null,
+      "tasks": [
+        {
+          "id": 1,
+          "name": "git clone",
+          "description": "Clone A Git Repository",
+          "position": 1,
+          "options": {
+            "path": {
+              "description": "local file location",
+              "required": false,
+              "type": "String",
+              "value": null
+                                                                                    },
+            "url": {
+              "description": "Remote Location Of The Git Repositiory",
+              "required": true,
+              "type": "Url",
+              "value": null
+                                                                                    },
+            "branch": {
+              "description": "Branch Of The Repository To Checkout",
+              "required": false,
+              "type": "String",
+              "value": null
+                                                                                    },
+            "clean_working_copy": {
+              "description": "Remove Local Working Copy",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+                                                                                    }
+                                                            },
+          "type": "remote",
+          "command": "/git/clone",
+          "tool_name": [
+            "SCM"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2011-08-04T15:31:28-07:00",
+          "updated_at": "2012-11-27T05:21:39-08:00",
+          "plugin_id": null
+                                        },
+        {
+          "id": 25,
+          "name": "maven",
+          "description": "Run A Specified Set Of Maven Goals",
+          "position": 1,
+          "options": {
+            "path": {
+              "description": "Location To Run Maven ",
+              "required": false,
+              "type": "String",
+              "value": null
+                                                                                    },
+            "goals": {
+              "description": "Set of Maven goals",
+              "required": true,
+              "type": "Array",
+              "value": [
+
+              ]
+                                                                                    },
+            "environment": {
+              "description": "Environment Variables",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    },
+            "settingsfile": {
+              "description": "Location of a Maven settings.xml file",
+              "required": false,
+              "type": "String",
+              "value": ""
+                                                                                    },
+            "profiles": {
+              "description": "Profiles To Activate",
+              "required": false,
+              "type": "Array",
+              "value": [
+
+              ]
+                                                                                    },
+            "properties": {
+              "description": "Settings To Pass Maven",
+              "required": false,
+              "type": "Array",
+              "value": [
+
+              ]
+                                                                                    }
+                                                            },
+          "type": "remote",
+          "command": "/maven/execute",
+          "tool_name": [
+            "Shell"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2011-10-14T15:31:29-07:00",
+          "updated_at": "2012-11-27T05:21:49-08:00",
+          "plugin_id": null
+                                        }
+      ],
+      "sources": [
+
+      ]
+            }
+  ]
+}

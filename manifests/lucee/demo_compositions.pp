@@ -16,5 +16,5 @@ class maestro::lucee::demo_compositions(
   maestro::lucee::demo_composition { 'centrepoint': }
   maestro::lucee::demo_composition { 'redmine': }
   maestro::lucee::demo_composition { 'wordpress': }
-  maestro::lucee::demo_composition { 'android': }
+  maestro::lucee::demo_composition { 'mobile': }
 }
