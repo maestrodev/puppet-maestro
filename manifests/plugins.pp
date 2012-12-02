@@ -11,13 +11,16 @@ class maestro::plugins() {
     version => '1.0',
   }
   maestro::plugin { 'maestro-jenkins-plugin':
-    version => '1.1.1',
+    version => '1.1.2',
   }
-  maestro::plugin { 'maestro-bamboo-plugin':
+  maestro::plugin { 'maestro-jira-plugin':
     version => '1.0',
   }
-  maestro::plugin { 'maestro-fog-plugin':
+  maestro::plugin { 'maestro-bamboo-plugin':
     version => '1.1',
+  }
+  maestro::plugin { 'maestro-fog-plugin':
+    version => '1.2',
   }
 
 }
