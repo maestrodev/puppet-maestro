@@ -20,10 +20,11 @@ class maestro::maestro::db(
     }
   }
 
-  class { 'postgresql':
-    version => $version_real,
-  }
-
+  class { "postgresql::params":
+      version               => $version_real,
+      manage_package_repo   => false,
+      package_source        => 'yum.postgresql.org',
+  } ->
   class { 'postgresql::server':
 
     config_hash => {
