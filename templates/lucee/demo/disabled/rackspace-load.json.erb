@@ -1,0 +1,746 @@
+{
+  "id": 2,
+  "name": "Load testing",
+  "description": "Centrepoint is a basic but useful application that sets up a dashboard of project information from Maven, Archiva and Continuum.",
+  "home_url": "https://github.com/brettporter/centrepoint",
+  "scm_url": "https://github.com/brettporter/centrepoint.git",
+  "tags": null,
+  "parameters": null,
+  "created_at": "2011-09-15T15:26:06-07:00",
+  "updated_at": "2012-10-04T09:21:32-07:00",
+  "compositions": [
+    {
+      "id": 25,
+      "name": "Start",
+      "description": "Bootstrap agents and trigger compositions",
+      "schedule": "",
+      "enabled": true,
+      "state": null,
+      "agent_facts": {},
+      "tags": [
+        ""
+      ],
+      "process_definition": null,
+      "fail_on_cancel": false,
+      "reuse_agent": true,
+      "created_at": "2012-10-17T21:53:21+00:00",
+      "updated_at": "2012-12-05T09:47:25+00:00",
+      "agent_pool_id": 1,
+      "on_error_id": null,
+      "fail_type_id": null,
+      "parent_id": null,
+      "composition_tasks": [
+        {
+          "id": 93,
+          "options": {
+            "username": {
+              "description": "Rackspace username",
+              "required": true,
+              "type": "String",
+              "value": "myusername"
+            },
+            "api_key": {
+              "description": "Rackspace API key",
+              "required": true,
+              "type": "Password",
+              "value": "mypassword"
+            },
+            "version": {
+              "description": "API version to use: v1 or v2 for Open Cloud Servers",
+              "required": false,
+              "type": "String",
+              "value": "v2"
+            },
+            "endpoint": {
+              "description": "endpoint used for Rackspace v2, choosing the region to use",
+              "required": false,
+              "type": "String",
+              "value": "https://dfw.servers.api.rackspacecloud.com/v2"
+            },
+            "auth_url": {
+              "description": "authentication endpoint, default to https://auth.api.rackspacecloud.com for US accounts, https://lon.auth.api.rackspacecloud.com for UK ones",
+              "required": false,
+              "type": "String",
+              "value": "https://auth.api.rackspacecloud.com"
+            },
+            "image_id": {
+              "description": "id of the image to use (ie. c195ef3b-9195-4474-b6f7-16e5bd86acd0 for CentOS 6.3 in v2)",
+              "required": true,
+              "type": "String",
+              "value": "c195ef3b-9195-4474-b6f7-16e5bd86acd0"
+            },
+            "flavor_id": {
+              "description": "Flavor id that defines ram, cpu,...",
+              "required": true,
+              "type": "Integer",
+              "value": 2
+            },
+            "public_key": {
+              "description": "public key content to copy to the server as authorized key",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "public_key_path": {
+              "description": "path to public key to copy to the server as authorized key",
+              "required": false,
+              "type": "String",
+              "value": "/var/local/maestro-agent/.ssh/id_rsa.pub"
+            },
+            "name": {
+              "required": false,
+              "type": "String",
+              "value": "agent.rackspace.maestrodev.net",
+              "description": "name of the started vm, a unique name will be generated if it already exists"
+            },
+            "number_of_vms": {
+              "required": true,
+              "type": "Integer",
+              "value": 3,
+              "description": "number of instances to start"
+            },
+            "private_key": {
+              "required": false,
+              "type": "String",
+              "value": "",
+              "description": "ssh private key content to use to connect to the server"
+            },
+            "private_key_path": {
+              "required": false,
+              "type": "String",
+              "value": "/var/local/maestro-agent/.ssh/id_rsa",
+              "description": "ssh private key path in the agent to use to connect to the server (instead of private_key content)"
+            },
+            "ssh_commands": {
+              "required": false,
+              "type": "Array",
+              "value": [
+                "curl -L http://raw.github.com/maestrodev/maestro-puppet-example/master/get-agent.sh | DAEMON=true bash -s #{maestro.master} #{maestro.master_ip}"
+              ],
+              "description": "commands to execute in the server once it is started"
+            },
+            "ssh_user": {
+              "required": false,
+              "type": "String",
+              "value": "root",
+              "description": "username to use for ssh connection"
+            }
+          },
+          "position": 1,
+          "name": "rackspace provision",
+          "is_from_parent": false,
+          "created_at": "2012-11-20T14:05:19+00:00",
+          "updated_at": "2012-12-05T11:48:06+00:00",
+          "composition_id": 25,
+          "task_id": 7,
+          "sources": [
+            {
+              "name": "Rackspace"
+            }
+          ]
+        },
+        {
+          "id": 94,
+          "options": {
+            "body": {
+              "description": "The String To Be Displayed In The Action Pane",
+              "required": true,
+              "type": "String",
+              "value": "Maestro Agents ready at #{fields[:cloud_ips].join(\",\")}"
+            },
+            "fail_on_cancel": {
+              "description": "If The User Declines The Action, The Composition Will Fail",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            }
+          },
+          "position": 2,
+          "name": "confirmation",
+          "is_from_parent": false,
+          "created_at": "2012-10-17T22:41:46+00:00",
+          "updated_at": "2012-12-05T11:48:06+00:00",
+          "composition_id": 25,
+          "task_id": 28,
+          "sources": []
+        },
+        {
+          "id": 377,
+          "options": {
+            "compositions": {
+              "description": "Composition names or ids to be scheduled",
+              "required": true,
+              "type": "Array",
+              "value": [
+                "Centrepoint with Maven"
+              ]
+            },
+            "wait_for_completion": {
+              "description": "Pause this Composition until completion of the scheduled compositions",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            },
+            "Force Schedule Build": {
+              "description": "Force build the scheduled composition",
+              "required": true,
+              "type": "Boolean",
+              "value": true
+            }
+          },
+          "position": 3,
+          "name": "schedule multiple",
+          "is_from_parent": false,
+          "created_at": "2012-12-06T02:02:10-08:00",
+          "updated_at": "2012-12-06T02:02:10-08:00",
+          "composition_id": 85,
+          "task_id": 26,
+          "sources": []
+        },
+        {
+          "id": 94,
+          "options": {
+            "body": {
+              "description": "The String To Be Displayed In The Action Pane",
+              "required": true,
+              "type": "String",
+              "value": "Ready to deprovision agents"
+            },
+            "fail_on_cancel": {
+              "description": "If The User Declines The Action, The Composition Will Fail",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            }
+          },
+          "position": 4,
+          "name": "confirmation",
+          "is_from_parent": false,
+          "created_at": "2012-10-17T22:41:46+00:00",
+          "updated_at": "2012-12-05T11:48:06+00:00",
+          "composition_id": 25,
+          "task_id": 28,
+          "sources": []
+        },
+        {
+          "id": 95,
+          "options": {},
+          "position": 5,
+          "name": "rackspace deprovision",
+          "is_from_parent": false,
+          "created_at": "2012-11-19T17:48:22+00:00",
+          "updated_at": "2012-12-05T11:48:06+00:00",
+          "composition_id": 25,
+          "task_id": 10,
+          "sources": []
+        }
+      ],
+      "fail_type": null,
+      "on_error_composition": null,
+      "tasks": [
+        {
+          "id": 7,
+          "name": "rackspace provision",
+          "description": "Provision servers in Rackspace",
+          "position": 1,
+          "options": {
+            "username": {
+              "description": "Rackspace username",
+              "required": true,
+              "type": "String",
+              "value": null
+            },
+            "api_key": {
+              "description": "Rackspace API key",
+              "required": true,
+              "type": "Password",
+              "value": null
+            },
+            "version": {
+              "description": "API version to use: v1 or v2 for Open Cloud Servers",
+              "required": false,
+              "type": "String",
+              "value": "v2"
+            },
+            "endpoint": {
+              "description": "endpoint used for Rackspace v2, choosing the region to use",
+              "required": false,
+              "type": "String",
+              "value": "https://dfw.servers.api.rackspacecloud.com/v2"
+            },
+            "auth_url": {
+              "description": "authentication endpoint, default to https://auth.api.rackspacecloud.com for US accounts, https://lon.auth.api.rackspacecloud.com for UK ones",
+              "required": false,
+              "type": "String",
+              "value": "https://auth.api.rackspacecloud.com"
+            },
+            "image_id": {
+              "description": "id of the image to use (ie. c195ef3b-9195-4474-b6f7-16e5bd86acd0 for CentOS 6.3 in v2)",
+              "required": true,
+              "type": "String",
+              "value": "c195ef3b-9195-4474-b6f7-16e5bd86acd0"
+            },
+            "flavor_id": {
+              "description": "Flavor id that defines ram, cpu,...",
+              "required": true,
+              "type": "Integer",
+              "value": 2
+            },
+            "public_key": {
+              "description": "public key content to copy to the server as authorized key",
+              "required": false,
+              "type": "String",
+              "value": null
+            },
+            "public_key_path": {
+              "description": "path to public key to copy to the server as authorized key",
+              "required": false,
+              "type": "String",
+              "value": "/var/local/maestro-agent/.ssh/id_rsa.pub"
+            },
+            "name": {
+              "required": false,
+              "type": "String",
+              "value": null,
+              "description": "name of the started vm, a unique name will be generated if it already exists"
+            },
+            "number_of_vms": {
+              "required": true,
+              "type": "Integer",
+              "value": 1,
+              "description": "number of instances to start"
+            },
+            "private_key": {
+              "required": false,
+              "type": "String",
+              "value": null,
+              "description": "ssh private key content to use to connect to the server"
+            },
+            "private_key_path": {
+              "required": false,
+              "type": "String",
+              "value": "/var/local/maestro-agent/.ssh/id_rsa",
+              "description": "ssh private key path in the agent to use to connect to the server (instead of private_key content)"
+            },
+            "ssh_commands": {
+              "required": false,
+              "type": "Array",
+              "value": [],
+              "description": "commands to execute in the server once it is started"
+            },
+            "ssh_user": {
+              "required": false,
+              "type": "String",
+              "value": "root",
+              "description": "username to use for ssh connection"
+            }
+          },
+          "type": "remote",
+          "command": "/rackspace/provision",
+          "tool_name": [
+            "Cloud"
+          ],
+          "code": null,
+          "klass": "MaestroDev::RackspaceWorker",
+          "dependencies": [
+            {
+              "name": "fog",
+              "version": "1.7.0",
+              "source": "http://rubygems.org/"
+            }
+          ],
+          "language": "ruby",
+          "pom": null,
+          "image": "rackspace.png",
+          "created_at": "2012-12-05T09:04:24+00:00",
+          "updated_at": "2012-12-05T09:04:24+00:00",
+          "plugin_id": 7
+        },
+        {
+          "id": 10,
+          "name": "rackspace deprovision",
+          "description": "Deprovision servers in Rackspace. Deprovisions all servers started in a previous provision tasks.",
+          "position": 1,
+          "options": {},
+          "type": "remote",
+          "command": "/rackspace/deprovision",
+          "tool_name": [
+            "Cloud"
+          ],
+          "code": null,
+          "klass": "MaestroDev::RackspaceWorker",
+          "dependencies": [
+            {
+              "name": "fog",
+              "version": "1.6.0",
+              "source": "http://rubygems.org/"
+            }
+          ],
+          "language": "ruby",
+          "pom": null,
+          "image": "rackspace.png",
+          "created_at": "2012-12-05T09:04:25+00:00",
+          "updated_at": "2012-12-05T09:04:25+00:00",
+          "plugin_id": 10
+        },
+        {
+          "id": 28,
+          "name": "confirmation",
+          "description": "Allows User Confirmation Before Continuing, A Notification Will Be Displayed Below. Confirming Will Allow The Composition To Continue, Rejecting Will Cancel The Composition",
+          "position": 1,
+          "options": {
+            "body": {
+              "description": "The String To Be Displayed In The Action Pane",
+              "required": true,
+              "type": "String",
+              "value": ""
+            },
+            "fail_on_cancel": {
+              "description": "If The User Declines The Action, The Composition Will Fail",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            }
+          },
+          "type": "confirmation",
+          "command": "/confirmation/work",
+          "tool_name": [
+            "Actions"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2011-08-04T22:31:28+00:00",
+          "updated_at": "2012-12-05T09:47:13+00:00",
+          "plugin_id": null
+        },
+        {
+          "id": 26,
+          "name": "schedule multiple",
+          "description": "Schedule compositions to execute",
+          "position": 5,
+          "options": {
+            "compositions": {
+              "description": "Composition names or ids to be scheduled",
+              "required": true,
+              "type": "Array",
+              "value": []
+            },
+            "wait_for_completion": {
+              "description": "Pause this Composition until completion of the scheduled compositions",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            },
+            "Force Schedule Build": {
+              "description": "Force build the scheduled composition",
+              "required": true,
+              "type": "Boolean",
+              "value": true
+            }
+          },
+          "type": "schedule",
+          "command": "/schedule/schedule_multiple",
+          "tool_name": [
+            "Management"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2012-04-11T15:57:59-07:00",
+          "updated_at": "2012-12-05T20:20:15-08:00",
+          "plugin_id": null
+        }
+      ],
+      "composition_configurations": [
+        {
+          "name": "master",
+          "value": "maestro.rackspace.maestrodev.net",
+          "is_from_parent": false,
+          "created_at": "2012-12-05T11:47:16+00:00",
+          "updated_at": "2012-12-05T11:47:16+00:00",
+          "composition_id": 25
+        },
+        {
+          "name": "master_ip",
+          "value": "",
+          "is_from_parent": false,
+          "created_at": "2012-12-05T11:47:30+00:00",
+          "updated_at": "2012-12-05T11:47:30+00:00",
+          "composition_id": 25
+        }
+      ],
+      "sources": [
+        {
+          "id": 7,
+          "name": "Rackspace",
+          "description": "Rackspace keys",
+          "uri": "some uri",
+          "options": {
+            "username": "rackspace",
+            "api_key": "******",
+            "version": "v2"
+          },
+          "created_at": "2012-11-19T17:46:12+00:00",
+          "updated_at": "2012-12-05T09:47:25+00:00",
+          "project_id": 0,
+          "source_type_id": 6,
+          "source_type": "rackspace"
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "name": "Centrepoint with Maven",
+      "description": "",
+      "schedule": "",
+      "enabled": true,
+      "state": null,
+      "agent_facts": {},
+      "tags": [],
+      "fail_on_cancel": false,
+      "reuse_agent": true,
+      "created_at": "2012-12-06T01:26:55-08:00",
+      "updated_at": "2012-12-06T01:26:55-08:00",
+      "agent_pool_id": 1,
+      "on_error_id": null,
+      "fail_type_id": 1,
+      "parent_id": null,
+      "composition_tasks": [
+        {
+          "id": 376,
+          "options": {
+            "path": {
+              "description": "local file location",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "url": {
+              "description": "Remote Location Of The Git Repositiory",
+              "required": true,
+              "type": "Url",
+              "value": "https://github.com/maestrodev/centrepoint.git"
+            },
+            "branch": {
+              "description": "Branch Of The Repository To Checkout",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "clean_working_copy": {
+              "description": "Remove Local Working Copy",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            },
+            "force_build": {
+              "description": "Build If No Update Is Found",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            }
+          },
+          "position": 1,
+          "name": "git clone",
+          "is_from_parent": false,
+          "created_at": "2012-12-06T01:32:58-08:00",
+          "updated_at": "2012-12-06T01:32:58-08:00",
+          "composition_id": 84,
+          "task_id": 1,
+          "sources": []
+        },
+        {
+          "id": 375,
+          "options": {
+            "path": {
+              "description": "Location To Run Maven ",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "goals": {
+              "description": "Set of Maven goals",
+              "required": true,
+              "type": "Array",
+              "value": [
+                "clean",
+                "install",
+                "-U",
+                "--batch-mode"
+              ]
+            },
+            "environment": {
+              "description": "Environment Variables",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "settingsfile": {
+              "description": "Location of a Maven settings.xml file",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "profiles": {
+              "description": "Profiles To Activate",
+              "required": false,
+              "type": "Array",
+              "value": []
+            },
+            "properties": {
+              "description": "Settings To Pass Maven",
+              "required": false,
+              "type": "Array",
+              "value": [
+                "repositoryId=maestro-deploy",
+                "url=#{maestro.repo}/repository/all",
+                "altDeploymentRepository=maestro-deploy::default::#{maestro.repo}/repository/snapshots",
+                "project.repository.url=#{maestro.repo}/repository/snapshots/"
+              ]
+            }
+          },
+          "position": 2,
+          "name": "maven",
+          "is_from_parent": false,
+          "created_at": "2012-12-06T01:32:58-08:00",
+          "updated_at": "2012-12-06T01:32:58-08:00",
+          "composition_id": 84,
+          "task_id": 20,
+          "sources": []
+        }
+      ],
+      "fail_type": "fast",
+      "on_error_composition": null,
+      "tasks": [
+        {
+          "id": 1,
+          "name": "git clone",
+          "description": "Clone A Git Repository",
+          "position": 1,
+          "options": {
+            "path": {
+              "description": "local file location",
+              "required": false,
+              "type": "String",
+              "value": null
+            },
+            "url": {
+              "description": "Remote Location Of The Git Repositiory",
+              "required": true,
+              "type": "Url",
+              "value": null
+            },
+            "branch": {
+              "description": "Branch Of The Repository To Checkout",
+              "required": false,
+              "type": "String",
+              "value": null
+            },
+            "clean_working_copy": {
+              "description": "Remove Local Working Copy",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            },
+            "force_build": {
+              "description": "Build If No Update Is Found",
+              "required": false,
+              "type": "Boolean",
+              "value": false
+            }
+          },
+          "type": "remote",
+          "command": "/git/clone",
+          "tool_name": [
+            "SCM"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2011-08-04T15:31:28-07:00",
+          "updated_at": "2012-12-05T20:19:41-08:00",
+          "plugin_id": null
+        },
+        {
+          "id": 20,
+          "name": "maven",
+          "description": "Run A Specified Set Of Maven Goals",
+          "position": 1,
+          "options": {
+            "path": {
+              "description": "Location To Run Maven ",
+              "required": false,
+              "type": "String",
+              "value": null
+            },
+            "goals": {
+              "description": "Set of Maven goals",
+              "required": true,
+              "type": "Array",
+              "value": []
+            },
+            "environment": {
+              "description": "Environment Variables",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "settingsfile": {
+              "description": "Location of a Maven settings.xml file",
+              "required": false,
+              "type": "String",
+              "value": ""
+            },
+            "profiles": {
+              "description": "Profiles To Activate",
+              "required": false,
+              "type": "Array",
+              "value": []
+            },
+            "properties": {
+              "description": "Settings To Pass Maven",
+              "required": false,
+              "type": "Array",
+              "value": []
+            }
+          },
+          "type": "remote",
+          "command": "/maven/execute",
+          "tool_name": [
+            "Shell"
+          ],
+          "code": null,
+          "klass": null,
+          "dependencies": null,
+          "language": null,
+          "pom": null,
+          "image": null,
+          "created_at": "2011-10-14T15:31:29-07:00",
+          "updated_at": "2012-12-05T20:20:02-08:00",
+          "plugin_id": null
+        }
+      ],
+      "composition_configurations": [
+        {
+          "name": "repo",
+          "value": "http://<%= archiva_host %>:<%= archiva_port %>/archiva",
+          "is_from_parent": false,
+          "created_at": "2012-12-06T01:42:19-08:00",
+          "updated_at": "2012-12-06T01:42:19-08:00",
+          "composition_id": 84
+        }
+      ],
+      "sources": []
+    }
+  ]
+}

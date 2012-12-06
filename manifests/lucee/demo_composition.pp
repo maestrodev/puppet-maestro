@@ -30,6 +30,18 @@ define maestro::lucee::demo_composition(
     $goal = 'install'
   }
 
+  # until the directory is included in LuCEE
+  if !defined(File["${maestro::maestro::homedir}/apps/lucee/WEB-INF/config/demo/disabled"]) {
+    file { "${maestro::maestro::homedir}/apps/lucee/WEB-INF/config/demo/disabled":
+      ensure  => directory,
+      owner   => $maestro::params::user,
+      group   => $maestro::params::group,
+      mode    => '0644',
+      before  => Service['maestro'],
+      require => File['/etc/maestro_lucee.json'],
+    }
+  }
+
   file { "${maestro::maestro::homedir}/apps/lucee/WEB-INF/config/demo/${name}.json":
     owner   => $maestro::params::user,
     group   => $maestro::params::group,

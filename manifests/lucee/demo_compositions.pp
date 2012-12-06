@@ -17,4 +17,6 @@ class maestro::lucee::demo_compositions(
   maestro::lucee::demo_composition { 'redmine': }
   maestro::lucee::demo_composition { 'wordpress': }
   maestro::lucee::demo_composition { 'mobile': }
+
+  maestro::lucee::demo_composition { 'disabled/rackspace-load': }
 }
