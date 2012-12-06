@@ -16,15 +16,16 @@ class maestro::maestro::db(
       descr    => "Postgresql ${version_real} Yum Repo",
       enabled  => 1,
       gpgcheck => 0,
-      before => Class[postgresql::server],
+      before => Class['postgresql::server'],
     }
+    
+    class { 'postgresql::params':
+      version             => $version_real,
+      manage_package_repo => false,
+      package_source      => 'yum.postgresql.org',
+    }
+    Class ['postgresql::params'] -> Class['postgresql::server']
   }
-
-  class { "postgresql::params":
-      version               => $version_real,
-      manage_package_repo   => false,
-      package_source        => 'yum.postgresql.org',
-  } ->
   class { 'postgresql::server':
 
     config_hash => {
