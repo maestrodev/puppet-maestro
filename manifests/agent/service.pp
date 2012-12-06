@@ -8,7 +8,7 @@ class maestro::agent::service {
       include maestro::agent::service::linux
     }
     default: {
-      fail('Unsupported operating system')
+      fail("Unsupported operating system family: ${::osfamily}")
     }
   }
 
