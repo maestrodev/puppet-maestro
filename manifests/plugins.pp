@@ -20,7 +20,7 @@ class maestro::plugins() {
     version => '1.1',
   }
   maestro::plugin { 'maestro-fog-plugin':
-    version => '1.2',
+    version => '1.3',
   }
 
 }
