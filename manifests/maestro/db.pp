@@ -59,4 +59,18 @@ class maestro::maestro::db(
       hasstatus => true,
     }
   }
+
+  # LDAP default system admin user, add permissions
+  if !empty($maestro::maestro::ldap) {
+    exec { 'insert-ldap-default-admin' :
+      command     => "psql -h localhost -d maestro -U maestro -c \
+      \"delete from userassignment where id=-1; insert into userassignment values(-1, '*', '${maestro::maestro::ldap['admin_user']}', (select id from role where name='System Administrator') );\"",
+      unless      => "psql -h localhost -d maestro -U maestro -c \
+      \"select username from userassignment where id=-1;\" | grep '${maestro::maestro::ldap['admin_user']}'",
+      environment => "PGPASSWORD=${db_password}",
+      path        => '/bin/:/usr/bin',
+      logoutput   => true,
+      require     => Service['postgresql'],
+    }
+  }
 }
