@@ -12,6 +12,13 @@ class maestro::lucee::demo_compositions(
   $working_copy_dir = '/var/local/maestro-agent/wc',
   $demo_keypair     = '/var/local/maestro-agent/.ssh/lucee-demo-keypair.pem') {
 
+  $source_config = { 'jenkins_host' => $jenkins_host,
+                     'jenkins_port' => $jenkins_port }
+  
+  maestro::lucee::demo_source { 'jenkins':
+    source_config => $source_config,
+  }
+  
   maestro::lucee::demo_composition { 'antwithivy': }
   maestro::lucee::demo_composition { 'centrepoint': }
   maestro::lucee::demo_composition { 'redmine': }
