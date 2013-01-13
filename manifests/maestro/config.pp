@@ -29,10 +29,12 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     group => $maestro::params::group,
   }
   # Configure Maestro
-  file { "${basedir}/conf/jetty.xml":
-    mode    => '0600',
-    content => template('maestro/jetty.xml.erb'),
-    require => File["${basedir}/conf"],
+  if !defined( File["${basedir}/conf/jetty.xml"] ) {
+    file { "${basedir}/conf/jetty.xml":
+      mode    => '0600',
+      content => template('maestro/jetty.xml.erb'),
+      require => File["${basedir}/conf"],
+    }
   }
   file { "${basedir}/conf/plexus.xml":
     mode    => '0600',
