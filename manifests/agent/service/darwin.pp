@@ -1,10 +1,10 @@
 class maestro::agent::service::darwin(
-  $enabled     = $maestro::maestro::enabled
+  $enabled = $maestro::agent::enabled
 ) {
 
   $basedir = $maestro::agent::basedir
-
   $ensure_service = $enabled ? { true => running, false => stopped, }
+
   file { '/Library/LaunchDaemons/com.maestrodev.agent.plist':
     ensure  => present,
     content => template('maestro/agent/com.maestrodev.agent.plist.erb'),

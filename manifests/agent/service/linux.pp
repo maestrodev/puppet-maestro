@@ -1,5 +1,5 @@
 class maestro::agent::service::linux(
-  $enabled     = $maestro::maestro::enabled
+  $enabled     = $maestro::agent::enabled
 ) {
   $ensure_service = $enabled ? { true => running, false => stopped, }
   file { '/etc/init.d/maestro-agent':

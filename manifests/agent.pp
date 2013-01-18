@@ -5,6 +5,7 @@
 #
 # [repo]  A hash containing the artifact repository URL and credentials.
 # [package_type] Selects the type of package to use for the install. Either rpm, or tarball.
+# [enabled] Enables/disables the service
 # [agent_version] The version to install
 # [facter] Indicates if the agent should use facter
 # [stomp_host] the hostname or IP address of the stomp server
@@ -16,6 +17,7 @@ class maestro::agent(
   $agent_version,
   $repo = $maestrodev_repo,
   $package_type = 'tarball',
+  $enabled = true,
   $facter = true,
   $stomp_host = '',
   $maven_servers = '',
