@@ -1,4 +1,6 @@
-etrics.statsd.hostname = localhost
+# Either NoOpStatsDClient or NonBlockingStatsDClient
+metrics.statsd.client = NonBlockingStatsDClient
+metrics.statsd.hostname = localhost
 metrics.statsd.port = 8125
 metrics.mongodb.hostname = localhost
 metrics.mongodb.port = 27017
