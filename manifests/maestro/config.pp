@@ -65,6 +65,11 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
   }
 
+  file { "${basedir}/conf/maestro.properties":
+    mode    => '0600',
+    content => template('maestro/maestro.properties.erb'),
+    require => File["${basedir}/conf"],
+  }
 
   # This requires something, but what? ->
   augeas { 'update-default-configurations':
