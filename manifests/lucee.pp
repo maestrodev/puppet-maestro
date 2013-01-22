@@ -5,7 +5,8 @@ class maestro::lucee(
   $type     = 'postgres',
   $host     = 'localhost',
   $port     = 5432,
-  $database = 'luceedb') {
+  $database = 'luceedb',
+  $metrics_enabled = false) {
 
   if defined (Class['maestro::lucee::demo_compositions']) {
     $is_demo = true

@@ -19,7 +19,6 @@ class maestro::lucee::demo_compositions(
     source_config => $source_config,
   }
   
-  maestro::lucee::demo_composition { 'antwithivy': }
   maestro::lucee::demo_composition { 'centrepoint': }
   maestro::lucee::demo_composition { 'redmine': }
   maestro::lucee::demo_composition { 'wordpress': }

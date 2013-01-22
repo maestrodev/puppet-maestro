@@ -35,6 +35,7 @@ class maestro::maestro(
   $ldap = {},
   $enabled = true,
   $lucee = true,
+  $metrics_enabled = false,
   $admin = 'admin',
   $admin_password = $maestro_adminpassword,
   $master_password = $maestro_master_password,
@@ -95,6 +96,7 @@ class maestro::maestro(
       password            => $db_password,
       require             => Package[ 'libxslt-devel', 'libxml2-devel' ],
       before              => Service['maestro'],
+      metrics_enabled     => $metrics_enabled
     }
 
     file { "${basedir}/conf/lucee-lib.json":
