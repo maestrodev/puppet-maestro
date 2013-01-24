@@ -93,7 +93,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   }
   file { '/tmp/augeas/maestro': ensure => directory } ->
   file { "/tmp/augeas/maestro/properties.aug":
-    source => "puppet://modules/maestro/properties.aug"
+    source => "puppet:///modules/maestro/properties.aug"
   }->
   augeas { 'show-snapshot-version':
     lens      => 'Properties.lns',
