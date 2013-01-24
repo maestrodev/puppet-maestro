@@ -92,10 +92,9 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     file { '/tmp/augeas': ensure => directory }
   }
   file { '/tmp/augeas/maestro': ensure => directory } ->
-  wget::fetch { 'fetch-augeas-maestro':
-    source      => 'https://raw.github.com/maestrodev/augeas/af585c7e29560306f23938b3ba15aa1104951f7f/lenses/properties.aug',
-    destination => '/tmp/augeas/maestro/properties.aug',
-  } ->
+  file { "/tmp/augeas/maestro/properties.aug":
+    source => "puppet://modules/maestro/properties.aug"
+  }->
   augeas { 'show-snapshot-version':
     lens      => 'Properties.lns',
     incl      => "${homedir}/apps/maestro/WEB-INF/classes/filterValues.properties",
