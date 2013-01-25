@@ -3,21 +3,18 @@ FORGE
   specs:
     maestrodev/maven (1.0.0)
       maestrodev/wget (>= 0.0.1)
-    maestrodev/wget (0.0.1)
+    maestrodev/wget (1.1.0)
+    puppetlabs/apt (1.1.0)
+      puppetlabs/stdlib (>= 2.2.1)
     puppetlabs/firewall (0.0.4)
+    puppetlabs/postgresql (2.0.1)
+      puppetlabs/apt (< 2.0.0, >= 1.1.0)
+      puppetlabs/firewall (>= 0.0.4)
+      puppetlabs/stdlib (< 4.0.0, >= 3.2.0)
     puppetlabs/stdlib (3.2.0)
 
-GIT
-  remote: https://github.com/puppetlabs/puppet-postgresql.git
-  ref: master
-  sha: afd8e90dd5880542f141544c592d410d6cee28dd
-  specs:
-    puppetlabs/postgresql (1.0.0)
-      puppetlabs/firewall (>= 0.0.4)
-      puppetlabs/stdlib (>= 3.2.0)
-
 DEPENDENCIES
-  maestrodev/maven (~> 1.0.0)
-  maestrodev/wget (~> 0.0.1)
-  puppetlabs/postgresql (>= 0)
+  maestrodev/maven (>= 1.0.0)
+  maestrodev/wget (>= 1.0.0)
+  puppetlabs/postgresql (>= 2.0.1)
 
