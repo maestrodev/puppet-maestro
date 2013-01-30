@@ -8,6 +8,7 @@ define maestro::lucee::demo_composition(
   $archiva_port     = $maestro::lucee::demo_compositions::archiva_port,
   $jenkins_host     = $maestro::lucee::demo_compositions::jenkins_host,
   $jenkins_port     = $maestro::lucee::demo_compositions::jenkins_port,
+  $jenkins_context_path = $maestro::lucee::demo_compositions::jenkins_context_path,
   $sonar_host       = $maestro::lucee::demo_compositions::sonar_host,
   $sonar_port       = $maestro::lucee::demo_compositions::sonar_port,
   $sonar_context_path = $maestro::lucee::demo_compositions::sonar_context_path,

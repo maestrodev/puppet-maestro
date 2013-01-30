@@ -7,6 +7,7 @@ class maestro::lucee::demo_compositions(
   $archiva_port     = '8082',
   $jenkins_host     = 'localhost',
   $jenkins_port     = '8181',
+  $jenkins_context_path = '/',
   $sonar_host       = 'localhost',
   $sonar_port       = '9000',
   $sonar_context_path = '/',
@@ -14,7 +15,8 @@ class maestro::lucee::demo_compositions(
   $demo_keypair     = '/var/local/maestro-agent/.ssh/lucee-demo-keypair.pem') {
 
   $source_config = { 'jenkins_host' => $jenkins_host,
-                     'jenkins_port' => $jenkins_port }
+                     'jenkins_port' => $jenkins_port,
+                     'jenkins_web_path' => $jenkins_context_path }
   
   maestro::lucee::demo_source { 'jenkins':
     source_config => $source_config,
