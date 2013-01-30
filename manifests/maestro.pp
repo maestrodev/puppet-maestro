@@ -27,6 +27,7 @@
 # [lucee_username] the lucee user name
 # [jetty_forwarded] set to true to indicate that jetty is being forwarded by a proxy.
 # [mail_from] A hash containing the origin information for emails sent by maestro. name, address.
+# [ga_property_id] the google analytics property id
 #
 class maestro::maestro(
   $repo = $maestrodev_repo,
@@ -56,7 +57,8 @@ class maestro::maestro(
   $mail_from = {
     name    => 'Maestro',
     address => 'info@maestrodev.com'
-  }) inherits maestro::params {
+  },
+  $ga_property_id = '') inherits maestro::params {
 
   $srcdir = '/usr/local/src'
   $installdir = '/usr/local'

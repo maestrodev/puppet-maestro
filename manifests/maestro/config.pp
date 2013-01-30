@@ -22,7 +22,8 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $srcdir = $maestro::maestro::srcdir,
     $installdir = $maestro::maestro::installdir,
     $basedir = $maestro::maestro::basedir,
-    $homedir = $maestro::maestro::homedir) inherits maestro::params {
+    $homedir = $maestro::maestro::homedir,
+    $ga_property_id = $maestro::maestro::ga_property_id) inherits maestro::params {
 
   File {
     owner => $maestro::params::user,
