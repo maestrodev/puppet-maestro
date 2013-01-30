@@ -9,6 +9,7 @@ class maestro::lucee::demo_compositions(
   $jenkins_port     = '8181',
   $sonar_host       = 'localhost',
   $sonar_port       = '9000',
+  $sonar_context_path = '/',
   $working_copy_dir = '/var/local/maestro-agent/wc',
   $demo_keypair     = '/var/local/maestro-agent/.ssh/lucee-demo-keypair.pem') {
 

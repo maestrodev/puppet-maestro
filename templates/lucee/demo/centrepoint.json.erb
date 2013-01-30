@@ -506,7 +506,7 @@
                             "type": "Array", 
                             "value": [
                                 "mvn clean -U --batch-mode", 
-                                "mvn <%= goal %> -U --batch-mode -DrepositoryId=maestro-deploy -Durl=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/all -DaltDeploymentRepository=maestro-deploy::default::http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots -Dproject.repository.url=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots/"<%= ",\"mvn -U org.codehaus.mojo:sonar-maven-plugin:2.0:sonar -Dsonar.host.url=http://#{sonar_host}:#{sonar_port} -Dsonar.jdbc.url=jdbc:postgresql://#{sonar_host}:5432/sonar -Dsonar.jdbc.driverClassName=org.postgresql.Driver -Dsonar.jdbc.username=maestro -Dsonar.jdbc.password=maestro\"" if sonar %>
+                                "mvn <%= goal %> -U --batch-mode -DrepositoryId=maestro-deploy -Durl=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/all -DaltDeploymentRepository=maestro-deploy::default::http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots -Dproject.repository.url=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots/"<%= ",\"mvn -U org.codehaus.mojo:sonar-maven-plugin:2.0:sonar -Dsonar.host.url=http://#{sonar_host}:#{sonar_port}#{sonar_context_path} -Dsonar.jdbc.url=jdbc:postgresql://#{sonar_host}:5432/sonar -Dsonar.jdbc.driverClassName=org.postgresql.Driver -Dsonar.jdbc.username=maestro -Dsonar.jdbc.password=maestro\"" if sonar %>
                             ]
                         }, 
                         "use_ssl": {
@@ -946,7 +946,7 @@
                             "type": "Array", 
                             "value": [
                                 "mvn clean -U --batch-mode", 
-                                "mvn <%= goal %> -U --batch-mode -DrepositoryId=maestro-deploy -Durl=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/all -DaltDeploymentRepository=maestro-deploy::default::http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots -Dproject.repository.url=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots/"<%= ",\"mvn -U org.codehaus.mojo:sonar-maven-plugin:2.0:sonar -Dsonar.host.url=http://#{sonar_host}:#{sonar_port} -Dsonar.jdbc.url=jdbc:postgresql://#{sonar_host}:5432/sonar -Dsonar.jdbc.driverClassName=org.postgresql.Driver -Dsonar.jdbc.username=maestro -Dsonar.jdbc.password=maestro\"" if sonar %>
+                                "mvn <%= goal %> -U --batch-mode -DrepositoryId=maestro-deploy -Durl=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/all -DaltDeploymentRepository=maestro-deploy::default::http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots -Dproject.repository.url=http://<%= archiva_host %>:<%= archiva_port %>/archiva/repository/snapshots/"<%= ",\"mvn -U org.codehaus.mojo:sonar-maven-plugin:2.0:sonar -Dsonar.host.url=http://#{sonar_host}:#{sonar_port}#{sonar_context_path} -Dsonar.jdbc.url=jdbc:postgresql://#{sonar_host}:5432/sonar -Dsonar.jdbc.driverClassName=org.postgresql.Driver -Dsonar.jdbc.username=maestro -Dsonar.jdbc.password=maestro\"" if sonar %>
                             ]
                         }, 
                         "use_ssl": {
