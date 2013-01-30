@@ -10,6 +10,7 @@ define maestro::lucee::demo_composition(
   $jenkins_port     = $maestro::lucee::demo_compositions::jenkins_port,
   $sonar_host       = $maestro::lucee::demo_compositions::sonar_host,
   $sonar_port       = $maestro::lucee::demo_compositions::sonar_port,
+  $sonar_context_path = $maestro::lucee::demo_compositions::sonar_context_path,
   $working_copy_dir = $maestro::lucee::demo_compositions::working_copy_dir,
   $demo_keypair     = $maestro::lucee::demo_compositions::demo_keypair) {
 
