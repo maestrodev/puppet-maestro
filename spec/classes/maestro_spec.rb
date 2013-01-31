@@ -40,11 +40,28 @@ describe 'maestro::maestro' do
       content.should =~ /"password": "maestro",$/
     end
 
+    it "should create a maestro.properties file" do
+      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content.should =~ /^google\.analytics\.propertyId = $/
+    end
+
     it "should create the right LuCEE client configuration" do
       content = catalogue.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
       content.should =~ /"username": "maestro",$/
       content.should =~ /"password": "maestro"$/
     end
+  end
+
+  context "google analytics configuration" do
+    let(:params) { {
+         :ga_property_id => "ABC123",
+     }.merge(DEFAULT_PARAMS) }
+    
+    it "should create a maestro.properties file" do
+      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content.should =~ /^google\.analytics\.propertyId = ABC123$/
+    end
+    
   end
 
   context "when using custom lucee password" do
