@@ -8,55 +8,52 @@ Simple configuration
 
 First, declare the variables that will be used across both nodes.
 
-```
-  $maestro_version = '4.3.2'
-  $agent_version   = '0.1.6'
-  
-  # Choose the following passwords as you wish  
-  # note that admin password needs to validate against the password rules (letters+numbers by default)
-  $maestro_db_server_password = '...'   # Password on the Postgres admin user
-  $maestro_db_password        = '...'   # Password on the Maestro database user
-  $maestro_master_password    = '...'   # Password used to encrypt other passwords
-  $maestro_adminpassword      = '...'   # Initial Maestro administrator user password
-  
-  # Use credentials provided by MaestroDev for trial / subscription
-  $repo = {
-    url      => 'https://repo.maestrodev.com/archiva/repository/all/',
-    username => '...',
-    password => '...',
-  }
-```
+    $maestro_version = '4.11.0'
+    $agent_version   = '1.6.0'
+    
+    # Choose the following passwords as you wish  
+    # note that admin password needs to validate against the password rules (letters+numbers by default)
+    $maestro_db_server_password = '...'   # Password on the Postgres admin user
+    $maestro_db_password        = '...'   # Password on the Maestro database user
+    $maestro_master_password    = '...'   # Password used to encrypt other passwords
+    $maestro_adminpassword      = '...'   # Initial Maestro administrator user password
+    
+    # Use credentials provided by MaestroDev for trial / subscription
+    $repo = {
+      url      => 'https://repo.maestrodev.com/archiva/repository/all/',
+      username => '...',
+      password => '...',
+    }
+
 
 On the Maestro node, you'll need Maestro and ActiveMQ:
 
-```
-  class { java: distribution => 'java-1.6.0-openjdk' }
+    class { java: distribution => 'java-1.6.0-openjdk' }
 
-  include maestro
+    include maestro
 
-  class { 'maestro::maestro' :
-    repo      => $repo,
-    version   => $maestro_version,
-  }
+    class { 'maestro::maestro' :
+      repo      => $repo,
+      version   => $maestro_version,
+    }
 
-  # ActiveMQ, with Stomp connector enabled
-  class { 'activemq': }
-  class { 'activemq::stomp': }
+    # ActiveMQ, with Stomp connector enabled
+    class { 'activemq': }
+    class { 'activemq::stomp': }
 
-  # demo compositions
-  class { 'maestro::lucee_demo_compositions': }
-```
+    # demo compositions
+    class { 'maestro::lucee_demo_compositions': }
+
 
 On the agent node(s), install the agent.
 
-```
-  class { java: distribution => 'java-1.6.0-openjdk-devel' }
+    class { java: distribution => 'java-1.6.0-openjdk-devel' }
 
-  class { 'maestro::agent':
-    repo           => $repo,
-    agent_version  => $agent_version,
-  }
-```
+    class { 'maestro::agent':
+      repo           => $repo,
+      agent_version  => $agent_version,
+    }
+
 
 (The -devel alternate packaging is only needed if you are developing Java
 software that will build on the agent. If not, you can use
@@ -69,24 +66,23 @@ required), and Maven, rake, and CI agents on the agent nodes.
 For example, the following installs Archiva, sharing the user database with
 Maestro:
 
-```
-  $jdbc_driver_url = "${repo['url']}/postgresql/postgresql/8.4-702.jdbc3/postgresql-8.4-702.jdbc3.jar"
-  $archiva_jdbc = {
-    url => "jdbc:postgresql://localhost/maestro",
-    driver => "org.postgresql.Driver",
-    username => "maestro",
-    password => $maestro_db_password,
-  }
-  class { archiva:
-    repo => $repo,
-    version => "1.4-M1-maestro-3.4.3.1",
-    port => 8082,
-    archiva_jdbc => $archiva_jdbc,
-    users_jdbc => $archiva_jdbc,
-    jdbc_driver_url => $jdbc_driver_url,
-    require => Postgres::Createdb[maestro],
-  }
-```
+    $jdbc_driver_url = "${repo['url']}/postgresql/postgresql/8.4-702.jdbc3/postgresql-8.4-702.jdbc3.jar"
+    $archiva_jdbc = {
+      url => "jdbc:postgresql://localhost/maestro",
+      driver => "org.postgresql.Driver",
+      username => "maestro",
+      password => $maestro_db_password,
+    }
+    class { archiva:
+      repo => $repo,
+      version => "1.4-M1-maestro-3.4.3.1",
+      port => 8082,
+      archiva_jdbc => $archiva_jdbc,
+      users_jdbc => $archiva_jdbc,
+      jdbc_driver_url => $jdbc_driver_url,
+      require => Postgres::Createdb[maestro],
+    }
+
 
 Other modules describe how to install that particular package.
 
@@ -96,23 +92,25 @@ Plugins can be installed from the Maestro Web UI or be automatically installed u
 
 For example to install some common plugins, add this to the Maestro node.
 
-```
-  maestro::plugin { 'maestro-irc-plugin':
-    version => '1.1-20120524.074920-16',
-  }
-  maestro::plugin { 'maestro-continuum-plugin':
-    version => '1.2',
-  }
-  maestro::plugin { 'maestro-scm-plugin':
-    version => '1.0-20120710.051326-11',
-  }
-  maestro::plugin { 'maestro-jenkins-plugin':
-    version => '1.0-20120727.034606-12',
-  }
-  maestro::plugin { 'maestro-bamboo-plugin':
-    version => '1.0-20120706.180758-20',
-  }
-  maestro::plugin { 'maestro-fog-plugin':
-    version => '1.0-20120718.205852-1',
-  }
-```
+    maestro::plugin { 'maestro-irc-plugin':
+      version => '1.2',
+    }
+    maestro::plugin { 'maestro-continuum-plugin':
+      version => '1.5',
+    }
+    maestro::plugin { 'maestro-scm-plugin':
+      version => '1.0',
+    }
+    maestro::plugin { 'maestro-jenkins-plugin':
+      version => '1.1.2',
+    }
+    maestro::plugin { 'maestro-jira-plugin':
+      version => '1.0',
+    }
+    maestro::plugin { 'maestro-bamboo-plugin':
+      version => '1.1',
+    }
+    maestro::plugin { 'maestro-fog-plugin':
+      version => '1.3',
+    }
+
