@@ -1,9 +1,13 @@
-class maestro::repository($username, $password) {
+class maestro::repository(
+  $url = 'https://repo.maestrodev.com/archiva/repository/all',
+  $username, 
+  $password
+) {
 
   $maestrodev = {
     username => $username,
     password => $password,
-    url      => 'https://repo.maestrodev.com/archiva/repository/all',
+    url      => $url,
   }
 
 }
