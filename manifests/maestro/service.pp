@@ -27,7 +27,7 @@ class maestro::maestro::service(
       require => [Service[maestro]]
     } ->
     exec { 'check-data-upgrade':
-      command   => "curl -X POST http://localhost:${port}/api/v1/system/upgrade",
+      command   => "curl --noproxy localhost -X POST http://localhost:${port}/api/v1/system/upgrade",
       logoutput => 'on_failure',
       tries     => 90,
       try_sleep => 1,
