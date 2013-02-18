@@ -3,6 +3,7 @@ class maestro::maestro::service(
   $db_password = $maestro::maestro::db_password,
   $basedir     = $maestro::maestro::basedir,
   $port        = $maestro::maestro::port,
+  $lucee       = $maestro::maestro::lucee,
   $ldap        = $maestro::maestro::ldap) inherits maestro::params {
 
   file { '/etc/init.d/maestro':
@@ -21,16 +22,20 @@ class maestro::maestro::service(
       mode    =>  '0700',
       content =>  template('maestro/startup_wait.sh.erb'),
     } ->
-    exec { "${startup_wait_script} ${db_password} >> ${basedir}/logs/maestro_initdb.log 2>&1":
+    exec { "check-maestro-up":
+      command => "${startup_wait_script} ${db_password} >> ${basedir}/logs/maestro_initdb.log 2>&1",
       alias   => 'startup_wait',
       timeout => 600,
       require => [Service[maestro]]
-    } ->
-    exec { 'check-data-upgrade':
-      command   => "curl --noproxy localhost -X POST http://localhost:${port}/api/v1/system/upgrade",
-      logoutput => 'on_failure',
-      tries     => 90,
-      try_sleep => 1,
+    }
+    if $lucee {
+      exec { 'check-data-upgrade':
+        command   => "curl --noproxy localhost -X POST http://localhost:${port}/api/v1/system/upgrade",
+        logoutput => 'on_failure',
+        tries     => 90,
+        try_sleep => 1,
+        require   => Exec["check-maestro-up"],
+      }
     }
   }
   $ensure_service = $enabled ? { true => running, false => stopped, }
