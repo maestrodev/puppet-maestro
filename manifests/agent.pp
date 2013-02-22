@@ -22,7 +22,8 @@ class maestro::agent(
   $stomp_host = '',
   $maven_servers = '',
   $agent_name = 'maestro_agent',
-  $maxmemory = '128') inherits maestro::params {
+  $maxmemory = '128',
+  $enable_jpda = false) inherits maestro::params {
 
   $basedir = '/usr/local/maestro-agent'
   $srcdir = '/usr/local/src'

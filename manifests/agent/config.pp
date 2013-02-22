@@ -9,7 +9,8 @@ class maestro::agent::config(
   $facter = $maestro::agent::facter,
   $stomp_host = $maestro::agent::stomp_host,
   $maven_servers = $maestro::agent::maven_servers,
-  $agent_name = $maestro::agent::agent_name) {
+  $agent_name = $maestro::agent::agent_name,
+  $enable_jpda = $maestro::agent::enable_jpda) {
 
   $wrapper = "${basedir}/conf/wrapper.conf"
   case $::operatingsystem {
@@ -37,10 +38,37 @@ class maestro::agent::config(
     target  => "${agent_user_home}/conf/maestro_agent.json",
   }
 
-  exec { 'maestro-agent-memory-max':
-    command => "sed -i${sed_suffix} 's/^#wrapper\\.java\\.maxmemory=.*$/wrapper\\.java\\.maxmemory=${maxmemory}/' ${wrapper}",
-    unless  => "egrep '^wrapper.java.maxmemory=${maxmemory}' ${wrapper}",
-    notify  => Service['maestro-agent'],
+  # prepare the augeas lens
+  if !defined(File['/tmp/augeas']) {
+    file { '/tmp/augeas': ensure => directory }
+  }
+  file { "/tmp/augeas/maestro-agent": ensure => directory } ->
+  file { "/tmp/augeas/maestro-agent/properties.aug":
+    source => "puppet:///modules/maestro/properties.aug"
+  }->
+
+  # adjust wrapper.conf
+  augeas { "maestro-agent-wrapper-maxmemory":
+    lens      => "Properties.lns",
+    incl      => "${wrapper}",
+    changes   => [
+      "set wrapper.java.maxmemory ${maxmemory}",
+    ],
+    load_path => '/tmp/augeas/maestro-agent',
+    notify    => Service['maestro-agent'],
+  }
+
+  if $enable_jpda {
+      notify{"Enabling JPDA for maestro agent":}
+      augeas { "maestro-agent-wrapper-jpda":
+        lens      => "Properties.lns",
+        incl      => "${wrapper}",
+        changes   => [
+          "set wrapper.java.additional.3 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
+        ],
+        load_path => '/tmp/augeas/maestro-agent',
+        notify    => Service['maestro-agent'],
+      }
   }
 
   file { 'maestro-agent':

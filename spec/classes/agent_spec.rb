@@ -99,7 +99,6 @@ describe 'maestro::agent' do
     it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
   end
 
-
   # ================================================ Linux ================================================
 
   context "when running on CentOS" do
@@ -108,9 +107,7 @@ describe 'maestro::agent' do
     it { should contain_file("/etc/init.d/maestro-agent") }
     it { should_not contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
     it { should contain_service("maestro-agent") }
-    it { should contain_exec("maestro-agent-memory-max").with(
-      'command' => "sed -i 's/^#wrapper\\.java\\.maxmemory=.*$/wrapper\\.java\\.maxmemory=128/' /usr/local/maestro-agent/conf/wrapper.conf"
-    )}
+    it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
   end
 
   # ================================================ OS X ================================================
@@ -122,9 +119,7 @@ describe 'maestro::agent' do
     it { should_not contain_file("/etc/init.d/maestro-agent") }
     it { should contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
     it { should contain_service("maestro-agent") }
-    it { should contain_exec("maestro-agent-memory-max").with(
-      'command' => "sed -i '' 's/^#wrapper\\.java\\.maxmemory=.*$/wrapper\\.java\\.maxmemory=128/' /usr/local/maestro-agent/conf/wrapper.conf"
-    )}
+    it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
   end
 
   
