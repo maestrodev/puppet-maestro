@@ -42,11 +42,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     content => template('maestro/plexus.xml.erb'),
     require => File["${basedir}/conf"],
   }
-  file { "${homedir}/apps/maestro/WEB-INF/users.properties":
-    mode    => '0600',
-    content => template('maestro/users.properties.erb'),
-    require => Class['maestro::maestro::package'],
-  }
 
   file { "${basedir}/conf/wrapper.conf":
     ensure  => link,
