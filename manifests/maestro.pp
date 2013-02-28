@@ -91,7 +91,8 @@ class maestro::maestro(
   $base_version = snapshotbaseversion($version)
 
   if $lucee {
-    package { [ 'libxslt-devel', 'libxml2-devel' ]: ensure => installed }
+    if ! defined(Package['libxslt-devel']) { package { 'libxslt-devel': ensure => installed } }
+    if ! defined(Package['libxml2-devel']) { package { 'libxml2-devel': ensure => installed } }
 
     class { 'maestro::lucee':
       agent_auto_activate => $agent_auto_activate,
