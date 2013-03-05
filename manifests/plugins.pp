@@ -7,7 +7,14 @@ class maestro::plugins(
   $jenkins = '1.1.2',
   $jira = '1.0',
   $bamboo = '1.1',
-  $fog = '1.3') {
+  $fog = '1.3',
+  $rpm = '1.0',
+  $puppet = '1.0',
+  $gemfury = '1.0',
+  $rightscale = '1.0',
+  $flowdock = '1.0',
+  $cucumber = '1.0'
+  ) {
 
   maestro::plugin { 'maestro-irc-plugin':
     version => $irc,
@@ -29,6 +36,24 @@ class maestro::plugins(
   }
   maestro::plugin { 'maestro-fog-plugin':
     version => $fog,
+  }
+  maestro::plugin { 'maestro-rpm-plugin':
+    version => $rpm,
+  }
+  maestro::plugin { 'maestro-puppet-plugin':
+    version => $puppet,
+  }
+  maestro::plugin { 'maestro-gemfury-plugin':
+    version => $gemfury,
+  }
+  maestro::plugin { 'maestro-rightscale-plugin':
+    version => $rightscale,
+  }
+  maestro::plugin { 'maestro-flowdock-plugin':
+    version => $flowdock,
+  }
+  maestro::plugin { 'maestro-cucumber-plugin':
+    version => $cucumber,
   }
 
 }
