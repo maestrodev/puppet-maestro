@@ -9,7 +9,7 @@ describe 'maestro::maestro' do
   } }
 
   DEFAULT_PARAMS = {
-      :version => '1.0',
+      :version => '4.0',
       :db_server_password => 'myserverpassword',
       :db_password => 'mydbpassword',
       :admin_password => 'myadminpassword',
@@ -145,6 +145,33 @@ describe 'maestro::maestro' do
     it { should_not contain_package("maestro") }
     it { should contain_wget__authfetch("fetch-maestro") }
     it { should contain_exec("unpack-maestro").with_cwd("/usr/local") }
+  end
+
+  context "when installing older versions of Maestro" do
+    let(:params) { DEFAULT_PARAMS.merge({
+      :version => "4.11.0",
+    }) }
+
+    it { should contain_package('libxml2-devel').with_ensure('installed') }
+    it { should contain_package('libxslt-devel').with_ensure('installed') }
+  end
+
+  context "when installing much older versions of Maestro" do
+    let(:params) { DEFAULT_PARAMS.merge({
+      :version => "4.5.0",
+    }) }
+
+    it { should contain_package('libxml2-devel').with_ensure('installed') }
+    it { should contain_package('libxslt-devel').with_ensure('installed') }
+  end
+
+  context "when installing recent versions of Maestro" do
+    let(:params) { DEFAULT_PARAMS.merge({
+      :version => "4.12.0",
+    }) }
+
+    it { should_not contain_package('libxml2-devel') }
+    it { should_not contain_package('libxslt-devel') }
   end
 end
 
