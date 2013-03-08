@@ -53,9 +53,9 @@ describe 'maestro::maestro' do
   end
 
   context "google analytics configuration" do
-    let(:params) { {
+    let(:params) { DEFAULT_PARAMS.merge({
          :ga_property_id => "ABC123",
-     }.merge(DEFAULT_PARAMS) }
+     }) }
     
     it "should create a maestro.properties file" do
       content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
@@ -65,10 +65,10 @@ describe 'maestro::maestro' do
   end
 
   context "when using custom lucee password" do
-    let(:params) { {
+    let(:params) { DEFAULT_PARAMS.merge({
         :lucee_username => "lucee",
         :lucee_password => "my-lucee-passwd",
-    }.merge(DEFAULT_PARAMS) }
+    }) }
 
     it "should create the right LuCEE configuration" do
       content = catalogue.resource('file', '/etc/maestro_lucee.json').send(:parameters)[:content]
@@ -108,9 +108,9 @@ describe 'maestro::maestro' do
     let(:pre_condition) { %Q[
       class { 'maestro::params': user_home => '/var/local/u' } 
     ]}
-    let(:params) { {
+    let(:params) { DEFAULT_PARAMS.merge({
         :lucee => false
-    }.merge(DEFAULT_PARAMS) }
+    }) }
 
     it { should_not contain_file('/var/local/u/.maestro/plugins') }
     it { should_not contain_file('/home/maestro/.maestro/plugins') }
@@ -123,25 +123,25 @@ describe 'maestro::maestro' do
   end
 
   context "when using a reverse proxy" do
-    let(:params) { { 
+    let(:params) { DEFAULT_PARAMS.merge({
       :jetty_forwarded => true
-    }.merge(DEFAULT_PARAMS) }
+    }) }
     it "should enable fowarding in jetty.xml" do                                  
       should contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end 
   end
 
   context "when using rpm package" do
-    let(:params) { { 
+    let(:params) { DEFAULT_PARAMS.merge({
       :package_type => 'rpm'
-    }.merge(DEFAULT_PARAMS) }
+    }) }
     it { should contain_package("maestro") }
   end
 
   context "when using tarball package" do
-    let(:params) { { 
+    let(:params) { DEFAULT_PARAMS.merge({
       :package_type => 'tarball'
-    }.merge(DEFAULT_PARAMS) }
+    }) }
     it { should_not contain_package("maestro") }
     it { should contain_wget__authfetch("fetch-maestro") }
     it { should contain_exec("unpack-maestro").with_cwd("/usr/local") }
