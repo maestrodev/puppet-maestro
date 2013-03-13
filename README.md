@@ -86,6 +86,23 @@ Maestro:
 
 Other modules describe how to install that particular package.
 
+Testing 
+-------
+
+bundle install
+bundle exec rake spec
+
+
+Development
+-----------
+
+# install the necessary puppet modules to test this module in vagrant
+RACK_ENV=development bundle exec librarian-puppet install
+vagrant up
+vagrant provision (to apply changes as tweaking)
+
+NOTE: be sure not to check in the resultant Puppetfile.lock, since this will add a dep that's only relevant for testing!!!
+
 Installing plugins
 ------------------
 Plugins can be installed from the Maestro Web UI or be automatically installed using the `maestro::plugin` definition in Puppet.

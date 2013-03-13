@@ -3,6 +3,8 @@
 .project
 .librarian/
 .tmp/
+.vagrant
 doc/
 spec/fixtures/
 pkg/
+graphs/
