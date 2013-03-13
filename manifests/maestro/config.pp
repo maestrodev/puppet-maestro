@@ -23,6 +23,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $installdir = $maestro::maestro::installdir,
     $basedir = $maestro::maestro::basedir,
     $homedir = $maestro::maestro::homedir,
+    $enable_jpda = $maestro::maestro::enable_jpda,
     $ga_property_id = $maestro::maestro::ga_property_id) inherits maestro::params {
 
   File {
@@ -108,18 +109,37 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   }
 
   # set memory configuration
-  $wrapper = "${homedir}/conf/wrapper.conf"
-  exec { 'maestro-memory-init':
-    command => "sed -i 's/wrapper\\.java\\.initmemory=.*$/wrapper\\.java\\.initmemory=${initmemory}/' ${wrapper}",
-    unless  => "grep 'wrapper.java.initmemory=${initmemory}' ${wrapper}",
-    require => Class['maestro::maestro::package'],
-    notify  => Service['maestro'],
+  augeas { "maestro-wrapper-initmemory":
+    lens      => "Properties.lns",
+    incl      => "${wrapper}",
+    changes   => [
+      "set wrapper.java.initmemory ${initmemory}",
+    ],
+    load_path => '/tmp/augeas/maestro',
+    notify    => Service['maestro'],
+  }->
+
+  augeas { "maestro-wrapper-maxmemory":
+    lens      => "Properties.lns",
+    incl      => "${wrapper}",
+    changes   => [
+      "set wrapper.java.maxmemory ${maxmemory}",
+    ],
+    load_path => '/tmp/augeas/maestro',
+    notify    => Service['maestro'],
   }
-  exec { 'maestro-memory-max':
-    command => "sed -i 's/wrapper\\.java\\.maxmemory=.*$/wrapper\\.java\\.maxmemory=${maxmemory}/' ${wrapper}",
-    unless  => "grep 'wrapper.java.maxmemory=${maxmemory}' ${wrapper}",
-    require => Class['maestro::maestro::package'],
-    notify  => Service['maestro'],
+
+  if $enable_jpda {
+      notify{"Enabling JPDA for maestro":}
+      augeas { "maestro-wrapper-jpda":
+        lens      => "Properties.lns",
+        incl      => "${wrapper}",
+        changes   => [
+          "set wrapper.java.additional.3 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
+        ],
+        load_path => '/tmp/augeas/maestro',
+        notify    => Service['maestro'],
+      }
   }
 
 }

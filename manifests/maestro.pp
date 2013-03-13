@@ -50,6 +50,7 @@ class maestro::maestro(
   $maxpermsize = '384m',
   $port = '8080',
   $agent_auto_activate = false,
+  $enable_jpda = false,
   $lucee_url = 'http://localhost:8080/lucee/api/v0/',
   $lucee_password = 'maestro',
   $lucee_username = 'maestro',

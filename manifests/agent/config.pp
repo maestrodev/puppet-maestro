@@ -58,13 +58,32 @@ class maestro::agent::config(
     notify    => Service['maestro-agent'],
   }
 
+  $tmp_dir = "${agent_user_home}/tmp"
+  notify{"Setting java.io.tmpdir=$tmp_dir for maestro agent":}
+  file { "${agent_user_home}/tmp": 
+    ensure => directory,
+    owner   => $agent_user,
+    group   => $agent_group,
+  } ->
+  augeas { "maestro-agent-wrapper-debug-and-tmpdir":
+    lens      => "Properties.lns",
+    incl      => "${wrapper}",
+    changes   => [
+      "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
+      "set wrapper.java.additional.4 -XX:HeapDumpPath=${agent_user_home}",
+      "set wrapper.java.additional.5 -Djava.io.tmpdir=$tmp_dir",
+    ],
+    load_path => '/tmp/augeas/maestro-agent',
+    notify    => Service['maestro-agent'],
+  }
+
   if $enable_jpda {
       notify{"Enabling JPDA for maestro agent":}
       augeas { "maestro-agent-wrapper-jpda":
         lens      => "Properties.lns",
         incl      => "${wrapper}",
         changes   => [
-          "set wrapper.java.additional.3 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
+          "set wrapper.java.additional.6 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
         ],
         load_path => '/tmp/augeas/maestro-agent',
         notify    => Service['maestro-agent'],
