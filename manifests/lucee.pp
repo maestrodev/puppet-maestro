@@ -1,4 +1,5 @@
 class maestro::lucee(
+  $config_dir  = '/etc',
   $agent_auto_activate = false,
   $username = 'maestro',
   $password = 'maestro',
@@ -20,7 +21,7 @@ class maestro::lucee(
   # We must make sure this file replaces the one installed
   # by the RPM package.
 
-  file { '/etc/maestro_lucee.json':
+  file { "${config_dir}/maestro_lucee.json":
     ensure  => present,
     owner   => root,
     group   => root,

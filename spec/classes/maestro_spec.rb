@@ -33,7 +33,7 @@ describe 'maestro::maestro' do
     it { should contain_file("/usr/local/src") }
     
     it "should create the right LuCEE configuration" do
-      content = catalogue.resource('file', '/etc/maestro_lucee.json').send(:parameters)[:content]
+      content = catalogue.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
       content.should =~ /"agent_auto_activate": false,$/
       content.should =~ /"pass": "mydbpassword",$/
       content.should =~ /"username": "maestro",$/
@@ -71,7 +71,7 @@ describe 'maestro::maestro' do
     }) }
 
     it "should create the right LuCEE configuration" do
-      content = catalogue.resource('file', '/etc/maestro_lucee.json').send(:parameters)[:content]
+      content = catalogue.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
       content.should =~ /"username": "lucee",$/
       content.should =~ /"password": "my-lucee-passwd",$/
     end

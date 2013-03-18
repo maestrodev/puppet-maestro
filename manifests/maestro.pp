@@ -114,10 +114,12 @@ class maestro::maestro(
     }
 
     class { 'maestro::lucee':
+      config_dir          => "${basedir}/conf",
       agent_auto_activate => $agent_auto_activate,
       password            => $db_password,
+      require             => File["${basedir}/conf"],
       before              => Service['maestro'],
-      metrics_enabled     => $metrics_enabled
+      metrics_enabled     => $metrics_enabled,
     }
 
     file { "${basedir}/conf/lucee-lib.json":
