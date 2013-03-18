@@ -10,7 +10,9 @@ class maestro::agent::config(
   $stomp_host = $maestro::agent::stomp_host,
   $maven_servers = $maestro::agent::maven_servers,
   $agent_name = $maestro::agent::agent_name,
-  $enable_jpda = $maestro::agent::enable_jpda) {
+  $enable_jpda = $maestro::agent::enable_jpda,
+  $jmxport = $maestro::agent::jmxport,
+  $rmi_server_hostname = $maestro::agent::rmi_server_hostname) {
 
   $wrapper = "${basedir}/conf/wrapper.conf"
   case $::operatingsystem {
@@ -71,7 +73,12 @@ class maestro::agent::config(
     changes   => [
       "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
       "set wrapper.java.additional.4 -XX:HeapDumpPath=${agent_user_home}",
-      "set wrapper.java.additional.5 -Djava.io.tmpdir=$tmp_dir",
+      "set wrapper.java.additional.5 -Djava.io.tmpdir=${tmp_dir}",
+      "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote=true",
+      "set wrapper.java.additional.7 -Dcom.sun.management.jmxremote.port=${jmxport}",
+      "set wrapper.java.additional.8 -Dcom.sun.management.jmxremote.authenticate=false",
+      "set wrapper.java.additional.9 -Dcom.sun.management.jmxremote.ssl=false",
+      "set wrapper.java.additional.10 -Djava.rmi.server.hostname=${rmi_server_hostname}",
     ],
     load_path => '/tmp/augeas/maestro-agent',
     notify    => Service['maestro-agent'],
@@ -83,7 +90,7 @@ class maestro::agent::config(
         lens      => "Properties.lns",
         incl      => "${wrapper}",
         changes   => [
-          "set wrapper.java.additional.6 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
+          "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
         ],
         load_path => '/tmp/augeas/maestro-agent',
         notify    => Service['maestro-agent'],

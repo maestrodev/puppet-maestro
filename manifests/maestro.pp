@@ -27,6 +27,9 @@
 # [lucee_username] the lucee user name
 # [jetty_forwarded] set to true to indicate that jetty is being forwarded by a proxy.
 # [mail_from] A hash containing the origin information for emails sent by maestro. name, address.
+# [enable_jpda] A boolean indicating whether or not we want to enable JPDA
+# [jmxport] The port number the JMX server will listen on (default 9001)
+# [rmi_server_hostname] The ip address the JMX server will listen on (default $ipaddress)
 # [ga_property_id] the google analytics property id
 #
 class maestro::maestro(
@@ -51,6 +54,8 @@ class maestro::maestro(
   $port = '8080',
   $agent_auto_activate = false,
   $enable_jpda = false,
+  $jmxport = '9001',
+  $rmi_server_hostname = $ipaddress,
   $lucee_url = 'http://localhost:8080/lucee/api/v0/',
   $lucee_password = 'maestro',
   $lucee_username = 'maestro',

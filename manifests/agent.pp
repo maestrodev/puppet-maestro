@@ -12,6 +12,9 @@
 # [maven_servers] a list of maven servers
 # [agent_name] the name this agent should identify itself with on the Maestro server
 # [maxmemory] the wrapper.java.maxmemory setting to configure in the wrapper.
+# [enable_jpda] A boolean indicating whether or not we want to enable JPDA
+# [jmxport] The port number the JMX server will listen on (default 9002)
+# [rmi_server_hostname] The ip address the JMX server will listen on (default $ipaddress)
 #
 class maestro::agent(
   $agent_version,
@@ -23,7 +26,9 @@ class maestro::agent(
   $maven_servers = '',
   $agent_name = 'maestro_agent',
   $maxmemory = '128',
-  $enable_jpda = false) inherits maestro::params {
+  $enable_jpda = false,
+  $jmxport = '9002',
+  $rmi_server_hostname = $ipaddress) inherits maestro::params {
 
   $basedir = '/usr/local/maestro-agent'
   $srcdir = '/usr/local/src'

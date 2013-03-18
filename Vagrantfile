@@ -30,9 +30,11 @@ Vagrant::Config.run do |config|
   config.vm.define :agent do |config|
     config.vm.host_name = "agent.acme.com"
 
+    # this will let us connect to the JMX port locally (note: if you change this, you must change in vagrant-agent.pp as well)
+    config.vm.network  :hostonly, "10.42.42.50"
+
     config.vm.customize ["modifyvm", :id, "--name", "agent"] # name for VirtualBox GUI
     #config.vm.customize ["modifyvm", :id, "--memory", 1024]
-    #config.vm.forward_port 8080, 8080
 
     config.vm.provision :puppet do |puppet|
       puppet.options = puppet_options
