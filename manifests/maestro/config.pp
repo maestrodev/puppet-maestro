@@ -47,9 +47,8 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   }
 
   file { "${basedir}/conf/wrapper.conf":
-    ensure  => link,
-    target  => "${homedir}/conf/wrapper.conf",
-    require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
+    content => template('maestro/wrapper.conf.erb'),
+    require => File["${basedir}/conf"],
   }
 
   file { "${basedir}/conf/webdefault.xml":
@@ -59,9 +58,9 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   }
 
   file { "${basedir}/conf/jetty-jmx.xml":
-    ensure  => link,
-    target  => "${homedir}/conf/jetty-jmx.xml",
-    require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
+    mode    => '0600',
+    content => template('maestro/jetty-jmx.xml.erb'),
+    require => File["${basedir}/conf"],
   }
 
   file { "${basedir}/conf/maestro.properties":
@@ -109,44 +108,4 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
       before  => Service[maestro],
     }
   }
-
-  # set memory configuration
-  augeas { "maestro-wrapper-initmemory":
-    lens      => "Properties.lns",
-    incl      => "${wrapper}",
-    changes   => [
-      "set wrapper.java.initmemory ${initmemory}",
-    ],
-    load_path => '/tmp/augeas/maestro',
-    notify    => Service['maestro'],
-  }->
-
-  augeas { "maestro-wrapper-maxmemory":
-    lens      => "Properties.lns",
-    incl      => "${wrapper}",
-    changes   => [
-      "set wrapper.java.maxmemory ${maxmemory}",
-      "set wrapper.java.additional.3 -Dcom.sun.management.jmxremote=true",
-      "set wrapper.java.additional.4 -Dcom.sun.management.jmxremote.port=${jmxport}",
-      "set wrapper.java.additional.5 -Dcom.sun.management.jmxremote.authenticate=false",
-      "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote.ssl=false",
-      "set wrapper.java.additional.7 -Djava.rmi.server.hostname=${rmi_server_hostname}",
-    ],
-    load_path => '/tmp/augeas/maestro',
-    notify    => Service['maestro'],
-  }
-
-  if $enable_jpda {
-      notify{"Enabling JPDA for maestro":}
-      augeas { "maestro-wrapper-jpda":
-        lens      => "Properties.lns",
-        incl      => "${wrapper}",
-        changes   => [
-          "set wrapper.java.additional.8 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
-        ],
-        load_path => '/tmp/augeas/maestro',
-        notify    => Service['maestro'],
-      }
-  }
-
 }

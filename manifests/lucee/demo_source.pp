@@ -11,7 +11,7 @@ define maestro::lucee::demo_source(
       group   => $maestro::params::group,
       mode    => '0644',
       before  => [Service['maestro'], File["${source_file}"]],
-      require => File['/etc/maestro_lucee.json'],
+      require => Class['maestro::maestro::config'],
     }
   }
   
@@ -20,7 +20,7 @@ define maestro::lucee::demo_source(
     group   => $maestro::params::group,
     mode    => '0644',
     before  => Service['maestro'],
-    require => File['/etc/maestro_lucee.json'],
+    require => Class['maestro::maestro::config'],
     content => template("maestro/lucee/demo/sources/${name}.json.erb"),
   }
 }

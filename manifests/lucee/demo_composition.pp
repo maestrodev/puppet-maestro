@@ -40,7 +40,7 @@ define maestro::lucee::demo_composition(
       group   => $maestro::params::group,
       mode    => '0644',
       before  => Service['maestro'],
-      require => File['/etc/maestro_lucee.json'],
+      require => Class['maestro::maestro::config'],
     }
   }
 
@@ -49,7 +49,7 @@ define maestro::lucee::demo_composition(
     group   => $maestro::params::group,
     mode    => '0644',
     before  => Service['maestro'],
-    require => File['/etc/maestro_lucee.json'],
+    require => Class['maestro::maestro::config'],
     content => template("maestro/lucee/demo/${name}.json.erb"),
   }
 }

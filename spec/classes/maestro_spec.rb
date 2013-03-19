@@ -45,6 +45,20 @@ describe 'maestro::maestro' do
       content.should =~ /^google\.analytics\.propertyId = $/
     end
 
+    it "should create a wrapper.conf file" do
+      content = catalogue.resource('file', '/var/local/maestro/conf/wrapper.conf').send(:parameters)[:content]
+      content.should =~ /^set\.MAESTRO_BASE=\/var\/local\/maestro$/
+      content.should =~ /^wrapper\.java\.additional\.8=-XX:PermSize=384m$/
+      content.should =~ /^wrapper\.java\.additional\.9=-XX:MaxPermSize=384m$/
+    end
+
+    it "should create a wrapper script" do
+      content = catalogue.resource('file', '/etc/init.d/maestro').send(:parameters)[:content]
+      content.should =~ /^export HOME=\/var\/local\/maestro$/
+      content.should =~ /^export MAESTRO_BASE=\/var\/local\/maestro$/
+      content.should =~ /^RUN_AS_USER=maestro$/
+    end
+
     it "should create the right LuCEE client configuration" do
       content = catalogue.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
       content.should =~ /"username": "maestro",$/
@@ -61,8 +75,8 @@ describe 'maestro::maestro' do
       content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
       content.should =~ /^google\.analytics\.propertyId = ABC123$/
     end
-    
   end
+
 
   context "when using custom lucee password" do
     let(:params) { DEFAULT_PARAMS.merge({
