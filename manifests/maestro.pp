@@ -55,7 +55,7 @@ class maestro::maestro(
   $agent_auto_activate = false,
   $enable_jpda = false,
   $jmxport = '9001',
-  $rmi_server_hostname = $ipaddress,
+  $rmi_server_hostname = 'localhost',
   $lucee_url = 'http://localhost:8080/lucee/api/v0/',
   $lucee_password = 'maestro',
   $lucee_username = 'maestro',
