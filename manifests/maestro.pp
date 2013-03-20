@@ -122,22 +122,6 @@ class maestro::maestro(
       metrics_enabled     => $metrics_enabled,
     }
 
-    file { "${basedir}/conf/lucee-lib.json":
-      mode    => '0600',
-      content => template('maestro/lucee-lib.json.erb'),
-      require => Class['maestro::maestro::package'],
-      notify  => Service[maestro],
-    } ->
-    # legacy hardcoded location
-    file { '/var/maestro':
-      ensure => directory,
-    } ->
-    file { '/var/maestro/lucee-lib.json':
-      ensure => link,
-      force  => true,
-      target => "${basedir}/conf/lucee-lib.json",
-    }
-
     # plugin folder
     file { "${user_home}/.maestro" :
       ensure  => directory,

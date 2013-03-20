@@ -1,5 +1,5 @@
 class maestro::lucee(
-  $config_dir  = '/etc',
+  $config_dir  = '/var/local/maestro/conf',
   $agent_auto_activate = false,
   $username = 'maestro',
   $password = 'maestro',
@@ -27,6 +27,12 @@ class maestro::lucee(
     group   => root,
     content => template('maestro/lucee/maestro_lucee.json.erb'),
     notify  => Service['maestro'],
+    require => Class['maestro::package'],
+  }
+
+  # Remove legacy file.
+  file { '/etc/maestro_lucee.json':
+    ensure => absent,
     require => Class['maestro::package'],
   }
 }

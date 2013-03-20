@@ -29,64 +29,70 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $ga_property_id = $maestro::maestro::ga_property_id) inherits maestro::params {
 
   $wrapper = "${homedir}/conf/wrapper.conf"
+  $configdir = "${basedir}/conf"
+
 
   File {
     owner => $maestro::params::user,
     group => $maestro::params::group,
   }
   # Configure Maestro
-  if !defined( File["${basedir}/conf/jetty.xml"] ) {
-    file { "${basedir}/conf/jetty.xml":
+  if !defined( File["${configdir}/jetty.xml"] ) {
+    file { "${configdir}/jetty.xml":
       mode    => '0600',
       content => template('maestro/jetty.xml.erb'),
-      require => File["${basedir}/conf"],
+      require => File[$configdir],
     }
   }
-  file { "${basedir}/conf/plexus.xml":
+  file { "${configdir}/plexus.xml":
     mode    => '0600',
     content => template('maestro/plexus.xml.erb'),
-    require => File["${basedir}/conf"],
+    require => File[$configdir],
   }
 
-  file { "${basedir}/conf/wrapper.conf":
-    ensure  => link,
-    target  => $wrapper,
-    require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
-  }
-
-  file { "${basedir}/conf/webdefault.xml":
-    ensure  => link,
-    target  => "${homedir}/conf/webdefault.xml",
-    require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
-  }
-
-  file { "${basedir}/conf/jetty-jmx.xml":
+  file { "${configdir}/jetty-jmx.xml":
     mode    => '0600',
     content => template('maestro/jetty-jmx.xml.erb'),
-    require => File["${basedir}/conf"],
+    require => File[$configdir],
   }
 
-  file { "${basedir}/conf/maestro.properties":
+  file { "${configdir}/maestro.properties":
     mode    => '0600',
     content => template('maestro/maestro.properties.erb'),
-    require => File["${basedir}/conf"],
+    require => File[$configdir],
   }
 
-  # This requires something, but what? ->
-  augeas { 'update-default-configurations':
-    changes => [
-      "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] ${admin_password}",
-      "rm default-configuration/users/*[username/#text != 'admin']",
-    ],
-    incl    => "${homedir}/conf/default-configurations.xml",
-    lens    => 'Xml.lns',
+  file { "${configdir}/lucee-lib.json":
+    mode    => '0600',
+    content => template('maestro/lucee-lib.json.erb'),
+    require => File[$configdir],
+    notify  => Service['maestro'],
+  }
+  # legacy hardcoded location
+  file { '/var/maestro/lucee-lib.json':
+    ensure => absent,
     require => Class['maestro::maestro::package'],
-  } ->
-  file { "${basedir}/conf/default-configurations.xml":
-    source  => "${homedir}/conf/default-configurations.xml",
-    require => File["${basedir}/conf"],
   }
 
+  # Create symlinks to some files provided by the distribution package
+
+  file { "${configdir}/wrapper.conf":
+    ensure  => link,
+    target  => $wrapper,
+    require => [Class['maestro::maestro::package'], File[$configdir]],
+  }
+
+  file { "${configdir}/webdefault.xml":
+    ensure  => link,
+    target  => "${homedir}/conf/webdefault.xml",
+    require => [Class['maestro::maestro::package'], File[$configdir]],
+  }
+
+  file { "${configdir}/default-configurations.xml":
+    ensure  => link,
+    target  => "${homedir}/conf/default-configurations.xml",
+    require => [Class['maestro::maestro::package'], File[$configdir]],
+  }
 
   # Until Augeas has the properties files fixes, use a custom version
   # Just a basic approach - for more complete management of lenses consider https://github.com/camptocamp/puppet-augeas
@@ -99,6 +105,18 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   } ->
   file { "/tmp/augeas/maestro/properties.aug":
     source => "puppet:///modules/maestro/properties.aug"
+  }
+
+  # Tweak the files provided in the distribution as these cannot be templated easily or in a portable fashion.
+
+  augeas { 'update-default-configurations':
+    changes => [
+      "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] ${admin_password}",
+      "rm default-configuration/users/*[username/#text != 'admin']"
+    ],
+    incl    => "${homedir}/conf/default-configurations.xml",
+    lens    => 'Xml.lns',
+    require => Class['maestro::maestro::package'],
   }
 
   Augeas {
