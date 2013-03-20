@@ -28,6 +28,8 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $rmi_server_hostname = $maestro::maestro::rmi_server_hostname,
     $ga_property_id = $maestro::maestro::ga_property_id) inherits maestro::params {
 
+  $wrapper = "${homedir}/conf/wrapper.conf"
+
   File {
     owner => $maestro::params::user,
     group => $maestro::params::group,
@@ -47,8 +49,9 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   }
 
   file { "${basedir}/conf/wrapper.conf":
-    content => template('maestro/wrapper.conf.erb'),
-    require => File["${basedir}/conf"],
+    ensure  => link,
+    target  => $wrapper,
+    require => [Class['maestro::maestro::package'], File["${basedir}/conf"]],
   }
 
   file { "${basedir}/conf/webdefault.xml":
@@ -84,21 +87,48 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     require => File["${basedir}/conf"],
   }
 
+
   # Until Augeas has the properties files fixes, use a custom version
   # Just a basic approach - for more complete management of lenses consider https://github.com/camptocamp/puppet-augeas
   if !defined(File['/tmp/augeas']) {
     file { '/tmp/augeas': ensure => directory }
   }
-  file { '/tmp/augeas/maestro': ensure => directory } ->
+  file { '/tmp/augeas/maestro':
+    ensure => directory,
+    require => File['/tmp/augeas'],
+  } ->
   file { "/tmp/augeas/maestro/properties.aug":
     source => "puppet:///modules/maestro/properties.aug"
-  }->
+  }
+
+  Augeas {
+    lens      => "Properties.lns",
+    load_path => '/tmp/augeas/maestro',
+    require   => [Class['maestro::maestro::package'], File['/tmp/augeas/maestro/properties.aug']],
+    notify    => Service['maestro'],
+  }
+
   augeas { 'show-snapshot-version':
-    lens      => 'Properties.lns',
     incl      => "${homedir}/apps/maestro/WEB-INF/classes/filterValues.properties",
     changes   => "set artifactVersion ${version}",
-    load_path => '/tmp/augeas/maestro',
-    require   => Class['maestro::maestro::package'],
+  }
+
+  augeas { 'maestro-wrapper':
+    incl      => $wrapper,
+    changes   => [
+      "set wrapper.java.initmemory ${initmemory}",
+      "set wrapper.java.maxmemory ${maxmemory}",
+      "set wrapper.java.additional.8 -XX:PermSize=${permsize}",
+      "set wrapper.java.additional.9 -XX:MaxPermSize=${maxpermsize}"
+    ],
+  }
+  # Makes sure we are not overwriting anything else that might have been configured in wrapper.java.additional.10
+  # before doing this...
+  if $enable_jpda {
+    augeas { 'maestro-jpda':
+      incl      => $wrapper,
+      changes   => 'set wrapper.java.additional.10 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n',
+    }
   }
 
   if $::architecture == 'x86_64' {

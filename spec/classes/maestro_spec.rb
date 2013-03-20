@@ -45,13 +45,6 @@ describe 'maestro::maestro' do
       content.should =~ /^google\.analytics\.propertyId = $/
     end
 
-    it "should create a wrapper.conf file" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/wrapper.conf').send(:parameters)[:content]
-      content.should =~ /^set\.MAESTRO_BASE=\/var\/local\/maestro$/
-      content.should =~ /^wrapper\.java\.additional\.8=-XX:PermSize=384m$/
-      content.should =~ /^wrapper\.java\.additional\.9=-XX:MaxPermSize=384m$/
-    end
-
     it "should create a wrapper script" do
       content = catalogue.resource('file', '/etc/init.d/maestro').send(:parameters)[:content]
       content.should =~ /^export HOME=\/var\/local\/maestro$/
