@@ -17,5 +17,11 @@ describe 'maestro::lucee' do
       should contain_file('/var/local/maestro/conf/maestro_lucee.json').with_content(/"is_demo": false,$/)
     end
     
+    it { should contain_file('/etc/maestro_lucee.json').with_ensure("absent") }
+  end
+
+  context "with different configuration directory" do
+    let(:params) { params.merge( { :config_dir => "/etc" } ) }
+    it { should contain_file('/etc/maestro_lucee.json') }
   end
 end

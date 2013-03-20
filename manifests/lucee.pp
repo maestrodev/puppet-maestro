@@ -31,8 +31,10 @@ class maestro::lucee(
   }
 
   # Remove legacy file.
-  file { '/etc/maestro_lucee.json':
-    ensure => absent,
-    require => Class['maestro::package'],
+  if $config_dir != '/etc' {
+    file { '/etc/maestro_lucee.json':
+      ensure => absent,
+      require => Class['maestro::package'],
+    }
   }
 }
