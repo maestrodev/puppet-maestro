@@ -68,10 +68,23 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     require => File[$configdir],
     notify  => Service['maestro'],
   }
-  # legacy hardcoded location
-  file { '/var/maestro/lucee-lib.json':
-    ensure => absent,
-    require => Class['maestro::maestro::package'],
+  if versioncmp($version, "4.13.0") >= 0 {
+    # remove legacy hardcoded location
+    file { '/var/maestro/lucee-lib.json':
+      ensure => absent,
+      require => Class['maestro::maestro::package'],
+    }
+  }
+  else {
+    # legacy hardcoded location
+    file { '/var/maestro':
+      ensure => directory,
+    } ->
+    file { '/var/maestro/lucee-lib.json':
+      ensure => link,
+      force  => true,
+      target => "${basedir}/conf/lucee-lib.json",
+    }
   }
 
   # Create symlinks to some files provided by the distribution package
