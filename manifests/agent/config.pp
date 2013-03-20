@@ -11,6 +11,7 @@ class maestro::agent::config(
   $maven_servers = $maestro::agent::maven_servers,
   $agent_name = $maestro::agent::agent_name,
   $enable_jpda = $maestro::agent::enable_jpda,
+  $support_email = $maestro::agent::support_email,
   $jmxport = $maestro::agent::jmxport,
   $rmi_server_hostname = $maestro::agent::rmi_server_hostname) {
 

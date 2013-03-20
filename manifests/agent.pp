@@ -13,6 +13,7 @@
 # [agent_name] the name this agent should identify itself with on the Maestro server
 # [maxmemory] the wrapper.java.maxmemory setting to configure in the wrapper.
 # [enable_jpda] A boolean indicating whether or not we want to enable JPDA
+# [support_email] An email address to send any fatal error logs to from the # agent
 # [jmxport] The port number the JMX server will listen on (default 9002)
 # [rmi_server_hostname] The ip address the JMX server will listen on (default $ipaddress)
 #
@@ -27,6 +28,7 @@ class maestro::agent(
   $agent_name = 'maestro_agent',
   $maxmemory = '128',
   $enable_jpda = false,
+  $support_email = "support@maestrodev.com",
   $jmxport = '9002',
   $rmi_server_hostname = $ipaddress) inherits maestro::params {
 

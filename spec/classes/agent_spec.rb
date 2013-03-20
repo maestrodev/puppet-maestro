@@ -42,6 +42,27 @@ describe 'maestro::agent' do
   context "when rvm fact is not set" do
     it { should contain_user(DEFAULT_USER).with_groups('root') }
   end
+
+  agent_config = "maestro_agent.json"
+  agent_config_file = "/var/local/maestro-agent/conf/maestro_agent.json"
+  context "with a default support address" do
+    it { 
+      should contain_file(agent_config).with_path(agent_config_file)
+      content = catalogue.resource('file', agent_config).send(:parameters)[:content]
+      content.should =~ %r["to": "support@maestrodev.com"]
+    }
+  end
+  
+  context "with a configured support address" do
+    let(:params) { DEFAULT_AGENT_PARAMS.merge({
+      :support_email => "support@example.com"
+    })}
+    it { 
+      should contain_file(agent_config).with_path(agent_config_file)
+      content = catalogue.resource('file', agent_config).send(:parameters)[:content]
+      content.should =~ %r["to": "support@example.com"]
+    }
+  end
   
   # ================================================ Tarball install =========================================
 
@@ -121,10 +142,4 @@ describe 'maestro::agent' do
     it { should contain_service("maestro-agent") }
     it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
   end
-
-  
-  
-  
-  
-  
 end
