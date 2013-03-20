@@ -11,8 +11,8 @@ Vagrant::Config.run do |config|
   abort "MAESTRODEV_PASSWORD must be set" unless ENV['MAESTRODEV_PASSWORD']
   
   # use local puppetlib modules and this module as /etc/puppet
-  config.vm.share_folder "dep-modules", "/etc/puppet", "./spec/fixtures/modules", :create => true, :owner => "puppet", :group => "puppet"
-  config.vm.share_folder "this-module", "/etc/puppet/maestro", ".", :create => true, :owner => "puppet", :group => "puppet"
+  config.vm.share_folder "dep-modules", "/etc/puppet/modules", "./spec/fixtures/modules", :create => true, :owner => "puppet", :group => "puppet"
+  config.vm.share_folder "this-module", "/etc/puppet/modules/maestro", ".", :create => true, :owner => "puppet", :group => "puppet"
 
   # map the puppet graphs directory to local, so we can easily check them out in ./graphs
   config.vm.share_folder "puppet-graphs", "/var/lib/puppet/state/graphs", "graphs", :create => true, :owner => "puppet", :group => "puppet"
@@ -24,7 +24,7 @@ Vagrant::Config.run do |config|
 
   # allow additional puppet options to be passed in (e.g. --graph, --debug, etc.)
   # note: splitting args is fragile and doesn't support spaces in args, but for now it works for what we need
-  puppet_options = ["--modulepath", "/etc/puppet", ENV['PUPPET_OPTIONS'].split(/ /)];
+  puppet_options = ["--modulepath", "/etc/puppet/modules", ENV['PUPPET_OPTIONS'].split(/ /)];
 
   # agent test VM
   config.vm.define :agent do |config|
