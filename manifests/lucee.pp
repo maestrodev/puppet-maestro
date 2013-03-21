@@ -1,12 +1,13 @@
 class maestro::lucee(
   $config_dir  = '/var/local/maestro/conf',
   $agent_auto_activate = false,
-  $username = 'maestro',
-  $password = 'maestro',
-  $type     = 'postgres',
-  $host     = 'localhost',
-  $port     = 5432,
-  $database = 'luceedb',
+  $username = $maestro::lucee::db::username,
+  $password = $maestro::lucee::db::password,
+  $type     = $maestro::lucee::db::type,
+  $host     = $maestro::lucee::db::host,
+  $port     = $maestro::lucee::db::port,
+  $logging_level = $maestro::logging::level,
+  $database = $maestro::lucee::db::database,
   $metrics_enabled = false) {
 
   # The $demo is set by the node.pp (or equiv) and is new way of detecting whether demo enabled.

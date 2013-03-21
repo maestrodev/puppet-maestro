@@ -5,7 +5,7 @@
       "enabled" : <%= @metrics_enabled %>
     },
     "log" : {
-      "level": "INFO"
+      "level": "<%= @logging_level || "INFO" %>"
     },
     "eui": {
       "display": true
@@ -15,12 +15,12 @@
     "username": "<%= @lucee_username %>",
     "password": "<%= @lucee_password %>",
     "database": {
-      "server": "<%= @type %>",
-      "host": "<%= @host %>",
-      "port": <%= @port %>,
-      "user": "<%= @username %>",
-      "pass": "<%= @password %>",
-      "database_name": "<%= @database %>"
+      "server": "<%= @type || "postgres" %>",
+      "host": "<%= @host || "localhost" %>",
+      "port": <%= @port || "5432" %>,
+      "user": "<%= @username || "maestro" %>",
+      "pass": "<%= @password || "maestro" %>",
+      "database_name": "<%= @database || "luceedb" %>"
     },
     "stomp": {
       "host": "127.0.0.1",
