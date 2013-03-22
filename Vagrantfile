@@ -44,21 +44,4 @@ Vagrant::Config.run do |config|
       #puppet.module_path = "modules"
     end
   end
-
-  # # maestro test VM
-  # config.vm.define :maestro do |config|
-  #   config.vm.host_name = "maestro.acme.com"
-  # 
-  #   config.vm.customize ["modifyvm", :id, "--name", "maestro"] # name for VirtualBox GUI
-  #   #config.vm.customize ["modifyvm", :id, "--memory", 1024]
-  #   #config.vm.forward_port 8080, 8080
-  # 
-  #   config.vm.provision :puppet do |puppet|
-  #     puppet.options = ["--modulepath", "/etc/puppet"]
-  #     puppet.facter = { "maestrodev_username" => ENV['MAESTRODEV_USERNAME'], "maestrodev_password" => ENV['MAESTRODEV_PASSWORD'] }
-  #     puppet.manifests_path = "manifests"
-  #     puppet.manifest_file  = "vagrant-maestro.pp"
-  #     #puppet.module_path = "modules"
-  #   end
-  # end
 end
