@@ -9,7 +9,7 @@
 <% using_ldap = !ldap.empty? -%>
 
 <%
-tables = ["configuration", "role"]
+tables = ["role"]
 tables += ["userassignment", "JDOUSER"] unless using_ldap
 -%>
 
