@@ -41,10 +41,6 @@ On the Maestro node, you'll need Maestro and ActiveMQ:
     class { 'activemq': }
     class { 'activemq::stomp': }
 
-    # demo compositions
-    class { 'maestro::lucee_demo_compositions': }
-
-
 On the agent node(s), install the agent.
 
     class { java: distribution => 'java-1.6.0-openjdk-devel' }

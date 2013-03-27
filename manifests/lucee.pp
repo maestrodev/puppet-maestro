@@ -11,8 +11,7 @@ class maestro::lucee(
   $metrics_enabled = false) {
 
   # The $demo is set by the node.pp (or equiv) and is new way of detecting whether demo enabled.
-  # The 'or' is so existing code will continue to function - remove when maestro::lucee::demo_compositions is gone
-  if $demo or defined (Class['maestro::lucee::demo_compositions']) {
+  if $demo {
     $is_demo = true
   }
   else {
