@@ -30,6 +30,7 @@
 # [enable_jpda] A boolean indicating whether or not we want to enable JPDA
 # [jmxport] The port number the JMX server will listen on (default 9001)
 # [rmi_server_hostname] The ip address the JMX server will listen on (default $ipaddress)
+# [web_config_properties] properties to add the maestro.properties, such as a feature toggles
 # [ga_property_id] the google analytics property id
 #
 class maestro::maestro(
@@ -64,6 +65,7 @@ class maestro::maestro(
     name    => 'Maestro',
     address => 'info@maestrodev.com'
   },
+  $web_config_properties = {},
   $ga_property_id = '') inherits maestro::params {
 
   $srcdir = '/usr/local/src'

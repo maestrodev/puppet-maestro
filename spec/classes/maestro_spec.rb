@@ -70,6 +70,25 @@ describe 'maestro::maestro' do
     end
   end
 
+  context "when using default web properties configuration" do
+    it "should create a maestro.properties file" do
+      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content.should_not =~ /^feature\.dashboard\.enabled = true$/
+    end
+  end
+
+  context "when using web properties configuration" do
+    let(:params) { DEFAULT_PARAMS.merge({
+      :web_config_properties => {
+        "feature.dashboard.enabled" => "true"
+      }
+    }) }
+
+    it "should create a maestro.properties file" do
+      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content.should =~ /^feature\.dashboard\.enabled = true$/
+    end
+  end
 
   context "when using custom lucee password" do
     let(:params) { DEFAULT_PARAMS.merge({

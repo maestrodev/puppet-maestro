@@ -26,6 +26,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $enable_jpda = $maestro::maestro::enable_jpda,
     $jmxport = $maestro::maestro::jmxport,
     $rmi_server_hostname = $maestro::maestro::rmi_server_hostname,
+    $web_config_properties = $maestro::maestro::web_config_properties,
     $ga_property_id = $maestro::maestro::ga_property_id) inherits maestro::params {
 
   $wrapper = "${homedir}/conf/wrapper.conf"
