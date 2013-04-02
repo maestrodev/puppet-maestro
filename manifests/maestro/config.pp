@@ -61,6 +61,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     mode    => '0600',
     content => template('maestro/maestro.properties.erb'),
     require => File[$configdir],
+    notify  => Service['maestro'],
   }
 
   file { "${configdir}/lucee-lib.json":
