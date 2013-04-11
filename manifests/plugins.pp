@@ -1,19 +1,19 @@
 # Maestro default plugins
 # define versions as parameters so they can be set from hiera
 class maestro::plugins(
-  $irc = '1.2',
-  $continuum = '1.5',
-  $scm = '1.0',
-  $jenkins = '1.1.2',
-  $jira = '1.0',
   $bamboo = '1.1',
-  $fog = '1.3',
-  $rpm = '1.0',
-  $puppet = '1.0',
-  $gemfury = '1.0',
-  $rightscale = '1.0',
+  $continuum = '1.6',
+  $cucumber = '1.0',
   $flowdock = '1.0',
-  $cucumber = '1.0'
+  $fog = '1.4.1',
+  $gemfury = '1.0',
+  $irc = '1.2',
+  $jenkins = '1.4.3',
+  $jira = '1.0',
+  $puppet = '1.0',
+  $rightscale = '1.0',
+  $rpm = '1.0',
+  $scm = '1.0'
   ) {
 
   maestro::plugin { 'maestro-irc-plugin':
