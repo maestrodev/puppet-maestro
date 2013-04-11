@@ -10,7 +10,7 @@
       "to": "<%= support_email %>",
       "authtype": "plain"
     },
-    "level":"INFO"
+    "level": "<%= @logging_level || "INFO" %>"
   },
   "name": "<%= agent_name %>",
   "stomp": {
