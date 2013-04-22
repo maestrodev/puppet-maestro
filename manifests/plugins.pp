@@ -13,7 +13,8 @@ class maestro::plugins(
   $puppet = '1.0',
   $rightscale = '1.0',
   $rpm = '1.0',
-  $scm = '1.0'
+  $scm = '1.0',
+  $ssh = '1.0'
   ) {
 
   maestro::plugin { 'maestro-irc-plugin':
@@ -54,6 +55,9 @@ class maestro::plugins(
   }
   maestro::plugin { 'maestro-cucumber-plugin':
     version => $cucumber,
+  }
+  maestro::plugin { 'maestro-ssh-plugin':
+    version => $ssh,
   }
 
 }
