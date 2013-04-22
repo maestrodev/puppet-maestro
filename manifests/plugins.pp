@@ -5,7 +5,7 @@ class maestro::plugins(
   $continuum = '1.6',
   $cucumber = '1.0',
   $flowdock = '1.0',
-  $fog = '1.4.1',
+  $fog = '1.5',
   $gemfury = '1.0',
   $irc = '1.2',
   $jenkins = '1.4.3',
