@@ -68,6 +68,8 @@ class maestro::maestro(
   $web_config_properties = {},
   $ga_property_id = '') inherits maestro::params {
 
+  include maestro::logging
+
   $srcdir = '/usr/local/src'
   $installdir = '/usr/local'
   $basedir = '/var/local/maestro'

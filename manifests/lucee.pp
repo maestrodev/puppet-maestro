@@ -8,7 +8,7 @@ class maestro::lucee(
   $port     = $maestro::lucee::db::port,
   $logging_level = $maestro::logging::level,
   $database = $maestro::lucee::db::database,
-  $metrics_enabled = false) {
+  $metrics_enabled = false) inherits maestro::lucee::db {
 
   # The $demo is set by the node.pp (or equiv) and is new way of detecting whether demo enabled.
   if $demo {
