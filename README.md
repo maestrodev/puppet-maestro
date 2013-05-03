@@ -105,25 +105,5 @@ Plugins can be installed from the Maestro Web UI or be automatically installed u
 
 For example to install some common plugins, add this to the Maestro node.
 
-    maestro::plugin { 'maestro-irc-plugin':
-      version => '1.2',
-    }
-    maestro::plugin { 'maestro-continuum-plugin':
-      version => '1.5',
-    }
-    maestro::plugin { 'maestro-scm-plugin':
-      version => '1.0',
-    }
-    maestro::plugin { 'maestro-jenkins-plugin':
-      version => '1.1.2',
-    }
-    maestro::plugin { 'maestro-jira-plugin':
-      version => '1.0',
-    }
-    maestro::plugin { 'maestro-bamboo-plugin':
-      version => '1.1',
-    }
-    maestro::plugin { 'maestro-fog-plugin':
-      version => '1.3',
-    }
+    include maestro::plugins
 
