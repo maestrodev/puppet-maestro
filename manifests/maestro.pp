@@ -61,6 +61,8 @@ class maestro::maestro(
   $lucee_password = 'maestro',
   $lucee_username = 'maestro',
   $jetty_forwarded = $::jetty_forwarded,
+  $maestro_context_path = "/",
+  $lucee_context_path = "/lucee",
   $mail_from = {
     name    => 'Maestro',
     address => 'info@maestrodev.com'

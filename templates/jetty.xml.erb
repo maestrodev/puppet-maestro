@@ -119,7 +119,7 @@
                    <Item>
                      <New id="lucee" class="org.eclipse.jetty.webapp.WebAppContext">
                        <Set name="war"><SystemProperty name="jetty.home" default="."/>/apps/lucee</Set>
-                       <Set name="contextPath">/lucee</Set>
+                       <Set name="contextPath"><%= lucee_context_path %></Set>
                        <Set name="defaultsDescriptor"><SystemProperty name="appserver.base" default="."/>/conf/webdefault.xml</Set>
                        <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
                        <Set name="extractWAR" type="boolean">True</Set>
@@ -130,7 +130,7 @@
                    <Item>
                      <New id="maestro" class="org.eclipse.jetty.webapp.WebAppContext">
                        <Set name="war"><SystemProperty name="jetty.home" default="."/>/apps/maestro</Set>
-                       <Set name="contextPath">/</Set>
+                       <Set name="contextPath"><%= maestro_context_path %></Set>
                        <Set name="defaultsDescriptor"><SystemProperty name="appserver.base" default="."/>/conf/webdefault.xml</Set>
                        <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
                        <Set name="extractWAR" type="boolean">True</Set>

@@ -25,13 +25,20 @@ describe 'maestro::maestro' do
 
   context "when using defaults" do
     it { should contain_file '/var/local/maestro' }
-    it "should not enable fowarding in jetty.xml" do                                  
+    it "should not enable fowarding in jetty.xml" do
       should contain_file("/var/local/maestro/conf/jetty.xml")
       should_not contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
     end
     it { should contain_exec("unpack-maestro") }
     it { should contain_file("/usr/local/src") }
-    
+
+    it "should have default context paths" do
+      should contain_file("/var/local/maestro/conf/jetty.xml")
+      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content.should =~ %r[<Set name="contextPath">/lucee</Set>]
+      content.should =~ %r[<Set name="contextPath">/</Set>]
+    end
+
     it "should create the right LuCEE configuration" do
       content = catalogue.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
       content.should =~ /"agent_auto_activate": false,$/
@@ -63,7 +70,7 @@ describe 'maestro::maestro' do
     let(:params) { DEFAULT_PARAMS.merge({
          :ga_property_id => "ABC123",
      }) }
-    
+
     it "should create a maestro.properties file" do
       content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
       content.should =~ /^google\.analytics\.propertyId = ABC123$/
@@ -152,9 +159,9 @@ describe 'maestro::maestro' do
     let(:params) { DEFAULT_PARAMS.merge({
       :jetty_forwarded => true
     }) }
-    it "should enable fowarding in jetty.xml" do                                  
+    it "should enable fowarding in jetty.xml" do
       should contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
-    end 
+    end
   end
 
   context "when using rpm package" do
@@ -206,6 +213,21 @@ describe 'maestro::maestro' do
     }) }
 
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
+  end
+
+  context "when context paths are customised" do
+    let(:params) { DEFAULT_PARAMS.merge({
+        :maestro_context_path => "/foo",
+        :lucee_context_path => "/bar",
+    })}
+    it "should have default context paths" do
+      should contain_file("/var/local/maestro/conf/jetty.xml")
+      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content.should =~ %r[<Set name="contextPath">/foo</Set>]
+      content.should =~ %r[<Set name="contextPath">/bar</Set>]
+      content.should_not =~ %r[<Set name="contextPath">/</Set>]
+      content.should_not =~ %r[<Set name="contextPath">/lucee</Set>]
+    end
   end
 end
 
