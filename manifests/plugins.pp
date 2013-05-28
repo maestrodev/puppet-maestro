@@ -11,7 +11,7 @@ class maestro::plugins(
     'maestro-fog-plugin' => { version => '1.5' },
     'maestro-gemfury-plugin' => { version => '1.0' },
     'maestro-irc-plugin' => { version => '1.2' },
-    'maestro-jenkins-plugin' => { version => '1.4.3' },
+    'maestro-jenkins-plugin' => { version => '1.4.4' },
     'maestro-jira-plugin' => { version => '1.0' },
     'maestro-puppet-plugin' => { version => '1.0' },
     'maestro-rightscale-plugin' => { version => '1.0' },
