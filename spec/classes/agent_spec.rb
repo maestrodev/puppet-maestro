@@ -127,7 +127,10 @@ describe 'maestro::agent' do
 
     it { should contain_file("/etc/init.d/maestro-agent") }
     it { should_not contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
-    it { should contain_service("maestro-agent") }
+    it { should contain_service("maestro-agent").with({
+      :ensure => 'running',
+      :enable => true
+    }) }
     it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
   end
 
@@ -139,7 +142,10 @@ describe 'maestro::agent' do
 
     it { should_not contain_file("/etc/init.d/maestro-agent") }
     it { should contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
-    it { should contain_service("maestro-agent") }
+    it { should contain_service("maestro-agent").with({
+      :ensure => 'running',
+      :enable => true
+    }) }
     it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
   end
 end

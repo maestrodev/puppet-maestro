@@ -28,7 +28,7 @@ First, declare the variables that will be used across both nodes.
 
 On the Maestro node, you'll need Maestro and ActiveMQ:
 
-    class { java: distribution => 'java-1.6.0-openjdk' }
+    class { java: package => 'java-1.6.0-openjdk-devel' }
 
     include maestro
 
@@ -43,7 +43,7 @@ On the Maestro node, you'll need Maestro and ActiveMQ:
 
 On the agent node(s), install the agent.
 
-    class { java: distribution => 'java-1.6.0-openjdk-devel' }
+    class { java: package => 'java-1.6.0-openjdk-devel' }
 
     class { 'maestro::agent':
       repo           => $repo,
