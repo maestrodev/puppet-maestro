@@ -18,3 +18,10 @@ end
 task :spec_prep => :librarian_spec_prep
 
 task :default => [:clean, :spec]
+
+desc "Integration test with Vagrant"
+task :integration do
+  sh %{vagrant destroy --force}
+  sh %{vagrant up}
+  sh %{vagrant destroy --force}
+end
