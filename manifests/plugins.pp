@@ -8,8 +8,9 @@ class maestro::plugins(
     'maestro-continuum-plugin' => { version => '1.6' },
     'maestro-cucumber-plugin' => { version => '1.0' },
     'maestro-flowdock-plugin' => { version => '1.0' },
-    'maestro-fog-plugin' => { version => '1.5' },
+    'maestro-fog-plugin' => { version => '1.6' },
     'maestro-gemfury-plugin' => { version => '1.0' },
+    'maestro-gitblit-plugin' => { version => '1.0' },
     'maestro-irc-plugin' => { version => '1.2' },
     'maestro-jenkins-plugin' => { version => '1.4.4' },
     'maestro-jira-plugin' => { version => '1.0' },
@@ -18,6 +19,7 @@ class maestro::plugins(
     'maestro-rpm-plugin' => { version => '1.0' },
     'maestro-scm-plugin' => { version => '1.0' },
     'maestro-ssh-plugin' => { version => '1.0' },
+    'maestro-sonar-plugin' => { version => '1.0.1' },
   } ) {
   create_resources('maestro::plugin', $plugins)
 }
