@@ -45,6 +45,8 @@ Vagrant::Config.run do |config|
 
   # maestro test VM
   config.vm.define :maestro do |config|
+    config.vm.provision :shell, :inline => "test -d /etc/puppet/modules/activemq || puppet module install maestrodev/activemq"
+
     config.vm.host_name = "maestro.acme.com"
 
     # this will let us connect to the JMX port locally (note: if you change this, you must change in agent.pp as well)
