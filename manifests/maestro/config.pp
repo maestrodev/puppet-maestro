@@ -153,8 +153,8 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     changes   => [
       "set wrapper.java.initmemory ${initmemory}",
       "set wrapper.java.maxmemory ${maxmemory}",
-      "set wrapper.java.additional.8 -XX:PermSize=${permsize}",
-      "set wrapper.java.additional.9 -XX:MaxPermSize=${maxpermsize}"
+      "set [. =~ regex('-XX:PermSize=.*')] -XX:PermSize=${permsize}",
+      "set [. =~ regex('-XX:MaxPermSize=.*')] -XX:MaxPermSize=${maxpermsize}",
     ],
   }
   # Makes sure we are not overwriting anything else that might have been configured in wrapper.java.additional.10
