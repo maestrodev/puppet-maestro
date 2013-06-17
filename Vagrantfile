@@ -42,4 +42,22 @@ Vagrant::Config.run do |config|
       puppet.manifest_file  = "agent.pp"
     end
   end
+
+  # maestro test VM
+  config.vm.define :maestro do |config|
+    config.vm.host_name = "maestro.acme.com"
+
+    # this will let us connect to the JMX port locally (note: if you change this, you must change in agent.pp as well)
+    config.vm.network  :hostonly, "10.42.42.51"
+
+    config.vm.customize ["modifyvm", :id, "--name", "maestro"] # name for VirtualBox GUI
+    #config.vm.customize ["modifyvm", :id, "--memory", 1024]
+
+    config.vm.provision :puppet do |puppet|
+      puppet.options = puppet_options
+      puppet.facter = { "maestrodev_username" => ENV['MAESTRODEV_USERNAME'], "maestrodev_password" => ENV['MAESTRODEV_PASSWORD'] }
+      puppet.manifests_path = "tests"
+      puppet.manifest_file  = "maestro.pp"
+    end
+  end
 end
