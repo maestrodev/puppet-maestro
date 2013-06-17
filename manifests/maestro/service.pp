@@ -35,6 +35,7 @@ class maestro::maestro::service(
         tries     => 300,
         try_sleep => 1,
         require   => Exec["check-maestro-up"],
+        path      => "/usr/bin",
       }
     }
   }
