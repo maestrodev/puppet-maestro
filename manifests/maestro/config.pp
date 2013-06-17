@@ -157,12 +157,14 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
       "set [. =~ regex('-XX:MaxPermSize=.*')] -XX:MaxPermSize=${maxpermsize}",
     ],
   }
-  # Makes sure we are not overwriting anything else that might have been configured in wrapper.java.additional.10
-  # before doing this...
   if $enable_jpda {
+    # TODO: make more flexible by calculating the right number for the
+    # parameter instead of hard-coding 13. Will require a Ruby function. Add
+    # one to:
+    #   cat $wrapper | egrep -c '^wrapper.java.additional.[0-9]+\s*='
     augeas { 'maestro-jpda':
       incl      => $wrapper,
-      changes   => 'set wrapper.java.additional.10 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n',
+      changes   => 'set wrapper.java.additional.13 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n',
     }
   }
 
