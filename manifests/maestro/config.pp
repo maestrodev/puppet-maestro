@@ -153,8 +153,8 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     changes   => [
       "set wrapper.java.initmemory ${initmemory}",
       "set wrapper.java.maxmemory ${maxmemory}",
-      "set [. =~ regex('-XX:PermSize=.*')] -XX:PermSize=${permsize}",
-      "set [. =~ regex('-XX:MaxPermSize=.*')] -XX:MaxPermSize=${maxpermsize}",
+      "set *[. =~ regexp('-XX:PermSize=.*')] -XX:PermSize=${permsize}",
+      "set *[. =~ regexp('-XX:MaxPermSize=.*')] -XX:MaxPermSize=${maxpermsize}",
     ],
   }
   if $enable_jpda {
