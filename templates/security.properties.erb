@@ -32,6 +32,12 @@ ldap.config.bind.dn=
 ldap.config.password=
 <% end %>
 
+# LDAP group mapping defaults
+ldap.config.group.role.attribute=cn
+ldap.config.group.search.base.dn=ou=groups
+ldap.config.group.search.filter=(uniqueMember={0})
+ldap.config.group.search.subtree=false
+
 # needs to remain empty for Maestro 3
 ldap.config.search.base.dn=
 
