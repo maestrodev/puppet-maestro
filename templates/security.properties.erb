@@ -33,10 +33,10 @@ ldap.config.password=
 <% end %>
 
 # LDAP group mapping defaults
-ldap.config.group.role.attribute=cn
-ldap.config.group.search.base.dn=ou=groups
-ldap.config.group.search.filter=(uniqueMember={0})
-ldap.config.group.search.subtree=false
+ldap.config.group.role.attribute=<%=ldap['group_role_attribute']%>
+ldap.config.group.search.base.dn=<%=ldap['group_search_basedn']%>%>
+ldap.config.group.search.filter=<%=ldap['group_search_filter']%>
+ldap.config.group.search.subtree=<%=ldap['group_search_subtree']%>
 
 # needs to remain empty for Maestro 3
 ldap.config.search.base.dn=
