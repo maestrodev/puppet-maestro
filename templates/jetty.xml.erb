@@ -50,16 +50,16 @@
     <Call name="addConnector">
       <Arg>
           <New class="org.eclipse.jetty.server.nio.SelectChannelConnector">
-            <Set name="host"><SystemProperty name="jetty.host" <%= "default=\"" + jetty_host + "\"" if has_variable?("jetty_host") %>/></Set>
-<% if has_variable?("jetty_port") and jetty_port %>
-	    <Set name="port"><SystemProperty name="jetty.port" default="<%= jetty_port %>"/></Set>
+            <Set name="host"><SystemProperty name="jetty.host" <%= "default=\"" + @jetty_host + "\"" if has_variable?("jetty_host") %>/></Set>
+<% if has_variable?("jetty_port") and @jetty_port %>
+	    <Set name="port"><SystemProperty name="jetty.port" default="<%= @jetty_port %>"/></Set>
 <% else %>
             <Set name="port"><SystemProperty name="jetty.port" default="8080"/></Set>
 <% end %>
             <Set name="maxIdleTime">30000</Set>
             <Set name="Acceptors">2</Set>
             <Set name="statsOn">false</Set>
-<% if has_variable?("jetty_forwarded") and jetty_forwarded == true %>
+<% if has_variable?("jetty_forwarded") and @jetty_forwarded == true %>
             <Set name="forwarded">true</Set>
 <% end %>
             <Set name="confidentialPort">8443</Set>
@@ -115,11 +115,11 @@
              <New id="Contexts" class="org.eclipse.jetty.server.handler.ContextHandlerCollection">
                <Set name="handlers">
                  <Array type="org.eclipse.jetty.server.Handler">
-<% if has_variable?("lucee") and lucee %>
+<% if has_variable?("lucee") and @lucee %>
                    <Item>
                      <New id="lucee" class="org.eclipse.jetty.webapp.WebAppContext">
                        <Set name="war"><SystemProperty name="jetty.home" default="."/>/apps/lucee</Set>
-                       <Set name="contextPath"><%= lucee_context_path %></Set>
+                       <Set name="contextPath"><%= @lucee_context_path %></Set>
                        <Set name="defaultsDescriptor"><SystemProperty name="appserver.base" default="."/>/conf/webdefault.xml</Set>
                        <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
                        <Set name="extractWAR" type="boolean">True</Set>
@@ -130,7 +130,7 @@
                    <Item>
                      <New id="maestro" class="org.eclipse.jetty.webapp.WebAppContext">
                        <Set name="war"><SystemProperty name="jetty.home" default="."/>/apps/maestro</Set>
-                       <Set name="contextPath"><%= maestro_context_path %></Set>
+                       <Set name="contextPath"><%= @maestro_context_path %></Set>
                        <Set name="defaultsDescriptor"><SystemProperty name="appserver.base" default="."/>/conf/webdefault.xml</Set>
                        <Set name="configurationClasses"><Ref id="plusConfig"/></Set>
                        <Set name="extractWAR" type="boolean">True</Set>

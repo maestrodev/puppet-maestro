@@ -1,6 +1,6 @@
 <plexus>
   <components>
-<% if !ldap.empty? %>
+<% if !@ldap.empty? %>
     <component>
       <role>org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory</role>
       <role-hint>configurable</role-hint>

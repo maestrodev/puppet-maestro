@@ -1,11 +1,11 @@
 #
 # The following are the default values.
 #
-email.from.address = <%=mail_from['address']%>
-email.from.name = <%=mail_from['name']%>
+email.from.address = <%=@mail_from['address']%>
+email.from.name = <%=@mail_from['name']%>
 
 # LDAP or DB user authentication
-<% using_ldap = !ldap.empty? %>
+<% using_ldap = !@ldap.empty? %>
 user.manager.impl=<%=using_ldap ? "ldap" : "jdo"%>
 
 security.policy.allowed.login.attempt=10000
@@ -14,13 +14,13 @@ security.policy.password.expiration.enabled=false
 
 <% if using_ldap %>
 # required LDAP server config
-ldap.config.hostname=<%=ldap['hostname']%>
-ldap.config.ssl=<%=ldap['ssl']%>
-ldap.config.port=<%=ldap['port']%>
-ldap.config.base.dn=<%=ldap['dn']%>
+ldap.config.hostname=<%=@ldap['hostname']%>
+ldap.config.ssl=<%=@ldap['ssl']%>
+ldap.config.port=<%=@ldap['port']%>
+ldap.config.base.dn=<%=@ldap['dn']%>
 ldap.config.context.factory=com.sun.jndi.ldap.LdapCtxFactory
-ldap.config.bind.dn=<%=ldap['bind_dn']%>
-ldap.config.password=<%=ldap['bind_password']%>
+ldap.config.bind.dn=<%=@ldap['bind_dn']%>
+ldap.config.password=<%=@ldap['bind_password']%>
 <% else %>
 # required LDAP server config - must be present but empty if not using LDAP
 ldap.config.hostname=
@@ -33,10 +33,10 @@ ldap.config.password=
 <% end %>
 
 # LDAP group mapping defaults
-ldap.config.group.role.attribute=<%=ldap['group_role_attribute']%>
-ldap.config.group.search.base.dn=<%=ldap['group_search_basedn']%>
-ldap.config.group.search.filter=<%=ldap['group_search_filter']%>
-ldap.config.group.search.subtree=<%=ldap['group_search_subtree']%>
+ldap.config.group.role.attribute=<%=@ldap['group_role_attribute']%>
+ldap.config.group.search.base.dn=<%=@ldap['group_search_basedn']%>
+ldap.config.group.search.filter=<%=@ldap['group_search_filter']%>
+ldap.config.group.search.subtree=<%=@ldap['group_search_subtree']%>
 
 # needs to remain empty for Maestro 3
 ldap.config.search.base.dn=
@@ -68,7 +68,7 @@ security.signon.path=/
 
 <% if using_ldap %>
 # uid of the ldap user 
-redback.default.admin=<%=ldap['admin_user']%>
+redback.default.admin=<%=@ldap['admin_user']%>
 # ldap.config.mapper.attribute.user.base.dn=
 
 # LDAP anonymous bind config

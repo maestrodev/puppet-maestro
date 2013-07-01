@@ -1,7 +1,7 @@
 wrapper.app.parameter.1=com.maestrodev.maestro.test.remotecontrol.LocalControlLauncher
-wrapper.java.additional.1=-DSELENIUM_ENVIRONMENT="<%=selenium_environment%>"
-wrapper.java.additional.2=-DSELENIUM_HUB_URL=http://<%=master_host%>:4444
-run.as.user.envvar=<%= user -%>
+wrapper.java.additional.1=-DSELENIUM_ENVIRONMENT="<%=@selenium_environment%>"
+wrapper.java.additional.2=-DSELENIUM_HUB_URL=http://<%=@master_host%>:4444
+run.as.user.envvar=<%=@user-%>
 
 #********************************************************************
 # Wrapper Properties
