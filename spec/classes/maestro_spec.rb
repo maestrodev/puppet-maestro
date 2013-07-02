@@ -229,5 +229,19 @@ describe 'maestro::maestro' do
       content.should_not =~ %r[<Set name="contextPath">/lucee</Set>]
     end
   end
+
+  context "when not using LDAP for security" do
+    # as some defaults are interpolated with spring, they must be set
+    # regardless of being used
+    it "should still populate the required default properties" do
+      security_file = "/var/local/maestro/conf/security.properties"
+      should contain_file(security_file)
+      content = catalogue.resource('file', security_file).send(:parameters)[:content]
+      content.should include("ldap.config.group.role.attribute=cn")
+      content.should include("ldap.config.group.search.base.dn=ou=groups")
+      content.should include("ldap.config.group.search.filter=(uniqueMember={0})")
+      content.should include("ldap.config.group.search.subtree=false")
+    end
+  end
 end
 
