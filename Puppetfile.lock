@@ -16,6 +16,6 @@ FORGE
 DEPENDENCIES
   maestrodev/maven (>= 1.0.0)
   maestrodev/wget (>= 1.0.0)
-  puppetlabs/postgresql (= 2.0.1)
+  puppetlabs/postgresql (>= 2.0.1)
   puppetlabs/stdlib (>= 2.5.1)
 

@@ -2,10 +2,8 @@ require 'spec_helper'
 require 'pp'
 
 describe 'maestro::maestro::db' do
-  let(:facts) { {
-      :osfamily => 'RedHat',
-      :postgres_default_version => '8.4',
-  } }
+  include_context :centos
+
   let(:params) { {
     :version     => '',
     :db_password => 'defaultpassword',

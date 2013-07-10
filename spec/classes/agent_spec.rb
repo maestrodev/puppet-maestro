@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'maestro::agent' do
+  include_context :centos
 
   DEFAULT_AGENT_PARAMS = {
       :repo => {
@@ -14,7 +15,6 @@ describe 'maestro::agent' do
 
   DEFAULT_USER = "maestro_agent"
   
-  let(:facts) { {:operatingsystem => 'CentOS', :kernel => 'Linux', :osfamily => 'RedHat'} }
   let(:params) { DEFAULT_AGENT_PARAMS }
   
   it { should contain_file("/var/local/maestro-agent").with(
@@ -30,12 +30,12 @@ describe 'maestro::agent' do
   # end
 
   context "when using rvm" do
-    let(:facts) {{:operatingsystem => 'CentOS', :kernel => 'Linux', :osfamily => 'RedHat', :rvm_installed => 'true'}}
+    let(:facts) { super().merge({:rvm_installed => 'true'}) }
     it { should contain_user(DEFAULT_USER).with_groups(['root', 'rvm']) }
   end
 
   context "when not using rvm" do
-    let(:facts) {{:operatingsystem => 'CentOS', :kernel => 'Linux', :osfamily => 'RedHat', :rvm_installed => 'false'}}
+    let(:facts) { super().merge({:rvm_installed => 'false'}) }
     it { should contain_user(DEFAULT_USER).with_groups('root') }
   end
 
