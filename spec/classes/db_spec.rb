@@ -20,7 +20,7 @@ describe 'maestro::maestro::db' do
     } }
 
     it { should contain_class('postgresql::params').with_version('9.0') }
-    it { should contain_yumrepo('postgresql-repo').with_name('postgresql-9.0')}
+    it { should contain_yumrepo('yum.postgresql.org')}
 
   end
 end
