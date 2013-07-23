@@ -26,6 +26,7 @@ class maestro::maestro::service(
       command => "${startup_wait_script} ${db_password} >> ${basedir}/logs/maestro_initdb.log 2>&1",
       alias   => 'startup_wait',
       timeout => 600,
+      refreshonly => true,
       require => [Service[maestro]]
     }
     if $lucee {
@@ -35,6 +36,7 @@ class maestro::maestro::service(
         tries     => 300,
         try_sleep => 1,
         require   => Exec["check-maestro-up"],
+        refreshonly => true,
         path      => "/usr/bin",
       }
     }
