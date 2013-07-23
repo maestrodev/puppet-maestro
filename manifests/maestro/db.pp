@@ -1,28 +1,19 @@
 class maestro::maestro::db(
-  $version       = $maestro::maestro::db_version,
-  $password      = $maestro::maestro::db_server_password,
-  $db_password   = $maestro::maestro::db_password,
-  $allowed_rules = $maestro::maestro::db_allowed_rules,
-  $enabled       = true) {
+  $version             = $maestro::maestro::db_version,
+  $password            = $maestro::maestro::db_server_password,
+  $db_password         = $maestro::maestro::db_password,
+  $allowed_rules       = $maestro::maestro::db_allowed_rules,
+  $manage_package_repo = true,
+  $enabled             = true) {
 
   if ($version == '' or $version == unset) {
     $version_real = $::postgres_default_version
   }
   else {
     $version_real = $version
-    yumrepo { 'postgresql-repo':
-      name     => "postgresql-${version_real}",
-      baseurl  => "http://yum.postgresql.org/${version_real}/redhat/rhel-\$releasever-\$basearch",
-      descr    => "Postgresql ${version_real} Yum Repo",
-      enabled  => 1,
-      gpgcheck => 0,
-      before => Class['postgresql::server'],
-    }
-    
     class { 'postgresql::params':
       version             => $version_real,
-      manage_package_repo => false,
-      package_source      => 'yum.postgresql.org',
+      manage_package_repo => $manage_package_repo,
     }
     Class ['postgresql::params'] -> Class['postgresql::server']
   }
