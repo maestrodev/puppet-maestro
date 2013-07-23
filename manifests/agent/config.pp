@@ -63,7 +63,7 @@ class maestro::agent::config(
   }
 
   $tmp_dir = "${agent_user_home}/tmp"
-  notify{"Setting java.io.tmpdir=$tmp_dir for maestro agent":}
+  notice("Setting java.io.tmpdir=$tmp_dir for maestro agent")
   file { "${agent_user_home}/tmp": 
     ensure => directory,
     owner   => $agent_user,
@@ -87,7 +87,6 @@ class maestro::agent::config(
   }
 
   if $enable_jpda {
-      notify{"Enabling JPDA for maestro agent":}
       augeas { "maestro-agent-wrapper-jpda":
         lens      => "Properties.lns",
         incl      => "${wrapper}",

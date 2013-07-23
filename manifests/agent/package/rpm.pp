@@ -6,7 +6,7 @@ class maestro::agent::package::rpm (
   # When we have a proper yum repo, this variable can go away.
   $maestro_agent_source = "${repo['url']}/com/maestrodev/lucee/agent/${base_version}/agent-${timestamp_version}-rpm.rpm"
 
-  notify { 'This will ALWAYS FAIL in --noop mode, since the wget doesn\'t leave a real file to be parsed in /usr/local/src, so ignore it': }
+  notice("This will ALWAYS FAIL in --noop mode, since the wget doesn't leave a real file to be parsed in /usr/local/src, so ignore it")
   wget::authfetch { 'fetch-agent-rpm':
     user        => $repo['username'],
     password    => $repo['password'],
