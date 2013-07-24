@@ -26,7 +26,7 @@ class maestro::plugins(
     'maestro-scm-plugin' => { version => '1.0' },
     'maestro-shell-plugin' => { version => '1.0', dir => 'com/maestrodev/maestro/plugins' },
     'maestro-ssh-plugin' => { version => '1.0' },
-    'maestro-sonar-plugin' => { version => '1.0.1', dir => 'com/maestrodev/maestro/plugins' },
+    'maestro-sonar-plugin' => { version => '1.0.2', dir => 'com/maestrodev/maestro/plugins' },
     'maestro-svn-plugin' => { version => '1.0', dir => 'com/maestrodev/maestro/plugins' },
     'maestro-tomcat-plugin' => { version => '1.0', dir => 'com/maestrodev/maestro/plugins' },
   } ) {
