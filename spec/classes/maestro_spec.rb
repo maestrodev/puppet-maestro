@@ -34,6 +34,15 @@ describe 'maestro::maestro' do
       content.should =~ %r[<Set name="contextPath">/</Set>]
     end
 
+    it "should use database defaults and configured password" do
+      should contain_file("/var/local/maestro/conf/jetty.xml")
+      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/maestro"/></Set>]
+      content.should =~ %r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>]
+      content.should =~ %r[<Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>]
+      content.should =~ %r[<Set name="password"><SystemProperty name="database.password" default="mydbpassword"/></Set>]
+    end
+
     it "should create the right LuCEE configuration" do
       content = catalogue.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
       content.should =~ /"agent_auto_activate": false,$/
@@ -231,6 +240,24 @@ describe 'maestro::maestro' do
       content.should include("ldap.config.group.search.base.dn=ou=groups")
       content.should include("ldap.config.group.search.filter=(uniqueMember={0})")
       content.should include("ldap.config.group.search.subtree=false")
+    end
+  end
+
+  context "when using a different JDBC URL" do
+    let(:params) { DEFAULT_PARAMS.merge({
+      :jdbc_users => {
+        'url' => "jdbc:postgresql://localhost/users",
+        'driver' => "org.postgresql.Driver",
+        'username' => "maestro",
+      }
+    })}
+    it "should populate jetty.xml" do
+      should contain_file("/var/local/maestro/conf/jetty.xml")
+      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/users"/></Set>]
+      content.should =~ %r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>]
+      content.should =~ %r[<Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>]
+      content.should =~ %r[<Set name="password"><SystemProperty name="database.password" default="mydbpassword"/></Set>]
     end
   end
 end

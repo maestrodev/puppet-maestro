@@ -7,6 +7,8 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $admin_password = $maestro::maestro::admin_password,
     $db_server_password = $maestro::maestro::db_server_password,
     $db_password = $maestro::maestro::db_password,
+    $jdbc_users = $maestro::maestro::jdbc_users,
+    $jdbc_maestro = $maestro::maestro::jdbc_maestro,
     $db_version = $maestro::maestro::db_version,
     $db_allowed_rules = $maestro::maestro::db_allowed_rules,
     $db_datadir = $maestro::maestro::db_datadir,
@@ -34,6 +36,12 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   $wrapper = "${homedir}/conf/wrapper.conf"
   $configdir = "${basedir}/conf"
 
+  if $jdbc_maestro['password'] == undef {
+    $jdbc_maestro['password'] = $db_password
+  }
+  if $jdbc_users['password'] == undef {
+    $jdbc_users['password'] = $db_password
+  }
 
   File {
     owner => $maestro::params::user,

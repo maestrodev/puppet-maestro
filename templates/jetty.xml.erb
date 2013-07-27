@@ -162,10 +162,10 @@
         <Arg>jdbc/maestro</Arg>
         <Arg>
           <New class="org.apache.commons.dbcp.BasicDataSource">
-            <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>
-            <Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/maestro"/></Set>
-            <Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>
-            <Set name="password"><SystemProperty name="database.password" default="<%=scope.lookupvar('maestro::db_password')%>"/></Set>
+            <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="<%= @jdbc_maestro['driver'] %>"/></Set>
+            <Set name="url"><SystemProperty name="database.url" default="<%= @jdbc_maestro['url'] %>"/></Set>
+            <Set name="username"><SystemProperty name="database.username" default="<%= @jdbc_maestro['username'] %>"/></Set>
+            <Set name="password"><SystemProperty name="database.password" default="<%= @jdbc_maestro['password'] %>"/></Set>
             <Set name="testOnBorrow">true</Set>
             <Set name="validationQuery">select 1</Set>
           </New>
@@ -191,10 +191,10 @@
         <Arg>jdbc/users</Arg>
         <Arg>
           <New class="org.apache.commons.dbcp.BasicDataSource">
-            <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>
-            <Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/maestro"/></Set>
-            <Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>
-            <Set name="password"><SystemProperty name="database.password" default="<%=scope.lookupvar('maestro::db_password')%>"/></Set>
+            <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="<%= @jdbc_users['driver'] %>"/></Set>
+            <Set name="url"><SystemProperty name="database.url" default="<%= @jdbc_users['url'] %>"/></Set>
+            <Set name="username"><SystemProperty name="database.username" default="<%= @jdbc_users['username'] %>"/></Set>
+            <Set name="password"><SystemProperty name="database.password" default="<%= @jdbc_users['password'] %>"/></Set>
             <Set name="testOnBorrow">true</Set>
             <Set name="validationQuery">select 1</Set>
           </New>

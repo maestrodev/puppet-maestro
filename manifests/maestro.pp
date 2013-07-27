@@ -46,6 +46,16 @@ class maestro::maestro(
   $master_password = $maestro_master_password,
   $db_server_password = $maestro_db_server_password,
   $db_password = $maestro_db_password,
+  $jdbc_maestro = {
+    url => "jdbc:postgresql://localhost/maestro",
+    driver => "org.postgresql.Driver",
+    username => "maestro",
+  },
+  $jdbc_users = {
+    url => "jdbc:postgresql://localhost/maestro",
+    driver => "org.postgresql.Driver",
+    username => "maestro",
+  },
   $db_version = undef,
   $db_allowed_rules = [],
   $initmemory = '512',
