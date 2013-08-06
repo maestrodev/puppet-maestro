@@ -29,19 +29,7 @@ describe 'maestro::agent' do
   #   it { should contain_exec("agent").with_cwd('/tmp') }
   # end
 
-  context "when using rvm" do
-    let(:facts) { super().merge({:rvm_installed => 'true'}) }
-    it { should contain_user(DEFAULT_USER).with_groups(['root', 'rvm']) }
-  end
-
-  context "when not using rvm" do
-    let(:facts) { super().merge({:rvm_installed => 'false'}) }
-    it { should contain_user(DEFAULT_USER).with_groups('root') }
-  end
-
-  context "when rvm fact is not set" do
-    it { should contain_user(DEFAULT_USER).with_groups('root') }
-  end
+  it { should contain_user(DEFAULT_USER).with_groups('root') }
 
   agent_config = "maestro_agent.json"
   agent_config_file = "/var/local/maestro-agent/conf/maestro_agent.json"

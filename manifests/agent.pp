@@ -42,17 +42,6 @@ class maestro::agent(
   if ! defined(User[$maestro::params::agent_user]) {
 
     $admin_group = $::osfamily ? { 'Darwin' => 'admin', default => 'root' }
-    
-    if $::rvm_installed == 'true' { # important to compare to string 'true'
-      $groups = [$admin_group, 'rvm']
-    } elsif $::rvm_installed == 'false' {
-      $groups = $admin_group
-    } else {
-      $msg = "Fact rvm_installed not defined or not true|false: '${::rvm_installed}'. Ensure puppet is run with --pluginsync"
-      notify { $msg : }
-      warning($msg)
-      $groups = $admin_group
-    }
 
     if ! defined(Group[$maestro::params::agent_group]) {
       group { $maestro::params::agent_group:
@@ -68,7 +57,7 @@ class maestro::agent(
       #  home       => $maestro::params::agent_user_home,
       #  shell      => '/bin/bash',
       #  gid        => $maestro::params::agent_group,
-      #  groups     => $groups,
+      #  groups     => $admin_group,
       #  before     => Class['maestro::agent::package'],
       #}
     } 
@@ -80,7 +69,7 @@ class maestro::agent(
         home       => $maestro::params::agent_user_home,
         shell      => '/bin/bash',
         gid        => $maestro::params::agent_group,
-        groups     => $groups,
+        groups     => $admin_group,
         system     => true,
         before     => Class['maestro::agent::package'],
       }
