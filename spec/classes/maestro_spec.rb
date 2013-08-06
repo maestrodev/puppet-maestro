@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'maestro::maestro' do
   include_context :centos
 
-  DEFAULT_PARAMS = {
+  let(:params) {{
       :version => '4.0',
       :db_server_password => 'myserverpassword',
       :db_password => 'mydbpassword',
@@ -14,9 +14,7 @@ describe 'maestro::maestro' do
           'password' => 'p',
           'url' => 'https://repo.maestrodev.com/archiva/repository/all'
       }
-  }
-
-  let(:params) { DEFAULT_PARAMS }
+  }}
 
   context "when using defaults" do
     it { should contain_file '/var/local/maestro' }
@@ -71,7 +69,7 @@ describe 'maestro::maestro' do
   end
 
   context "google analytics configuration" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
          :ga_property_id => "ABC123",
      }) }
 
@@ -89,7 +87,7 @@ describe 'maestro::maestro' do
   end
 
   context "when using web properties configuration" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :web_config_properties => {
         "feature.dashboard.enabled" => "true"
       }
@@ -102,7 +100,7 @@ describe 'maestro::maestro' do
   end
 
   context "when using custom lucee password" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
         :lucee_username => "lucee",
         :lucee_password => "my-lucee-passwd",
     }) }
@@ -140,7 +138,7 @@ describe 'maestro::maestro' do
     let(:pre_condition) { %Q[
       class { 'maestro::params': user_home => '/var/local/u' } 
     ]}
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
         :lucee => false
     }) }
 
@@ -155,7 +153,7 @@ describe 'maestro::maestro' do
   end
 
   context "when using a reverse proxy" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :jetty_forwarded => true
     }) }
     it "should enable fowarding in jetty.xml" do
@@ -164,14 +162,14 @@ describe 'maestro::maestro' do
   end
 
   context "when using rpm package" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :package_type => 'rpm'
     }) }
     it { should contain_package("maestro") }
   end
 
   context "when using tarball package" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :package_type => 'tarball'
     }) }
     it { should_not contain_package("maestro") }
@@ -180,7 +178,7 @@ describe 'maestro::maestro' do
   end
 
   context "when installing on Maestro up to 4.11.0" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :version => "4.11.0",
     }) }
 
@@ -189,7 +187,7 @@ describe 'maestro::maestro' do
   end
 
   context "when installing Maestro 4.12.0+" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :version => "4.12.0",
     }) }
 
@@ -199,7 +197,7 @@ describe 'maestro::maestro' do
   end
 
   context "when installing Maestro 4.13.0+" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :version => "4.13.0",
     }) }
 
@@ -207,7 +205,7 @@ describe 'maestro::maestro' do
   end
 
   context "when installing Maestro 4.13.0+ SNAP" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :version => "4.13.0-SNAPSHOT",
     }) }
 
@@ -215,7 +213,7 @@ describe 'maestro::maestro' do
   end
 
   context "when context paths are customised" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
         :maestro_context_path => "/foo",
         :lucee_context_path => "/bar",
     })}
@@ -244,7 +242,7 @@ describe 'maestro::maestro' do
   end
 
   context "when using a different JDBC URL" do
-    let(:params) { DEFAULT_PARAMS.merge({
+    let(:params) { super().merge({
       :jdbc_users => {
         'url' => "jdbc:postgresql://localhost/users",
         'driver' => "org.postgresql.Driver",

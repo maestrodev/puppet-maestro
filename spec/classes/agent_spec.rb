@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'maestro::agent' do
   include_context :centos
 
-  DEFAULT_AGENT_PARAMS = {
+  let(:user) { "maestro_agent" }
+  let(:params) {{
       :repo => {
           'id' => 'maestro-mirror',
           'username' => 'u',
@@ -11,15 +12,11 @@ describe 'maestro::agent' do
           'url' => 'https://repo.maestrodev.com/archiva/repository/all'
       },
       :agent_version => '1.0',
-  }
-
-  DEFAULT_USER = "maestro_agent"
-  
-  let(:params) { DEFAULT_AGENT_PARAMS }
+  }}
   
   it { should contain_file("/var/local/maestro-agent").with(
     :ensure => :directory,
-    :owner  => DEFAULT_USER)
+    :owner  => user)
   }
 
   # context "when using custom basedir" do
@@ -29,7 +26,7 @@ describe 'maestro::agent' do
   #   it { should contain_exec("agent").with_cwd('/tmp') }
   # end
 
-  it { should contain_user(DEFAULT_USER).with_groups('root') }
+  it { should contain_user(user).with_groups('root') }
 
   agent_config = "maestro_agent.json"
   agent_config_file = "/var/local/maestro-agent/conf/maestro_agent.json"
@@ -42,9 +39,7 @@ describe 'maestro::agent' do
   end
   
   context "with a configured support address" do
-    let(:params) { DEFAULT_AGENT_PARAMS.merge({
-      :support_email => "support@example.com"
-    })}
+    let(:params) { super().merge({:support_email => "support@example.com"})}
     it { 
       should contain_file(agent_config).with_path(agent_config_file)
       content = catalogue.resource('file', agent_config).send(:parameters)[:content]
@@ -57,14 +52,12 @@ describe 'maestro::agent' do
   context "when installing from a tarball" do
     it { should contain_file("/var/local") }
     
-    let(:params) { DEFAULT_AGENT_PARAMS.merge({
-      :package_type => 'tarball'
-    }) }
+    let(:params) { super().merge({:package_type => 'tarball'}) }
     it { should contain_exec("unpack-agent").with_cwd('/usr/local') }
   end
 
   context "when passing only agent snapshot version" do
-    let(:params) { DEFAULT_AGENT_PARAMS.merge({
+    let(:params) { super().merge({
       :agent_version => '0.1.1-20120430.110153-41',
     }) }
     it { should contain_wget__authfetch("fetch-agent").with(
@@ -74,9 +67,7 @@ describe 'maestro::agent' do
   end
 
   context "when passing a release version" do
-    let(:params) { DEFAULT_AGENT_PARAMS.merge({
-      :agent_version => '0.1.1',
-    }) }
+    let(:params) { super().merge({:agent_version => '0.1.1'}) }
     it { should contain_wget__authfetch("fetch-agent").with(
       'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/0.1.1/agent-0.1.1-bin.tar.gz",
       'destination' => "/usr/local/src/agent-0.1.1-bin.tar.gz"
@@ -88,9 +79,7 @@ describe 'maestro::agent' do
   context "when installing a release version from an rpm" do
     
     it { should contain_file("/var/local") }
-    let(:params) { DEFAULT_AGENT_PARAMS.merge({
-      :package_type => 'rpm'
-    }) }
+    let(:params) { super().merge({:package_type => 'rpm'}) }
     it { should_not contain_exec("unpack-agent") }
     agent_rpm_source = "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/1.0/agent-1.0-rpm.rpm"
     it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-1.0.rpm", 'provider' => 'rpm' } )}
@@ -98,7 +87,7 @@ describe 'maestro::agent' do
   end
 
   context "when installing a snapshot version from an rpm" do
-    let(:params) { DEFAULT_AGENT_PARAMS.merge({
+    let(:params) { super().merge({
       :package_type => 'rpm',
       :agent_version => '1.0.0-20120430.110153-41',
     }) }
@@ -111,8 +100,6 @@ describe 'maestro::agent' do
   # ================================================ Linux ================================================
 
   context "when running on CentOS" do
-    let(:params) { DEFAULT_AGENT_PARAMS }
-
     it { should contain_file("/etc/init.d/maestro-agent") }
     it { should_not contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
     it { should contain_service("maestro-agent").with({
@@ -126,7 +113,6 @@ describe 'maestro::agent' do
 
   context "when running on OS X" do
     let(:facts) { {:operatingsystem => 'Darwin', :kernel => 'Darwin', :osfamily => 'Darwin'} }
-    let(:params) { DEFAULT_AGENT_PARAMS }
 
     it { should_not contain_file("/etc/init.d/maestro-agent") }
     it { should contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
