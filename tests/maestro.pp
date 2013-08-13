@@ -15,3 +15,6 @@ class { 'maestro::maestro':
   db_password        => "admin",
   enable_jpda        => true,
 }
+
+Package['java'] -> Service['activemq']
+Package['java'] -> Service['maestro']

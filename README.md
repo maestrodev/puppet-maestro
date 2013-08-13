@@ -28,27 +28,32 @@ First, declare the variables that will be used across both nodes.
 
 On the Maestro node, you'll need Maestro and ActiveMQ:
 
-    class { java: package => 'java-1.6.0-openjdk-devel' }
-
+    class { 'java': package => 'java-1.6.0-openjdk-devel' }
+    
     include maestro
-
+    
     class { 'maestro::maestro' :
       repo      => $repo,
       version   => $maestro_version,
     }
-
+    
     # ActiveMQ, with Stomp connector enabled
     class { 'activemq': }
     class { 'activemq::stomp': }
+    
+    Package['java'] -> Service['activemq']
+    Package['java'] -> Service['maestro']
+
 
 On the agent node(s), install the agent.
 
-    class { java: package => 'java-1.6.0-openjdk-devel' }
+    class { 'java': package => 'java-1.6.0-openjdk-devel' }
 
     class { 'maestro::agent':
       repo           => $repo,
       agent_version  => $agent_version,
     }
+    Package['java'] -> Service['maestro-agent']
 
 
 (The -devel alternate packaging is only needed if you are developing Java
