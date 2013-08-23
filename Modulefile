@@ -1,5 +1,5 @@
 name 'maestrodev-maestro'
-version '1.2.15'
+version '1.2.16'
 
 author 'maestrodev'
 license 'Apache License, Version 2.0'
