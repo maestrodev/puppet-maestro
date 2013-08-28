@@ -14,7 +14,7 @@ class maestro::agent::config(
   $support_email = $maestro::agent::support_email,
   $logging_level = $maestro::logging::level,
   $jmxport = $maestro::agent::jmxport,
-  $rmi_server_hostname = $maestro::agent::rmi_server_hostname) {
+  $rmi_server_hostname = $maestro::agent::rmi_server_hostname) inherits maestro::logging {
 
   $wrapper = "${basedir}/conf/wrapper.conf"
   case $::operatingsystem {

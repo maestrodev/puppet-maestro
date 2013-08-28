@@ -12,5 +12,5 @@ class maestro::lucee::db(
   $type = 'postgres',
   $host = 'localhost',
   $port = 5432,
-  $database = 'luceedb') {
+  $database = 'luceedb') inherits maestro::logging {
 }
