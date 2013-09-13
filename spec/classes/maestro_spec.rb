@@ -182,8 +182,8 @@ describe 'maestro::maestro' do
       :version => "4.11.0",
     }) }
 
-    it { should contain_package('libxml2-devel').with_ensure('installed') }
-    it { should contain_package('libxslt-devel').with_ensure('installed') }
+    it { should contain_package('libxml2-devel').with_ensure('present') }
+    it { should contain_package('libxslt-devel').with_ensure('present') }
   end
 
   context "when installing Maestro 4.12.0+" do

@@ -115,18 +115,9 @@ class maestro::maestro(
   if $lucee {
     # For maestro versions older than 4.12.0 we need some more packages
     if versioncmp($version, '4.12.0') < 0 {
-      if ! defined(Package['libxslt-devel']) {
-        package { 'libxslt-devel':
-          ensure => installed,
-          before => Class['maestro::lucee'],
-        }
-      }
-      if ! defined(Package['libxml2-devel']) {
-        package { 'libxml2-devel':
-          ensure => installed,
-          before => Class['maestro::lucee'],
-        }
-      }
+      ensure_packages(['libxslt-devel', 'libxml2-devel'])
+      Package['libxslt-devel'] -> Class['maestro::lucee']
+      Package['libxml2-devel'] -> Class['maestro::lucee']
     }
 
     class { 'maestro::lucee':
