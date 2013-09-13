@@ -1,6 +1,8 @@
 class maestro::lucee(
   $config_dir  = '/var/local/maestro/conf',
   $agent_auto_activate = false,
+  $lucee_password = $maestro::maestro::lucee_password,
+  $lucee_username = $maestro::maestro::lucee_username,
   $username = $maestro::lucee::db::username,
   $password = $maestro::lucee::db::password,
   $type     = $maestro::lucee::db::type,
