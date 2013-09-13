@@ -3,18 +3,17 @@ require 'json'
 
 describe 'maestro::lucee' do
 
-  params = {
+  let(:lucee_config_file) { '/var/local/maestro/conf/maestro_lucee.json' }
+
+  let(:params) { {
       :config_dir          => "/var/local/maestro/conf",
       :agent_auto_activate => false,
-  }
-  default_lucee_config_file = '/var/local/maestro/conf/maestro_lucee.json'
-
-  let(:params) { params }
+  } }
 
   context "with default config" do
     it "should set the defaults correctly" do
-      should contain_file(default_lucee_config_file)
-      content = catalogue.resource('file', default_lucee_config_file).send(:parameters)[:content]
+      should contain_file(lucee_config_file)
+      content = catalogue.resource('file', lucee_config_file).send(:parameters)[:content]
       config = JSON.parse(content)
       config["is_demo"].should eq false
       config["lucee"]["agent_auto_activate"].should eq false
@@ -31,14 +30,14 @@ describe 'maestro::lucee' do
   end
 
   context "with different configuration directory" do
-    let(:params) { params.merge( { :config_dir => "/etc" } ) }
+    let(:params) { super().merge( { :config_dir => "/etc" } ) }
     it { should contain_file('/etc/maestro_lucee.json') }
   end
 
   context "with different logging level" do
-    let(:params) { params.merge( { :logging_level => "ERROR" } ) }
+    let(:params) { super().merge( { :logging_level => "ERROR" } ) }
 
-    it { should contain_file(default_lucee_config_file).with_content(/"level": "ERROR"$/) }
+    it { should contain_file(lucee_config_file).with_content(/"level": "ERROR"$/) }
   end
 
   context "with different logging level via maestro::logging" do
@@ -46,11 +45,11 @@ describe 'maestro::lucee' do
       'class { "maestro::logging": level => "WARN" }'
     }
 
-    it { should contain_file(default_lucee_config_file).with_content(/"level": "WARN"$/) }
+    it { should contain_file(lucee_config_file).with_content(/"level": "WARN"$/) }
   end
 
   context "with different database" do
-    let(:params) { params.merge( { 
+    let(:params) { super().merge( { 
       :username => "username",
       :password => "password",
       :host => "host",
@@ -60,7 +59,7 @@ describe 'maestro::lucee' do
     } ) }
 
     it {
-      content = catalogue.resource('file', default_lucee_config_file).send(:parameters)[:content]
+      content = catalogue.resource('file', lucee_config_file).send(:parameters)[:content]
       config = JSON.parse(content)
       config["lucee"]["database"]["server"].should eq "mysql"
       config["lucee"]["database"]["host"].should eq "host"
@@ -84,7 +83,7 @@ describe 'maestro::lucee' do
     }
 
     it {
-      content = catalogue.resource('file', default_lucee_config_file).send(:parameters)[:content]
+      content = catalogue.resource('file', lucee_config_file).send(:parameters)[:content]
       config = JSON.parse(content)
       config["lucee"]["database"]["server"].should eq "mysql"
       config["lucee"]["database"]["host"].should eq "host"
