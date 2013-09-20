@@ -108,4 +108,3 @@ Plugins can be installed from the Maestro Web UI or be automatically installed u
 For example to install some common plugins, add this to the Maestro node.
 
     include maestro::plugins
-
