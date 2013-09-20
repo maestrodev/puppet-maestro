@@ -1,16 +1,17 @@
 class maestro::lucee(
   $config_dir  = '/var/local/maestro/conf',
   $agent_auto_activate = false,
-  $lucee_password = $maestro::maestro::lucee_password,
-  $lucee_username = $maestro::maestro::lucee_username,
-  $username = $maestro::lucee::db::username,
-  $password = $maestro::lucee::db::password,
-  $type     = $maestro::lucee::db::type,
-  $host     = $maestro::lucee::db::host,
-  $port     = $maestro::lucee::db::port,
-  $logging_level = $maestro::logging::level,
-  $database = $maestro::lucee::db::database,
-  $metrics_enabled = false) inherits maestro::lucee::db {
+  $lucee_password      = $maestro::maestro::lucee_password,
+  $lucee_username      = $maestro::maestro::lucee_username,
+  $username            = $maestro::lucee::db::username,
+  $password            = $maestro::lucee::db::password,
+  $type                = $maestro::lucee::db::type,
+  $host                = $maestro::lucee::db::host,
+  $port                = $maestro::lucee::db::port,
+  $messenger_debugging = false,
+  $logging_level       = $maestro::logging::level,
+  $database            = $maestro::lucee::db::database,
+  $metrics_enabled     = false) inherits maestro::lucee::db {
 
   # The $demo is set by the node.pp (or equiv) and is new way of detecting whether demo enabled.
   if $demo {
