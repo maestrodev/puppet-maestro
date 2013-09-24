@@ -26,8 +26,9 @@ define maestro::plugin($version, $dir = 'com/maestrodev') {
     } ->
 
     # copy to .maestro/plugins if it hasn't been installed already
-    exec { "cp /usr/local/src/${name}-${version}-bin.zip ${plugin_folder}/${plugin_file}":
-      unless => "test -s ${plugin_folder}/installed/${plugin_file}",
+    exec { "rm -f ${plugin_folder}/failed/${plugin_file} && cp /usr/local/src/${name}-${version}-bin.zip ${plugin_folder}/${plugin_file}":
+      unless  => "test -s ${plugin_folder}/installed/${plugin_file}",
+      require => [Exec['startup_wait']],
     } ->
 
     # verify that plugin has been installed correctly in Maestro
@@ -36,7 +37,6 @@ define maestro::plugin($version, $dir = 'com/maestrodev') {
       unless    => "test -s ${plugin_folder}/installed/${plugin_file} || test -s ${plugin_folder}/failed/${plugin_file}",
       tries     => 30,
       try_sleep => 4,
-      require   => [Exec['startup_wait']],
     } ->
     exec { "assert-plugin-installed-${name}":
       command   => "test -s ${plugin_folder}/installed/${plugin_file}",

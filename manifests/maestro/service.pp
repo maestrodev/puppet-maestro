@@ -23,21 +23,22 @@ class maestro::maestro::service(
       content =>  template('maestro/startup_wait.sh.erb'),
     } ->
     exec { "check-maestro-up":
-      command => "${startup_wait_script} ${db_password} >> ${basedir}/logs/maestro_initdb.log 2>&1",
-      alias   => 'startup_wait',
-      timeout => 600,
+      command     => "${startup_wait_script} ${db_password} >> ${basedir}/logs/maestro_initdb.log 2>&1",
+      alias       => 'startup_wait',
+      timeout     => 600,
       refreshonly => true,
-      require => [Service[maestro]]
+      subscribe   => [Service[maestro]],
     }
     if $lucee {
       exec { 'check-data-upgrade':
-        command   => "curl --noproxy localhost -X POST http://localhost:${port}/api/v1/system/upgrade",
-        logoutput => 'on_failure',
-        tries     => 300,
-        try_sleep => 1,
-        require   => Exec["check-maestro-up"],
+        command     => "curl --noproxy localhost -X POST http://localhost:${port}/api/v1/system/upgrade",
+        logoutput   => 'on_failure',
+        tries       => 300,
+        try_sleep   => 1,
+        require     => Exec['startup_wait'],
+        subscribe   => [Service[maestro]],
         refreshonly => true,
-        path      => "/usr/bin",
+        path        => "/usr/bin",
       }
     }
   }

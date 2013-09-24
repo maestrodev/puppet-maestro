@@ -18,7 +18,7 @@ for table in <%= tables.map {|t| "\"#{t}\""}.join(" ") %>
   do
     while [ `PGPASSWORD=$1 psql -h localhost --username=maestro maestro -c "select tablename from pg_tables where tablename = '$table';" | grep -c "$table"` -eq 0 ]
       do
-        echo "Waiting for Maestro table to be created: $table"
+        echo "`date`: Waiting for Maestro table to be created: $table"
         sleep 10
       done
   done
@@ -28,7 +28,15 @@ for table in <%= tables.map {|t| "\"#{t}\""}.join(" ") %>
   do
     while [ `PGPASSWORD=$1 psql -h localhost --username=maestro maestro -c "select count(*) from \"$table\";" | tail -n 3 | head -n 1` -eq 0 ]
       do
-        echo "Waiting for Maestro seed data to be inserted: $table"
+        echo "`date`: Waiting for Maestro seed data to be inserted: $table"
         sleep 10
       done
   done
+
+# wait until lucee is up and can process plugin installations
+while ! bash -c "exec 6<>/dev/tcp/127.0.0.1/<%= @port %>" >& /dev/null
+do
+  echo "`date`: Waiting for port <%= @port %> to be open"
+  sleep 5
+done
+echo "`date`: Port <%= @port %> is open"
