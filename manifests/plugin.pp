@@ -26,8 +26,11 @@ define maestro::plugin($version, $dir = 'com/maestrodev') {
     } ->
 
     # copy to .maestro/plugins if it hasn't been installed already
+    # currently make sure this is before Maestro starts, so that they are
+    # available for any seed data that might require them
     exec { "rm -f ${plugin_folder}/failed/${plugin_file} && cp /usr/local/src/${name}-${version}-bin.zip ${plugin_folder}/${plugin_file}":
       unless  => "test -s ${plugin_folder}/installed/${plugin_file}",
+      before  => Service[maestro],
     } ->
 
     # verify that plugin has been installed correctly in Maestro
