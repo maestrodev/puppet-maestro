@@ -32,11 +32,3 @@ for table in <%= tables.map {|t| "\"#{t}\""}.join(" ") %>
         sleep 10
       done
   done
-
-# wait until lucee is up and can process plugin installations
-while ! bash -c "exec 6<>/dev/tcp/127.0.0.1/<%= @port %>" >& /dev/null
-do
-  echo "`date`: Waiting for port <%= @port %> to be open"
-  sleep 5
-done
-echo "`date`: Port <%= @port %> is open"

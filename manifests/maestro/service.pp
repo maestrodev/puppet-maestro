@@ -35,8 +35,7 @@ class maestro::maestro::service(
         logoutput   => 'on_failure',
         tries       => 300,
         try_sleep   => 1,
-        require     => Exec['startup_wait'],
-        subscribe   => [Service[maestro]],
+        subscribe   => Exec['startup_wait'],
         refreshonly => true,
         path        => "/usr/bin",
       }
