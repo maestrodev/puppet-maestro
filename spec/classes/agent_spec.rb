@@ -4,6 +4,7 @@ describe 'maestro::agent' do
   include_context :centos
 
   let(:user) { "maestro_agent" }
+  let(:agent_version) { '2.1.0' }
   let(:params) {{
       :repo => {
           'id' => 'maestro-mirror',
@@ -11,7 +12,7 @@ describe 'maestro::agent' do
           'password' => 'p',
           'url' => 'https://repo.maestrodev.com/archiva/repository/all'
       },
-      :agent_version => '1.0',
+      :agent_version => agent_version,
   }}
   
   it { should contain_file("/var/local/maestro-agent").with(
@@ -46,55 +47,59 @@ describe 'maestro::agent' do
       content.should =~ %r["to": "support@example.com"]
     }
   end
-  
+
+
   # ================================================ Tarball install =========================================
 
   context "when installing from a tarball" do
+    let(:params) { super().merge({ :package_type => 'tarball' }) }
+
     it { should contain_file("/var/local") }
-    
-    let(:params) { super().merge({:package_type => 'tarball'}) }
     it { should contain_exec("unpack-agent").with_cwd('/usr/local') }
-  end
 
-  context "when passing only agent snapshot version" do
-    let(:params) { super().merge({
-      :agent_version => '0.1.1-20120430.110153-41',
-    }) }
-    it { should contain_wget__authfetch("fetch-agent").with(
-      'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/0.1.1-SNAPSHOT/agent-0.1.1-20120430.110153-41-bin.tar.gz",
-      'destination' => "/usr/local/src/agent-0.1.1-20120430.110153-41-bin.tar.gz"
-    )}
-  end
+    context "when passing only agent snapshot version" do
+      let(:agent_version) { '2.1.1-20120430.110153-41' }
+      it { should contain_wget__authfetch("fetch-agent").with(
+        'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.1-SNAPSHOT/agent-2.1.1-20120430.110153-41-bin.tar.gz",
+        'destination' => "/usr/local/src/agent-2.1.1-20120430.110153-41-bin.tar.gz"
+      )}
+    end
 
-  context "when passing a release version" do
-    let(:params) { super().merge({:agent_version => '0.1.1'}) }
-    it { should contain_wget__authfetch("fetch-agent").with(
-      'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/0.1.1/agent-0.1.1-bin.tar.gz",
-      'destination' => "/usr/local/src/agent-0.1.1-bin.tar.gz"
-    )}
+    context "when passing a release version" do
+      let(:agent_version) { '2.1.0' }
+      it { should contain_wget__authfetch("fetch-agent").with(
+        'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.0/agent-2.1.0-bin.tar.gz",
+        'destination' => "/usr/local/src/agent-2.1.0-bin.tar.gz"
+      )}
+    end
   end
   
   # ================================================ rpm install =========================================
 
-  context "when installing a release version from an rpm" do
-    
-    it { should contain_file("/var/local") }
+  context "when installing from an rpm" do
     let(:params) { super().merge({:package_type => 'rpm'}) }
-    it { should_not contain_exec("unpack-agent") }
-    agent_rpm_source = "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/1.0/agent-1.0-rpm.rpm"
-    it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-1.0.rpm", 'provider' => 'rpm' } )}
-    it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
-  end
 
-  context "when installing a snapshot version from an rpm" do
-    let(:params) { super().merge({
-      :package_type => 'rpm',
-      :agent_version => '1.0.0-20120430.110153-41',
-    }) }
-    it { should_not contain_exec("unpack-agent") }
-    agent_rpm_source = "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/1.0.0-SNAPSHOT/agent-1.0.0-20120430.110153-41-rpm.rpm"
-    it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-1.0.0-20120430.110153-41.rpm", 'provider' => 'rpm' } )}
-    it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
+    context "when installing a release version" do
+      let(:agent_rpm_source) { "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.0/agent-2.1.0-rpm.rpm" }
+
+      it { should_not contain_exec("unpack-agent") }
+      it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-2.1.0.rpm", 'provider' => 'rpm' } )}
+      it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
+    end
+
+    context "when installing a snapshot version" do
+      let(:agent_version) { '2.1.0-20120430.110153-41' }
+      let(:agent_rpm_source) { "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.0-SNAPSHOT/agent-2.1.0-20120430.110153-41-rpm.rpm" }
+
+      it { should_not contain_exec("unpack-agent") }
+      it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-2.1.0-20120430.110153-41.rpm", 'provider' => 'rpm' } )}
+      it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
+    end
+
+    context "when installing an older version" do
+      let(:agent_version) { '2.0.0' }
+      it { expect { subject.call }.to raise_error(Puppet::Error) }
+    end
   end
 
   # ================================================ Linux ================================================

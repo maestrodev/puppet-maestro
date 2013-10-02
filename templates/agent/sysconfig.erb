@@ -1,0 +1,11 @@
+JAVA_HOME=/usr/lib/jvm/java
+MAESTRO_ENV=production
+RUN_AS_USER=maestro_agent
+
+# needs to be exported to be used in wrapper.conf. Other vars just used in init.d script
+export MAESTRO_HOME=<%= @agent_user_home %>
+# export MAESTRO_CONFIG=$MAESTRO_HOME/conf/maestro_agent.json
+# export MAESTRO_LOG=$MAESTRO_HOME/logs/agent.log
+
+PIDDIR=$MAESTRO_HOME/logs
+WRAPPER_CONF=$MAESTRO_HOME/conf/wrapper.conf

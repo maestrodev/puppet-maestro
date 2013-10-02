@@ -12,28 +12,7 @@ class maestro::agent::package(
   $timestamp_version = $version # version is a release
   $base_version = snapshotbaseversion($version)
 
-  if ! defined(File[$srcdir]) {
-    file { $srcdir:
-      ensure => directory,
-    }
-  }
-
-  file { '/var/local':
-    ensure  => directory,
-  }
-  file { [$agent_user_home,"${agent_user_home}/logs","${agent_user_home}/conf"]:
-    ensure  => directory,
-    owner   => $agent_user,
-    group   => $agent_group,
-    require => File[ '/var/local' ],
-  }
-
-  file { $basedir:
-    ensure  => directory,
-    owner   => $agent_user,
-    group   => $agent_group,
-  }
-
+  ensure_resource('file', $srcdir, {'ensure' => 'directory' })
 
   case $type {
 
@@ -49,40 +28,19 @@ class maestro::agent::package(
         agent_user        => $agent_user,
         agent_group       => $agent_group,
         agent_user_home   => $agent_user_home,
-      } ->
-      file { "${basedir}/logs":
-        ensure  => link,
-        target  => "${agent_user_home}/logs",
-        owner   => $agent_user,
-        group   => $agent_group,
-        force   => true,
       }
     }
     'rpm': {
       anchor { 'maestro::agent::package::begin': } -> Class['maestro::agent::package::rpm'] -> anchor { 'maestro::agent::package::end': }
+
+      if $version < '2.1.0' {
+        fail("Agent version set to ${version} but Maestro module requires Agent > 2.1.x")
+      }
+
       class { 'maestro::agent::package::rpm':
         repo              => $repo,
         timestamp_version => $timestamp_version,
         base_version      => $base_version,
-      } ->
-      file { "${basedir}/logs":
-        ensure  => link,
-        target  => "${agent_user_home}/logs",
-        owner   => $agent_user,
-        group   => $agent_group,
-        force   => true,
-      } ->
-      # until maestro-agent properly sets the working directory / temp
-      # directory
-      file { "${basedir}/bin":
-        ensure  => directory,
-        owner   => $agent_user,
-        group   => $agent_group,
-      } ->
-      file { "${basedir}/bin/tmp":
-        ensure => directory,
-        owner  => $agent_user,
-        group  => $agent_group,
       }
     }
     default: {

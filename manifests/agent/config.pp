@@ -16,7 +16,7 @@ class maestro::agent::config(
   $jmxport = $maestro::agent::jmxport,
   $rmi_server_hostname = $maestro::agent::rmi_server_hostname) inherits maestro::logging {
 
-  $wrapper = "${basedir}/conf/wrapper.conf"
+  $wrapper = "${agent_user_home}/conf/wrapper.conf"
   case $::operatingsystem {
     'Darwin': {
       $java_home ='/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home'
@@ -36,10 +36,6 @@ class maestro::agent::config(
     owner   => $agent_user,
     group   => $agent_group,
     notify  => Service['maestro-agent'],
-  } ->
-  file { "${basedir}/conf/maestro_agent.json":
-    ensure  => link,
-    target  => "${agent_user_home}/conf/maestro_agent.json",
   }
 
   # prepare the augeas lens
@@ -54,28 +50,18 @@ class maestro::agent::config(
   # adjust wrapper.conf
   augeas { "maestro-agent-wrapper-maxmemory":
     lens      => "Properties.lns",
-    incl      => "${wrapper}",
+    incl      => $wrapper,
     changes   => [
       "set wrapper.java.maxmemory ${maxmemory}",
     ],
     load_path => '/tmp/augeas/maestro-agent',
     notify    => Service['maestro-agent'],
-  }
-
-  $tmp_dir = "${agent_user_home}/tmp"
-  notice("Setting java.io.tmpdir=$tmp_dir for maestro agent")
-  file { "${agent_user_home}/tmp": 
-    ensure => directory,
-    owner   => $agent_user,
-    group   => $agent_group,
   } ->
+
   augeas { "maestro-agent-wrapper-debug-and-tmpdir":
     lens      => "Properties.lns",
-    incl      => "${wrapper}",
+    incl      => $wrapper,
     changes   => [
-      "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
-      "set wrapper.java.additional.4 -XX:HeapDumpPath=${agent_user_home}",
-      "set wrapper.java.additional.5 -Djava.io.tmpdir=${tmp_dir}",
       "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote=true",
       "set wrapper.java.additional.7 -Dcom.sun.management.jmxremote.port=${jmxport}",
       "set wrapper.java.additional.8 -Dcom.sun.management.jmxremote.authenticate=false",
@@ -87,23 +73,35 @@ class maestro::agent::config(
   }
 
   if $enable_jpda {
-      augeas { "maestro-agent-wrapper-jpda":
-        lens      => "Properties.lns",
-        incl      => "${wrapper}",
-        changes   => [
-          "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
-        ],
-        load_path => '/tmp/augeas/maestro-agent',
-        notify    => Service['maestro-agent'],
-      }
+    augeas { "maestro-agent-wrapper-jpda":
+      lens      => "Properties.lns",
+      incl      => $wrapper,
+      changes   => [
+        "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
+      ],
+      load_path => '/tmp/augeas/maestro-agent',
+      notify    => Service['maestro-agent'],
+    }
   }
 
-  file { 'maestro-agent':
-    path    => "${basedir}/bin/maestro_agent",
-    owner   => $agent_user,
-    group   => $agent_group,
-    mode    => '0755',
-    content => template('maestro/agent/maestro-agent.erb'),
+  # sysconfig / default file with environment variables
+  case $::osfamily {
+    'RedHat','Debian' : {
+
+      $sysconfig_file = $::osfamily ? {
+        'RedHat' => '/etc/sysconfig/maestro-agent',
+        'Debian' => '/etc/default/maestro-agent',
+        default => ''
+      }
+
+      file { $sysconfig_file:
+        content => template('maestro/agent/sysconfig.erb'),
+        notify  => Service['maestro-agent'],
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+      }
+    }
   }
 
   file { "${srcdir}/maestro-agent.version":
