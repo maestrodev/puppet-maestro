@@ -18,6 +18,7 @@ class maestro::agent::package::rpm (
     ensure   => latest,
     source   => "/usr/local/src/agent-${timestamp_version}.rpm",
     provider => rpm,
+    before   => [File[$agent_user_home]], # so agent owner is set by puppet afterwards
   }
 
 }
