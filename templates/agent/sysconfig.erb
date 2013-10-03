@@ -11,7 +11,7 @@ fi
 
 export JAVA_HOME=/usr/lib/jvm/java
 export MAESTRO_ENV=production
-RUN_AS_USER=maestro_agent
+RUN_AS_USER=<%= @agent_user %>
 
 export MAESTRO_HOME=<%= @agent_user_home %>
 export HOME=$MAESTRO_HOME
