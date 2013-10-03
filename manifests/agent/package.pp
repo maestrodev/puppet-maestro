@@ -33,7 +33,7 @@ class maestro::agent::package(
     'rpm': {
       anchor { 'maestro::agent::package::begin': } -> Class['maestro::agent::package::rpm'] -> anchor { 'maestro::agent::package::end': }
 
-      if $version < '2.1.0' {
+      if versioncmp($version, '2.1.0') < 0 {
         fail("Agent version set to ${version} but Maestro module requires Agent > 2.1.x")
       }
 

@@ -1,3 +1,11 @@
+#!/bin/sh
+
+# proxy variables
+if [ -f /etc/profile.d/proxy.sh ]
+then
+  . /etc/profile.d/proxy.sh
+fi
+
 JAVA_HOME=/usr/lib/jvm/java
 MAESTRO_ENV=production
 RUN_AS_USER=maestro_agent
