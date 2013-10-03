@@ -108,6 +108,7 @@ describe 'maestro::agent' do
 
   context "when running on CentOS" do
     it { should contain_file("/etc/init.d/maestro-agent") }
+    it { should contain_file("/etc/sysconfig/maestro-agent") }
     it { should_not contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
     it { should contain_service("maestro-agent").with({
       :ensure => 'running',

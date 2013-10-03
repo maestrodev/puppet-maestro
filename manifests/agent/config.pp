@@ -94,7 +94,7 @@ class maestro::agent::config(
   case $::osfamily {
     'RedHat','Debian' : {
 
-      $sysconfig_file = $::osfamily ? {
+      $sysconfig_folder = $::osfamily ? {
         'RedHat' => '/etc/sysconfig',
         'Debian' => '/etc/default',
         default => ''
