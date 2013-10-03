@@ -17,6 +17,7 @@ class maestro::agent::config(
   $rmi_server_hostname = $maestro::agent::rmi_server_hostname) inherits maestro::logging {
 
   $wrapper = "${agent_user_home}/conf/wrapper.conf"
+
   case $::operatingsystem {
     'Darwin': {
       $java_home ='/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home'
@@ -62,6 +63,11 @@ class maestro::agent::config(
     lens      => "Properties.lns",
     incl      => $wrapper,
     changes   => [
+      # these first 3 not needed for agents >= 2.1.0
+      "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
+      "set wrapper.java.additional.4 -XX:HeapDumpPath=%MAESTRO_HOME%/logs",
+      "set wrapper.java.additional.5 -Djava.io.tmpdir=%MAESTRO_HOME%/tmp",
+
       "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote=true",
       "set wrapper.java.additional.7 -Dcom.sun.management.jmxremote.port=${jmxport}",
       "set wrapper.java.additional.8 -Dcom.sun.management.jmxremote.authenticate=false",
@@ -89,18 +95,23 @@ class maestro::agent::config(
     'RedHat','Debian' : {
 
       $sysconfig_file = $::osfamily ? {
-        'RedHat' => '/etc/sysconfig/maestro-agent',
-        'Debian' => '/etc/default/maestro-agent',
+        'RedHat' => '/etc/sysconfig',
+        'Debian' => '/etc/default',
         default => ''
       }
 
-      file { $sysconfig_file:
+      file { "${sysconfig_folder}/maestro-agent":
         content => template('maestro/agent/sysconfig.erb'),
         notify  => Service['maestro-agent'],
         owner   => 'root',
         group   => 'root',
         mode    => '0755',
       }
+
+      file { "${sysconfig_folder}/maestro_agent":
+        ensure => absent,
+      }
+
     }
   }
 
@@ -108,5 +119,32 @@ class maestro::agent::config(
     content => "${timestamp_version}\n",
   }
 
+  # older agents
+  if versioncmp($maestro::agent::agent_version, '2.1.0') < 0 {
+
+    file { $wrapper:
+      ensure  => link,
+      target  => "${basedir}/conf/wrapper.conf",
+    }
+
+    file { "${basedir}/conf/maestro_agent.json":
+      ensure  => link,
+      target  => "${agent_user_home}/conf/maestro_agent.json",
+      require => File["${agent_user_home}/conf"],
+    }
+    file { "${agent_user_home}/tmp":
+      ensure => directory,
+      owner   => $agent_user,
+      group   => $agent_group,
+    }
+
+    file { 'maestro-agent':
+      path    => "${basedir}/bin/maestro_agent",
+      owner   => $agent_user,
+      group   => $agent_group,
+      mode    => '0755',
+      content => template('maestro/agent/maestro-agent.erb'),
+    }
+  }
 
 }

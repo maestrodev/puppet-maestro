@@ -79,26 +79,28 @@ describe 'maestro::agent' do
   context "when installing from an rpm" do
     let(:params) { super().merge({:package_type => 'rpm'}) }
 
-    context "when installing a release version" do
-      let(:agent_rpm_source) { "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.0/agent-2.1.0-rpm.rpm" }
-
+    shared_examples :rpm do
+      let(:agent_rpm_source) { "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/#{base_version}/agent-#{agent_version}-rpm.rpm" }
       it { should_not contain_exec("unpack-agent") }
-      it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-2.1.0.rpm", 'provider' => 'rpm' } )}
+      it { should_not contain_file('/var/local/maestro-agent/conf/wrapper.conf') }
+      it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-#{agent_version}.rpm", 'provider' => 'rpm' } )}
       it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
     end
 
-    context "when installing a snapshot version" do
-      let(:agent_version) { '2.1.0-20120430.110153-41' }
-      let(:agent_rpm_source) { "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.0-SNAPSHOT/agent-2.1.0-20120430.110153-41-rpm.rpm" }
+    context "when installing a release version" do
+      let(:base_version) { agent_version }
+      it_behaves_like :rpm
+    end
 
-      it { should_not contain_exec("unpack-agent") }
-      it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-2.1.0-20120430.110153-41.rpm", 'provider' => 'rpm' } )}
-      it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
+    context "when installing a snapshot version" do
+      let(:base_version) { "2.1.0-SNAPSHOT" }
+      let(:agent_version) { "2.1.0-20120430.110153-41" }
+      it_behaves_like :rpm
     end
 
     context "when installing an older version" do
       let(:agent_version) { '2.0.0' }
-      it { expect { subject.call }.to raise_error(Puppet::Error) }
+      it { should contain_file('/var/local/maestro-agent/conf/wrapper.conf').with_ensure('link') }
     end
   end
 

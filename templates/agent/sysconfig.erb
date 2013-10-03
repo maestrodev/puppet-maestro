@@ -6,12 +6,15 @@ then
   . /etc/profile.d/proxy.sh
 fi
 
-JAVA_HOME=/usr/lib/jvm/java
-MAESTRO_ENV=production
+# variables need to be exported to be used in wrapper.conf or app
+# Other vars just used in init.d script don't need to
+
+export JAVA_HOME=/usr/lib/jvm/java
+export MAESTRO_ENV=production
 RUN_AS_USER=maestro_agent
 
-# needs to be exported to be used in wrapper.conf. Other vars just used in init.d script
 export MAESTRO_HOME=<%= @agent_user_home %>
+export HOME=$MAESTRO_HOME
 # export MAESTRO_CONFIG=$MAESTRO_HOME/conf/maestro_agent.json
 # export MAESTRO_LOG=$MAESTRO_HOME/logs/agent.log
 

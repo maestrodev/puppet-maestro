@@ -33,15 +33,50 @@ class maestro::agent::package(
     'rpm': {
       anchor { 'maestro::agent::package::begin': } -> Class['maestro::agent::package::rpm'] -> anchor { 'maestro::agent::package::end': }
 
-      if versioncmp($version, '2.1.0') < 0 {
-        fail("Agent version set to ${version} but Maestro module requires Agent > 2.1.x")
-      }
-
       class { 'maestro::agent::package::rpm':
         repo              => $repo,
         timestamp_version => $timestamp_version,
         base_version      => $base_version,
       }
+
+      # older agents
+      if versioncmp($version, '2.1.0') < 0 {
+
+        file { '/var/local':
+          ensure  => directory,
+        } ->
+        file { [$agent_user_home,"${agent_user_home}/logs","${agent_user_home}/conf"]:
+          ensure  => directory,
+          owner   => $agent_user,
+          group   => $agent_group,
+        }
+
+        file { $basedir:
+          ensure  => directory,
+          owner   => $agent_user,
+          group   => $agent_group,
+        }
+
+        file { "${basedir}/logs":
+          ensure  => directory,
+          owner   => $agent_user,
+          group   => $agent_group,
+        } ->
+        # until maestro-agent properly sets the working directory / temp
+        # directory
+        file { "${basedir}/bin":
+          ensure  => directory,
+          owner   => $agent_user,
+          group   => $agent_group,
+        } ->
+        file { "${basedir}/bin/tmp":
+          ensure => directory,
+          owner  => $agent_user,
+          group  => $agent_group,
+        }
+
+      }
+
     }
     default: {
       fail("Invalid Maestro package type: ${type}")
