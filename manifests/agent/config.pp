@@ -119,8 +119,8 @@ class maestro::agent::config(
     content => "${timestamp_version}\n",
   }
 
-  # older agents
-  if versioncmp($maestro::agent::agent_version, '2.1.0') < 0 {
+  # tarballs and older rpms
+  if ($maestro::agent::package_type == 'tarball') or (versioncmp($maestro::agent::agent_version, '2.1.0') < 0) {
 
     file { $wrapper:
       ensure  => link,

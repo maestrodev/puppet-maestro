@@ -48,16 +48,4 @@ class maestro::agent::package::tarball(
     force   => true,
   }
 
-  case $::osfamily {
-    'RedHat', 'Debian': {
-      file { '/etc/init.d/maestro-agent':
-        ensure  => link,
-        target  => "${maestro::agent::basedir}/bin/maestro_agent",
-        notify  => Service['maestro-agent'],
-        require => Exec['unpack-agent'],
-      }
-    }
-  }
-
-
 }
