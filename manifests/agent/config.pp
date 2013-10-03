@@ -132,11 +132,6 @@ class maestro::agent::config(
       target  => "${agent_user_home}/conf/maestro_agent.json",
       require => File["${agent_user_home}/conf"],
     }
-    file { "${agent_user_home}/tmp":
-      ensure => directory,
-      owner   => $agent_user,
-      group   => $agent_group,
-    }
 
     file { 'maestro-agent':
       path    => "${basedir}/bin/maestro_agent",

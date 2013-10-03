@@ -8,15 +8,6 @@ class maestro::agent::package::tarball(
   $agent_group,
   $agent_user_home) {
 
-  file { '/var/local':
-    ensure  => directory,
-  } ->
-  file { [$agent_user_home,"${agent_user_home}/logs","${agent_user_home}/conf"]:
-    ensure  => directory,
-    owner   => $agent_user,
-    group   => $agent_group,
-  }
-
   file { $basedir:
     ensure  => directory,
     owner   => $agent_user,

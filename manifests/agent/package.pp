@@ -14,6 +14,16 @@ class maestro::agent::package(
 
   ensure_resource('file', $srcdir, {'ensure' => 'directory' })
 
+  # in RPM agents >= 2.1.0 this is only needed to ensure the owner and group
+  file { '/var/local':
+    ensure  => directory,
+  } ->
+  file { [$agent_user_home,"${agent_user_home}/logs","${agent_user_home}/conf","${agent_user_home}/tmp"]:
+    ensure  => directory,
+    owner   => $agent_user,
+    group   => $agent_group,
+  }
+
   case $type {
 
     'tarball': {
@@ -41,15 +51,6 @@ class maestro::agent::package(
 
       # older agents
       if versioncmp($version, '2.1.0') < 0 {
-
-        file { '/var/local':
-          ensure  => directory,
-        } ->
-        file { [$agent_user_home,"${agent_user_home}/logs","${agent_user_home}/conf"]:
-          ensure  => directory,
-          owner   => $agent_user,
-          group   => $agent_group,
-        }
 
         file { $basedir:
           ensure  => directory,
