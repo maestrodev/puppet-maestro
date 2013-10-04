@@ -59,9 +59,11 @@ class maestro::agent::package(
         }
 
         file { "${basedir}/logs":
-          ensure  => directory,
+          ensure  => link,
+          target  => "${agent_user_home}/logs",
           owner   => $agent_user,
           group   => $agent_group,
+          force   => true,
         } ->
         # until maestro-agent properly sets the working directory / temp
         # directory
