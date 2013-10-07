@@ -8,17 +8,14 @@ class maestro::maestro::package::tarball(
 {
   $installdir = $maestro::maestro::installdir
 
-  if ! defined(File[$srcdir]) {
-    file { $srcdir:
-      ensure => directory,
-      before => Wget::Authfetch['fetch-maestro'],
-    }
-  }
+  ensure_resource('file', $srcdir, {'ensure' => 'directory' })
+
   wget::authfetch { 'fetch-maestro':
     user        => $repo['username'],
     password    => $repo['password'],
     source      => "${repo['url']}/com/maestrodev/maestro/maestro-jetty/${base_version}/maestro-jetty-${version}-bin.tar.gz",
     destination => "${srcdir}/maestro-jetty-${version}-bin.tar.gz",
+    require     => File[$srcdir],
   } ->
   exec {"rm -rf ${installdir}/maestro-${base_version}":
     unless => "egrep \"^${version}$\" $srcdir/maestro-jetty.version",

@@ -33,8 +33,8 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $web_config_properties = $maestro::maestro::web_config_properties,
     $ga_property_id = $maestro::maestro::ga_property_id) inherits maestro::params {
 
-  $wrapper = "${homedir}/conf/wrapper.conf"
   $configdir = "${basedir}/conf"
+  $wrapper = "${configdir}/wrapper.conf"
 
   if $jdbc_maestro['password'] == undef {
     $jdbc_maestro['password'] = $db_password
@@ -47,37 +47,43 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     owner => $maestro::params::user,
     group => $maestro::params::group,
   }
+
   # Configure Maestro
+
+  # sysconfig file with environment variables
+  file { "/etc/sysconfig/maestro":
+    content => template('maestro/sysconfig.erb'),
+    notify  => Service['maestro'],
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+  }
+
   if !defined( File["${configdir}/jetty.xml"] ) {
     file { "${configdir}/jetty.xml":
       mode    => '0600',
       content => template('maestro/jetty.xml.erb'),
-      require => File[$configdir],
-    }
+      }
   }
   file { "${configdir}/plexus.xml":
     mode    => '0600',
     content => template('maestro/plexus.xml.erb'),
-    require => File[$configdir],
   }
 
   file { "${configdir}/jetty-jmx.xml":
     mode    => '0600',
     content => template('maestro/jetty-jmx.xml.erb'),
-    require => File[$configdir],
   }
 
   file { "${configdir}/maestro.properties":
     mode    => '0600',
     content => template('maestro/maestro.properties.erb'),
-    require => File[$configdir],
     notify  => Service['maestro'],
   }
 
   file { "${configdir}/lucee-lib.json":
     mode    => '0600',
     content => template('maestro/lucee-lib.json.erb'),
-    require => File[$configdir],
     notify  => Service['maestro'],
   }
   if versioncmp($version, "4.13.0") >= 0 {
@@ -101,22 +107,25 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
 
   # Create symlinks to some files provided by the distribution package
 
-  file { "${configdir}/wrapper.conf":
-    ensure  => link,
-    target  => $wrapper,
-    require => [Class['maestro::maestro::package'], File[$configdir]],
-  }
+  # not needed in Maestro 4.18.0+ RPM
+  if ($maestro::maestro::package_type == 'tarball') or (versioncmp($maestro::maestro::version, '4.18.0') < 0) {
+    file { "${configdir}/wrapper.conf":
+      ensure  => link,
+      target  => "${homedir}/conf/wrapper.conf",
+      require => [Class['maestro::maestro::package'], File[$configdir]],
+    }
 
-  file { "${configdir}/webdefault.xml":
-    ensure  => link,
-    target  => "${homedir}/conf/webdefault.xml",
-    require => [Class['maestro::maestro::package'], File[$configdir]],
-  }
+    file { "${configdir}/webdefault.xml":
+      ensure  => link,
+      target  => "${homedir}/conf/webdefault.xml",
+      require => [Class['maestro::maestro::package'], File[$configdir]],
+    }
 
-  file { "${configdir}/default-configurations.xml":
-    ensure  => link,
-    target  => "${homedir}/conf/default-configurations.xml",
-    require => [Class['maestro::maestro::package'], File[$configdir]],
+    file { "${configdir}/default-configurations.xml":
+      ensure  => link,
+      target  => "${homedir}/conf/default-configurations.xml",
+      require => [Class['maestro::maestro::package'], File[$configdir]],
+    }
   }
 
   # Until Augeas has the properties files fixes, use a custom version
@@ -139,7 +148,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
       "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] ${admin_password}",
       "rm default-configuration/users/*[username/#text != 'admin']"
     ],
-    incl    => "${homedir}/conf/default-configurations.xml",
+    incl    => "${basedir}/conf/default-configurations.xml",
     lens    => 'Xml.lns',
     require => Class['maestro::maestro::package'],
   }

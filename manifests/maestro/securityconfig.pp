@@ -12,6 +12,5 @@ class maestro::maestro::securityconfig(
   file { "${basedir}/conf/security.properties":
     mode    => '0644',
     content => template('maestro/security.properties.erb'),
-    require => File["${basedir}/conf"],
   }
 }

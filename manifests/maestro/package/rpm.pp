@@ -6,6 +6,8 @@ class maestro::maestro::package::rpm(
   # When we have a proper yum repo, this variable can go away.
   $maestro_source = "${repo['url']}/com/maestrodev/maestro/rpm/maestro/${base_version}/maestro-${version}.rpm"
 
+  ensure_resource('file', '/usr/local/src', {'ensure' => 'directory' })
+
   wget::authfetch { 'fetch-maestro-rpm':
     user        => $repo['username'],
     password    => $repo['password'],
@@ -17,6 +19,7 @@ class maestro::maestro::package::rpm(
     ensure   => latest,
     source   => "/usr/local/src/maestro-${version}.rpm",
     provider => rpm,
+    before   => File['/etc/sysconfig/maestro'],
   }
 
 }

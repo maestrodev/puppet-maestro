@@ -12,9 +12,4 @@
 class maestro {
   include wget
 
-  if ! defined(File['/usr/local/src']) {
-    file {'/usr/local/src':
-      ensure => directory,
-    }
-  }
 }

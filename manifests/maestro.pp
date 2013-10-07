@@ -97,17 +97,20 @@ class maestro::maestro(
   # Create the basedir. Where config and logs belong for this
   # particular maestro instance.
 
-  file { $basedir:
-    ensure => directory,
-  } ->
-  file { "${basedir}/conf":
-    ensure => directory,
-  } ->
-  file { "${basedir}/logs":
-    ensure => directory,
-  } ->
-  file { "${basedir}/tmp":
-    ensure => directory,
+  # not needed in Maestro 4.18.0+ RPM
+  if ($maestro::maestro::package_type == 'tarball') or (versioncmp($maestro::maestro::version, '4.18.0') < 0) {
+    file { $basedir:
+      ensure => directory,
+    } ->
+    file { "${basedir}/conf":
+      ensure => directory,
+    } ->
+    file { "${basedir}/logs":
+      ensure => directory,
+    } ->
+    file { "${basedir}/tmp":
+      ensure => directory,
+    }
   }
 
   $base_version = snapshotbaseversion($version)
@@ -124,7 +127,6 @@ class maestro::maestro(
       config_dir          => "${basedir}/conf",
       agent_auto_activate => $agent_auto_activate,
       password            => $db_password,
-      require             => File["${basedir}/conf"],
       before              => Service['maestro'],
       metrics_enabled     => $metrics_enabled,
     }

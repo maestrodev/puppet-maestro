@@ -6,11 +6,15 @@ class maestro::maestro::service(
   $lucee       = $maestro::maestro::lucee,
   $ldap        = $maestro::maestro::ldap) inherits maestro::params {
 
-  file { '/etc/init.d/maestro':
-    owner   => 'root',
-    mode    => '0755',
-    content => template('maestro/maestro.erb'),
-    require => Class['maestro::maestro::package'],
+  # not needed in Maestro 4.18.0+ RPM
+  if ($maestro::maestro::package_type == 'tarball') or (versioncmp($maestro::maestro::version, '4.18.0') < 0) {
+    file { '/etc/init.d/maestro':
+      owner   => 'root',
+      mode    => '0755',
+      content => template('maestro/maestro.erb'),
+      require => Class['maestro::maestro::package'],
+      notify  => Service['maestro'],
+    }
   }
 
   # do this only for binary installations, not for webapp deployments
@@ -47,7 +51,7 @@ class maestro::maestro::service(
     hasrestart => true,
     hasstatus  => true,
     enable     => $enabled,
-    require    => [File['/etc/init.d/maestro'], Class['maestro::maestro::package', 'maestro::maestro::db']],
+    require    => [Class['maestro::maestro::package', 'maestro::maestro::db']],
     subscribe  => [File["${basedir}/conf/jetty.xml"], File["${basedir}/conf/security.properties"]],
   }
 }

@@ -3,40 +3,71 @@
 #
 # Copyright (c) 1999, 2006 Tanuki Software Inc.
 #
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of the Java Service Wrapper and associated
+# documentation files (the "Software"), to deal in the Software
+# without  restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sub-license,
+# and/or sell copies of the Software, and to permit persons to
+# whom the Software is furnished to do so, subject to the
+# following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+# NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+
+#
 # Java Service Wrapper sh script.  Suitable for starting and stopping
 #  wrapped Java applications on UNIX platforms.
 #
+# This file is originally from Java Service Wrapper 3.2.3 distribution
+# with alteration to fit the needs of AppAssembler Maven Plugin
+#
+
 
 #-----------------------------------------------------------------------------
 # These settings can be modified to fit the needs of your application
-
-export HOME=<%= @user_home %>
-export MAESTRO_BASE=<%= @basedir %>
-export MAESTRO_ENV=production
-
 
 # Application
 APP_NAME="maestro"
 APP_LONG_NAME="Maestro Standalone"
 
-if [ "X$MAESTRO_BASE" = "X" ]; then
-  MAESTRO_BASE=..
+# discover BASEDIR
+BASEDIR=`dirname "$0"`/..
+BASEDIR=`(cd "$BASEDIR"; pwd)`
+ls -l "$0" | grep -e '->' > /dev/null 2>&1
+if [ $? = 0 ]; then
+  #this is softlink
+  _PWD=`pwd`
+  _EXEDIR=`dirname "$0"`
+  cd "$_EXEDIR"
+  _BASENAME=`basename "$0"`
+  _REALFILE=`ls -l "$_BASENAME" | sed 's/.*->\ //g'`
+   BASEDIR=`dirname "$_REALFILE"`/..
+   BASEDIR=`(cd "$BASEDIR"; pwd)`
+   cd "$_PWD"
 fi
+
+
 
 # Wrapper
-WRAPPER_CMD="/usr/local/maestro/bin/wrapper"
-WRAPPER_CONF="$MAESTRO_BASE/conf/wrapper.conf"
-
-if [ ! -f "$WRAPPER_CONF" ]; then
-  WRAPPER_CONF="../conf/wrapper.conf"
-fi
+WRAPPER_CMD="./wrapper"
+WRAPPER_CONF="$BASEDIR/conf/wrapper.conf"
 
 # Priority at which to run the wrapper.  See "man nice" for valid priorities.
 #  nice is only used if a priority is specified.
 PRIORITY=
 
 # Location of the pid file.
-PIDDIR="$MAESTRO_BASE/logs"
+PIDDIR="$BASEDIR/logs"
 
 # If uncommented, causes the Wrapper to be shutdown using an anchor file.
 #  When launched with the 'start' command, it will also ignore all INT and
@@ -51,7 +82,7 @@ PIDDIR="$MAESTRO_BASE/logs"
 # NOTE - This will set the user which is used to run the Wrapper as well as
 #  the JVM and is not useful in situations where a privileged resource or
 #  port needs to be allocated prior to the user being changed.
-RUN_AS_USER=<%= @user %>
+#RUN_AS_USER=
 
 # The following two lines are used by the chkconfig command. Change as is
 #  appropriate for your application.  They should remain commented.
@@ -185,15 +216,26 @@ if [ "$DIST_ARCH" = "unknown" ]
 then
     DIST_ARCH=`uname -m | tr [:upper:] [:lower:] | tr -d [:blank:]`
 fi
+
+# Detect the architecture bits, defaulting to 32
+DIST_BITS="32"
 case "$DIST_ARCH" in
-    'amd64' | 'athlon' | 'ia32' | 'ia64' | 'i386' | 'i486' | 'i586' | 'i686' | 'x86_64')
+    'amd64' | 'athlon' | 'ia32' | 'i386' | 'i486' | 'i586' | 'i686')
         DIST_ARCH="x86"
+        ;;
+    'ia64' | 'amd64' | 'x86_64')
+        DIST_ARCH="x86"
+        DIST_BITS="64"
         ;;
     'ip27')
         DIST_ARCH="mips"
         ;;
-    'power' | 'powerpc' | 'power_pc' | 'ppc64')
+    'power' | 'powerpc' | 'power_pc')
         DIST_ARCH="ppc"
+        ;;
+    'ppc64')
+        DIST_ARCH="ppc"
+        DIST_BITS="64"
         ;;
     'pa_risc' | 'pa-risc')
         DIST_ARCH="parisc"
@@ -215,12 +257,9 @@ outputFile() {
     fi
 }
 
-# Decide on the wrapper binary to use.
-# If a 32-bit wrapper binary exists then it will work on 32 or 64 bit
-#  platforms, if the 64-bit binary exists then the distribution most
-#  likely wants to use long names.  Otherwise, look for the default.
+# Try the detected distribution bits, fall back to 32
 # For macosx, we also want to look for universal binaries.
-WRAPPER_TEST_CMD="$WRAPPER_CMD-$DIST_OS-$DIST_ARCH-32"
+WRAPPER_TEST_CMD="$WRAPPER_CMD-$DIST_OS-$DIST_ARCH-$DIST_BITS"
 if [ -x "$WRAPPER_TEST_CMD" ]
 then
     WRAPPER_CMD="$WRAPPER_TEST_CMD"
@@ -256,7 +295,7 @@ else
             fi
         fi
     else
-        WRAPPER_TEST_CMD="$WRAPPER_CMD-$DIST_OS-$DIST_ARCH-64"
+        WRAPPER_TEST_CMD="$WRAPPER_CMD-$DIST_OS-$DIST_ARCH-32"
         if [ -x "$WRAPPER_TEST_CMD" ]
         then
             WRAPPER_CMD="$WRAPPER_TEST_CMD"
@@ -350,7 +389,7 @@ checkUser() {
 
         # Still want to change users, recurse.  This means that the user will only be
         #  prompted for a password once. Variables shifted by 1
-        su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
+        /sbin/runuser - $RUN_AS_USER -c "\"$REALPATH\" $2"
         RETVAL=$?
 
         # Now that we are the original user again, we may need to clean up the lock file.
@@ -420,7 +459,7 @@ console() {
     if [ "X$pid" = "X" ]
     then
         # The string passed to eval must handles spaces in paths correctly.
-        COMMAND_LINE="$CMDNICE \"$WRAPPER_CMD\" \"$WRAPPER_CONF\" wrapper.syslog.ident=$APP_NAME wrapper.pidfile=\"$PIDFILE\" $ANCHORPROP $LOCKPROP"
+        COMMAND_LINE="$CMDNICE \"$WRAPPER_CMD\" \"$WRAPPER_CONF\" wrapper.syslog.ident=$APP_NAME wrapper.pidfile=\"$PIDFILE\" $ANCHORPROP $LOCKPROP $WRAPPER_CONF_OVERRIDES"
         eval $COMMAND_LINE
     else
         echo "$APP_LONG_NAME is already running."
@@ -434,7 +473,7 @@ start() {
     if [ "X$pid" = "X" ]
     then
         # The string passed to eval must handles spaces in paths correctly.
-        COMMAND_LINE="$CMDNICE \"$WRAPPER_CMD\" \"$WRAPPER_CONF\" wrapper.syslog.ident=$APP_NAME wrapper.pidfile=\"$PIDFILE\" wrapper.daemonize=TRUE $ANCHORPROP $IGNOREPROP $LOCKPROP"
+        COMMAND_LINE="$CMDNICE \"$WRAPPER_CMD\" \"$WRAPPER_CONF\" wrapper.syslog.ident=$APP_NAME wrapper.pidfile=\"$PIDFILE\" wrapper.daemonize=TRUE $ANCHORPROP $IGNOREPROP $LOCKPROP $WRAPPER_CONF_OVERRIDES"
         eval $COMMAND_LINE
     else
         echo "$APP_LONG_NAME is already running."

@@ -121,7 +121,7 @@ describe 'maestro::agent' do
     let(:params) { super().merge({:package_type => 'rpm'}) }
 
     it { should_not contain_file("/etc/init.d/maestro-agent") }
-    it { should contain_file("/etc/sysconfig/maestro-agent") }
+    it { should contain_file("/etc/sysconfig/maestro-agent").with_content(%r{^WRAPPER_CMD=/usr/local/maestro-agent/bin/wrapper$}) }
     it { should_not contain_file("/Library/LaunchDaemons/com.maestrodev.agent.plist") }
     it { should contain_service("maestro-agent").with({
       :ensure => 'running',
