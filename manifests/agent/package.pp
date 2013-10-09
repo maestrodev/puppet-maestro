@@ -68,9 +68,12 @@ class maestro::agent::package(
         # until maestro-agent properly sets the working directory / temp
         # directory
         file { "${basedir}/bin":
-          ensure  => directory,
-          owner   => $agent_user,
-          group   => $agent_group,
+          ensure       => directory,
+          owner        => $agent_user,
+          group        => $agent_group,
+          mode         => '0755',
+          recurse      => true, # sets all the scripts to be executable
+          recurselimit => 1,
         } ->
         file { "${basedir}/bin/tmp":
           ensure => directory,
