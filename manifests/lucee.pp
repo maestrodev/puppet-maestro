@@ -11,15 +11,8 @@ class maestro::lucee(
   $messenger_debugging = false,
   $logging_level       = $maestro::logging::level,
   $database            = $maestro::lucee::db::database,
-  $metrics_enabled     = false) inherits maestro::lucee::db {
-
-  # The $demo is set by the node.pp (or equiv) and is new way of detecting whether demo enabled.
-  if $demo {
-    $is_demo = true
-  }
-  else {
-    $is_demo = false
-  }
+  $metrics_enabled     = false,
+  $is_demo             = false) inherits maestro::lucee::db {
 
   # We must make sure this file replaces the one installed
   # by the RPM package.
