@@ -56,6 +56,7 @@ class maestro::agent::config(
       "set wrapper.java.maxmemory ${maxmemory}",
     ],
     load_path => '/tmp/augeas/maestro-agent',
+    require   => Anchor['maestro::agent::package::end'],
     notify    => Service['maestro-agent'],
   } ->
 
@@ -86,6 +87,7 @@ class maestro::agent::config(
         "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
       ],
       load_path => '/tmp/augeas/maestro-agent',
+      require   => Anchor['maestro::agent::package::end'],
       notify    => Service['maestro-agent'],
     }
   }
