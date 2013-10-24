@@ -48,6 +48,13 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     group => $maestro::params::group,
   }
 
+  Augeas {
+    lens      => "Properties.lns",
+    load_path => '/tmp/augeas/maestro',
+    require   => [Anchor['maestro::maestro::package::end'], File['/tmp/augeas/maestro/properties.aug']],
+    notify    => Service['maestro'],
+  }
+
   # Configure Maestro
 
   # sysconfig file with environment variables
@@ -150,14 +157,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     ],
     incl    => "${basedir}/conf/default-configurations.xml",
     lens    => 'Xml.lns',
-    require => Class['maestro::maestro::package'],
-  }
-
-  Augeas {
-    lens      => "Properties.lns",
-    load_path => '/tmp/augeas/maestro',
-    require   => [Anchor['maestro::maestro::package::end'], File['/tmp/augeas/maestro/properties.aug']],
-    notify    => Service['maestro'],
   }
 
   augeas { 'show-snapshot-version':
