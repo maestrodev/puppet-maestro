@@ -58,6 +58,12 @@ describe 'maestro::maestro' do
       content.should =~ /"password": "maestro"$/
     end
 
+    it "should adjust startup_wait.sh" do
+      should contain_file("/tmp/startup_wait.sh")
+      content = catalogue.resource('file', '/tmp/startup_wait.sh').send(:parameters)[:content]
+      content.should =~ %r[psql -h localhost]
+    end
+
     context "when creating a sysconfig file" do
       let(:content) { catalogue.resource('file', '/etc/sysconfig/maestro').send(:parameters)[:content] }
       it { content.should =~ %r{^export HOME=/var/local/maestro$} }
@@ -293,7 +299,7 @@ describe 'maestro::maestro' do
   context "when using a different JDBC URL" do
     let(:params) { super().merge({
       :jdbc_users => {
-        'url' => "jdbc:postgresql://localhost/users",
+        'url' => "jdbc:postgresql://anotherhost/users",
         'driver' => "org.postgresql.Driver",
         'username' => "maestro",
       }
@@ -301,10 +307,15 @@ describe 'maestro::maestro' do
     it "should populate jetty.xml" do
       should contain_file("/var/local/maestro/conf/jetty.xml")
       content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
-      content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/users"/></Set>]
+      content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://anotherhost/users"/></Set>]
       content.should =~ %r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>]
       content.should =~ %r[<Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>]
       content.should =~ %r[<Set name="password"><SystemProperty name="database.password" default="mydbpassword"/></Set>]
+    end
+    it "should adjust startup_wait.sh" do
+      should contain_file("/tmp/startup_wait.sh")
+      content = catalogue.resource('file', '/tmp/startup_wait.sh').send(:parameters)[:content]
+      content.should =~ %r[psql -h anotherhost]
     end
   end
 end
