@@ -1,5 +1,5 @@
 export MAESTRO_ENV=production
-RUN_AS_USER=maestro
+RUN_AS_USER=<%= @user %>
 
 # variables need to be exported to be used in wrapper.conf or app
 # Other vars just used in init.d script don't need to

@@ -20,6 +20,12 @@ class maestro::maestro::package::rpm(
     source   => "/usr/local/src/maestro-${version}.rpm",
     provider => rpm,
     before   => File['/etc/sysconfig/maestro'],
+    notify   => Exec["maestro-package-ownership"],
+  }
+
+  exec { "maestro-package-ownership":
+    command     => "chown -R ${maestro::params::user}:${maestro::params::group} ${maestro::basedir} ${maestro::homedir}",
+    refreshonly => true,
   }
 
 }
