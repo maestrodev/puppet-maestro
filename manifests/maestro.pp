@@ -134,7 +134,7 @@ class maestro::maestro(
     # plugin folder
     file { "${user_home}/.maestro" :
       ensure  => directory,
-      require => User[$maestro::params::user],
+      require => Anchor['maestro::maestro::package::end'],
     } ->
     file { "${user_home}/.maestro/plugins" :
       ensure => directory,
