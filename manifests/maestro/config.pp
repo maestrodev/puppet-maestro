@@ -156,7 +156,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   Augeas {
     lens      => "Properties.lns",
     load_path => '/tmp/augeas/maestro',
-    require   => [Class['maestro::maestro::package'], File['/tmp/augeas/maestro/properties.aug']],
+    require   => [Anchor['maestro::maestro::package::end'], File['/tmp/augeas/maestro/properties.aug']],
     notify    => Service['maestro'],
   }
 
@@ -173,7 +173,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
       "set *[. =~ regexp('-XX:PermSize=.*')] -XX:PermSize=${permsize}",
       "set *[. =~ regexp('-XX:MaxPermSize=.*')] -XX:MaxPermSize=${maxpermsize}",
     ],
-    require => Anchor['maestro::maestro::package::end'],
   }
   if $enable_jpda {
     # TODO: make more flexible by calculating the right number for the
@@ -183,7 +182,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     augeas { 'maestro-jpda':
       incl      => $wrapper,
       changes   => 'set wrapper.java.additional.13 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n',
-      require => Anchor['maestro::maestro::package::end'],
     }
   }
 
