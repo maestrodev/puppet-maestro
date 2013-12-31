@@ -52,7 +52,7 @@ class maestro::maestro::db(
         environment => "PGPASSWORD=${db_password}",
         path        => '/bin/:/usr/bin',
         logoutput   => true,
-        require     => Service['postgresqld'],
+        require     => Postgresql::Db['maestro'],
       }
     }
   }
