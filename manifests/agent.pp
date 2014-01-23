@@ -47,7 +47,6 @@ class maestro::agent(
     if ! defined(Group[$maestro::params::agent_group]) {
       group { $maestro::params::agent_group:
         ensure => present,
-        before => User[$maestro::params::agent_user],
       }
     }
 
