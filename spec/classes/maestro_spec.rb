@@ -25,14 +25,14 @@ describe 'maestro::maestro' do
 
     it "should have default context paths" do
       should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
       content.should =~ %r[<Set name="contextPath">/lucee</Set>]
       content.should =~ %r[<Set name="contextPath">/</Set>]
     end
 
     it "should use database defaults and configured password" do
       should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
       content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/maestro"/></Set>]
       content.should =~ %r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>]
       content.should =~ %r[<Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>]
@@ -40,7 +40,7 @@ describe 'maestro::maestro' do
     end
 
     it "should create the right LuCEE configuration" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
       content.should =~ /"agent_auto_activate": false,$/
       content.should =~ /"pass": "mydbpassword",$/
       content.should =~ /"username": "maestro",$/
@@ -48,24 +48,24 @@ describe 'maestro::maestro' do
     end
 
     it "should create a maestro.properties file" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
       content.should =~ /^google\.analytics\.propertyId = $/
     end
 
     it "should create the right LuCEE client configuration" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
       content.should =~ /"username": "maestro",$/
       content.should =~ /"password": "maestro"$/
     end
 
     it "should adjust startup_wait.sh" do
       should contain_file("/tmp/startup_wait.sh")
-      content = catalogue.resource('file', '/tmp/startup_wait.sh').send(:parameters)[:content]
+      content = subject.resource('file', '/tmp/startup_wait.sh').send(:parameters)[:content]
       content.should =~ %r[psql -h localhost]
     end
 
     context "when creating a sysconfig file" do
-      let(:content) { catalogue.resource('file', '/etc/sysconfig/maestro').send(:parameters)[:content] }
+      let(:content) { subject.resource('file', '/etc/sysconfig/maestro').send(:parameters)[:content] }
       it { content.should =~ %r{^export HOME=/var/local/maestro$} }
       it { content.should =~ %r{^export MAESTRO_BASE=/var/local/maestro$} }
       it { content.should =~ /^RUN_AS_USER=maestro$/ }
@@ -189,14 +189,14 @@ describe 'maestro::maestro' do
      }) }
 
     it "should create a maestro.properties file" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
       content.should =~ /^google\.analytics\.propertyId = ABC123$/
     end
   end
 
   context "when using default web properties configuration" do
     it "should create a maestro.properties file" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
       content.should_not =~ /^feature\.dashboard\.enabled = true$/
     end
   end
@@ -209,7 +209,7 @@ describe 'maestro::maestro' do
     }) }
 
     it "should create a maestro.properties file" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
       content.should =~ /^feature\.dashboard\.enabled = true$/
     end
   end
@@ -221,13 +221,13 @@ describe 'maestro::maestro' do
     }) }
 
     it "should create the right LuCEE configuration" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
       content.should =~ /"username": "lucee",$/
       content.should =~ /"password": "my-lucee-passwd",$/
     end
 
     it "should create the right LuCEE client configuration" do
-      content = catalogue.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
       content.should =~ /"username": "lucee",$/
       content.should =~ /"password": "my-lucee-passwd"$/
     end
@@ -274,7 +274,7 @@ describe 'maestro::maestro' do
     })}
     it "should have default context paths" do
       should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
       content.should =~ %r[<Set name="contextPath">/foo</Set>]
       content.should =~ %r[<Set name="contextPath">/bar</Set>]
       content.should_not =~ %r[<Set name="contextPath">/</Set>]
@@ -288,7 +288,7 @@ describe 'maestro::maestro' do
     it "should still populate the required default properties" do
       security_file = "/var/local/maestro/conf/security.properties"
       should contain_file(security_file)
-      content = catalogue.resource('file', security_file).send(:parameters)[:content]
+      content = subject.resource('file', security_file).send(:parameters)[:content]
       content.should include("ldap.config.group.role.attribute=cn")
       content.should include("ldap.config.group.search.base.dn=ou=groups")
       content.should include("ldap.config.group.search.filter=(uniqueMember={0})")
@@ -306,7 +306,7 @@ describe 'maestro::maestro' do
     })}
     it "should populate jetty.xml" do
       should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = catalogue.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
       content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://anotherhost/users"/></Set>]
       content.should =~ %r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>]
       content.should =~ %r[<Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>]
@@ -314,7 +314,7 @@ describe 'maestro::maestro' do
     end
     it "should adjust startup_wait.sh" do
       should contain_file("/tmp/startup_wait.sh")
-      content = catalogue.resource('file', '/tmp/startup_wait.sh').send(:parameters)[:content]
+      content = subject.resource('file', '/tmp/startup_wait.sh').send(:parameters)[:content]
       content.should =~ %r[psql -h anotherhost]
     end
   end

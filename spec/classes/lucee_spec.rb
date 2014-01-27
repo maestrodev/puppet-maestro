@@ -13,7 +13,7 @@ describe 'maestro::lucee' do
   context "with default config" do
     it "should set the defaults correctly" do
       should contain_file(lucee_config_file)
-      content = catalogue.resource('file', lucee_config_file).send(:parameters)[:content]
+      content = subject.resource('file', lucee_config_file).send(:parameters)[:content]
       config = JSON.parse(content)
       config["is_demo"].should eq false
       config["lucee"]["agent_auto_activate"].should eq false
@@ -59,7 +59,7 @@ describe 'maestro::lucee' do
     } ) }
 
     it {
-      content = catalogue.resource('file', lucee_config_file).send(:parameters)[:content]
+      content = subject.resource('file', lucee_config_file).send(:parameters)[:content]
       config = JSON.parse(content)
       config["lucee"]["database"]["server"].should eq "mysql"
       config["lucee"]["database"]["host"].should eq "host"
@@ -83,7 +83,7 @@ describe 'maestro::lucee' do
     }
 
     it {
-      content = catalogue.resource('file', lucee_config_file).send(:parameters)[:content]
+      content = subject.resource('file', lucee_config_file).send(:parameters)[:content]
       config = JSON.parse(content)
       config["lucee"]["database"]["server"].should eq "mysql"
       config["lucee"]["database"]["host"].should eq "host"
