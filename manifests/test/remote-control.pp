@@ -1,4 +1,8 @@
-class maestro::test::remote-control( $repo = $maestrodev_repo, $version = '1.0.8.2', $master_host = 'localhost' ) {
+class maestro::test::remote-control(
+  $repo = $maestro::params::repo,
+  $version = '1.0.8.2',
+  $master_host = 'localhost' ) inherits maestro::params {
+
   $firefox_version = '10'
   $selenium_environment = "Firefox ${firefox_version} on Linux, Firefox ${firefox_version} on Linux, Firefox ${firefox_version} on Linux"
   $installdir = '/usr/local/maestro-test-remote-control'

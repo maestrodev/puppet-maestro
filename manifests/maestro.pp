@@ -34,7 +34,7 @@
 # [ga_property_id] the google analytics property id
 #
 class maestro::maestro(
-  $repo = $maestrodev_repo,
+  $repo = $maestro::params::repo,
   $version = $maestro_version,
   $package_type = 'tarball',
   $ldap = {},
@@ -84,7 +84,7 @@ class maestro::maestro(
 
   $srcdir = '/usr/local/src'
   $installdir = '/usr/local'
-  $basedir = '/var/local/maestro'
+  $basedir = $maestro::params::user_home
   $homedir = '/usr/local/maestro'
 
 
@@ -93,6 +93,28 @@ class maestro::maestro(
     owner => $maestro::params::user,
     group => $maestro::params::group,
   }
+
+  # Create user and group
+
+  if ! defined(User[$maestro::params::user]) {
+    user { $user:
+      ensure     => present,
+      home       => $maestro::params::user_home,
+      managehome => true,
+      shell      => '/bin/bash',
+      system     => true,
+      gid        => $maestro::params::group,
+      require    => Group[$maestro::params::group],
+    }
+  }
+
+  if ! defined(Group[$maestro::params::group]) {
+    group { $maestro::params::group:
+      ensure => present,
+      system => true,
+    }
+  }
+
 
   # Create the basedir. Where config and logs belong for this
   # particular maestro instance.

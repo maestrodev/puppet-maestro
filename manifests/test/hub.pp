@@ -1,4 +1,7 @@
-class maestro::test::hub( $repo = $maestrodev_repo, $version = '1.0.8.2', $user = 'maestro' ) {
+class maestro::test::hub(
+  $repo = $maestro::params::repo,
+  $version = '1.0.8.2',
+  $user = 'maestro' ) inherits maestro::params {
 
   wget::authfetch { 'fetch-test-hub':
     user        => $repo['username'],
