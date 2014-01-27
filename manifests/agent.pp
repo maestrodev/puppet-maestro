@@ -19,7 +19,6 @@
 #
 class maestro::agent(
   $agent_version,
-  $agent_user = $maestro::params::agent_user,
   $repo = $maestro::params::repo,
   $package_type = 'tarball',
   $enabled = true,

@@ -44,7 +44,7 @@ describe 'maestro::agent' do
 
   context "when using a different username" do
     let(:user) { 'agent' }
-    let(:params) { super().merge(:agent_user => user) }
+    let(:pre_condition) { "class { 'maestro::params': agent_user => #{user} }" }
 
     it { should contain_file('/etc/sysconfig/maestro-agent').with_content(/^RUN_AS_USER=#{user}$/) }
   end
