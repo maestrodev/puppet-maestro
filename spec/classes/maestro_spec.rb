@@ -241,7 +241,7 @@ describe 'maestro::maestro' do
 
     it { should contain_file('/var/local/u/.maestro/plugins') }
     it { should_not contain_file('/home/maestro/.maestro/plugins') }
-    it { should contain_file('/etc/sysconfig/maestro').with_content =~ %r[export HOME=/var/local/u] }
+    it { should contain_file('/etc/sysconfig/maestro').with_content(%r[export HOME=/var/local/u]) }
   end
 
   context "when using a custom home directory without lucee" do
@@ -255,7 +255,7 @@ describe 'maestro::maestro' do
 
     it { should_not contain_file('/var/local/u/.maestro/plugins') }
     it { should_not contain_file('/home/maestro/.maestro/plugins') }
-    it { should contain_file('/etc/sysconfig/maestro').with_content =~ %r[export HOME=/var/local/u] }
+    it { should contain_file('/etc/sysconfig/maestro').with_content(%r[export HOME=/var/local/u]) }
   end
 
   context "when using a reverse proxy" do
