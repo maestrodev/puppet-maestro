@@ -20,6 +20,6 @@ class maestro::agent::service::darwin(
     hasstatus  => true,
     hasrestart => true,
     provider   => launchd,
-    require    => [File['maestro-agent'], File[$maestro::agent::basedir], File[$maestro::params::agent_user_home]],
+    require    => Anchor['maestro::agent::package::end'],
   }
 }

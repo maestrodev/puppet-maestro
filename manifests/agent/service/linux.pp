@@ -16,6 +16,6 @@ class maestro::agent::service::linux(
   service { 'maestro-agent':
     ensure  => $enabled ? { true => running, false => stopped },
     enable  => $enabled,
-    require => [Anchor['maestro::agent::package::end'], Package['java']],
+    require => Anchor['maestro::agent::package::end'],
   }
 }
