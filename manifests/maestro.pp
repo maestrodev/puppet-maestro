@@ -78,9 +78,8 @@ class maestro::maestro(
     address => 'info@maestrodev.com'
   },
   $web_config_properties = {},
-  $ga_property_id = '') inherits maestro::params {
-
-  include maestro::logging
+  $ga_property_id = '',
+  $logging_level = $maestro::params::logging_level) inherits maestro::params {
 
   $srcdir = '/usr/local/src'
   $installdir = '/usr/local'

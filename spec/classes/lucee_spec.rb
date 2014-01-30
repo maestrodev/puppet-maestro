@@ -40,9 +40,9 @@ describe 'maestro::lucee' do
     it { should contain_file(lucee_config_file).with_content(/"level": "ERROR"$/) }
   end
 
-  context "with different logging level via maestro::logging" do
+  context "with different logging level via maestro::params" do
     let(:pre_condition) {
-      'class { "maestro::logging": level => "WARN" }'
+      'class { "maestro::params": logging_level => "WARN" }'
     }
 
     it { should contain_file(lucee_config_file).with_content(/"level": "WARN"$/) }

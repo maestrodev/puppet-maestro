@@ -9,7 +9,7 @@ class maestro::lucee(
   $host                = $maestro::lucee::db::host,
   $port                = $maestro::lucee::db::port,
   $messenger_debugging = false,
-  $logging_level       = $maestro::logging::level,
+  $logging_level       = $maestro::params::logging_level,
   $database            = $maestro::lucee::db::database,
   $metrics_enabled     = false,
   $is_demo             = false) inherits maestro::lucee::db {

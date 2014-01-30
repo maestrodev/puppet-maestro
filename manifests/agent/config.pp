@@ -12,9 +12,9 @@ class maestro::agent::config(
   $agent_name = $maestro::agent::agent_name,
   $enable_jpda = $maestro::agent::enable_jpda,
   $support_email = $maestro::agent::support_email,
-  $logging_level = $maestro::logging::level,
+  $logging_level = $maestro::params::logging_level,
   $jmxport = $maestro::agent::jmxport,
-  $rmi_server_hostname = $maestro::agent::rmi_server_hostname) inherits maestro::logging {
+  $rmi_server_hostname = $maestro::agent::rmi_server_hostname) inherits maestro::params {
 
   $wrapper = "${agent_user_home}/conf/wrapper.conf"
 

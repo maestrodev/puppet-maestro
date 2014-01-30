@@ -5,6 +5,7 @@ class maestro::params(
   $agent_user      = 'maestro_agent',
   $agent_group     = 'maestro_agent',
   $agent_user_home = '/var/local/maestro-agent',
-  $repo            = undef) {
+  $repo            = undef,
+  $logging_level   = 'INFO') {
 
 }
