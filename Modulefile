@@ -8,7 +8,7 @@ source 'http://github.com/maestrodev/puppet-maestro'
 summary 'MaestroDev Maestro'
 description 'Install and configure Maestro from MaestroDev'
 
-dependency 'maestrodev/wget',       '>=1.0.0'
+dependency 'maestrodev/wget',       '>=1.3.0'
 dependency 'maestrodev/maven',      '>=1.0.0'
 dependency 'puppetlabs/stdlib',     '>=3.2.0'
 dependency 'puppetlabs/postgresql', '>=2.0.1 <3.0.0'
