@@ -2,11 +2,11 @@ class maestro::agent::package(
   $type = $maestro::agent::package_type,
   $repo = $maestro::agent::repo,
   $version = $maestro::agent::agent_version,
-  $srcdir = $maestro::agent::srcdir,
+  $srcdir = $maestro::params::srcdir,
   $basedir = $maestro::agent::basedir,
   $agent_user = $maestro::agent::agent_user,
   $agent_group = $maestro::agent::agent_group,
-  $agent_user_home = $maestro::agent::agent_user_home) {
+  $agent_user_home = $maestro::agent::agent_user_home) inherits maestro::params {
 
 
   $timestamp_version = $version # version is a release

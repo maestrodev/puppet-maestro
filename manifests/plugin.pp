@@ -1,6 +1,8 @@
 define maestro::plugin($version, $dir = 'com/maestrodev') {
+  include maestro::params
+
   $user_home = $maestro::params::user_home
-  $maestro_enabled = $maestro::maestro::enabled
+  $maestro_enabled = $maestro::params::enabled
 
   if $maestro_enabled {
     Exec { path => '/bin:/usr/bin' }
@@ -18,9 +20,9 @@ define maestro::plugin($version, $dir = 'com/maestrodev') {
 
     # download the plugin to /usr/local/src
     wget::authfetch { "fetch-maestro-plugin-${name}":
-      user        => $maestro::repo['username'],
-      password    => $maestro::repo['password'],
-      source      => "${maestro::repo['url']}/${dir}/${name}/${base_version}/${name}-${version}-bin.zip",
+      user        => $maestro::params::repo['username'],
+      password    => $maestro::params::repo['password'],
+      source      => "${maestro::params::repo['url']}/${dir}/${name}/${base_version}/${name}-${version}-bin.zip",
       destination => "/usr/local/src/${name}-${version}-bin.zip",
       require     => [File['/usr/local/src'], File["${user_home}/.maestro/plugins"]],
     } ->

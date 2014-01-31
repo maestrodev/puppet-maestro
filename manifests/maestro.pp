@@ -13,18 +13,18 @@
 # [admin] the maestro admin user
 # [admin_password] the maestro admin user password
 # [master_password] the master password
-# [db_server_password] the database server password
-# [db_password] the database user password
-# [db_version] the PostgreSQL version.
-# [db_allowed_rules] an array used to configure PostgreSQL access control.
+# [db_server_password] DEPRECATED the database server password
+# [db_password] DEPRECATED the database user password
+# [db_version] DEPRECATED the PostgreSQL version.
+# [db_allowed_rules] DEPRECATED an array used to configure PostgreSQL access control.
 # [initmemory] configures the initial memory for the JVM running Maestro
 # [maxmemory] configures the max memory for the JVM running Maestro
 # [permsize] configures the initial permsize for the JVM running Maestro
 # [maxpermsize] configures the max permsize for the JVM running Maestro
 # [port] the port maestro should be configured to listen on.
 # [lucee_url] the URL for the LUCEE API
-# [lucee_password] the lucee user password
-# [lucee_username] the lucee user name
+# [lucee_password] DEPRECATED the lucee user password
+# [lucee_username] DEPRECATED the lucee user name
 # [jetty_forwarded] set to true to indicate that jetty is being forwarded by a proxy.
 # [mail_from] A hash containing the origin information for emails sent by maestro. name, address.
 # [enable_jpda] A boolean indicating whether or not we want to enable JPDA
@@ -38,14 +38,14 @@ class maestro::maestro(
   $version = $maestro_version,
   $package_type = 'tarball',
   $ldap = {},
-  $enabled = true,
+  $enabled = $maestro::params::enabled,
   $lucee = true,
   $metrics_enabled = false,
   $admin = 'admin',
   $admin_password = $maestro_adminpassword,
   $master_password = $maestro_master_password,
-  $db_server_password = $maestro_db_server_password,
-  $db_password = $maestro_db_password,
+  $db_server_password = undef, # deprecated
+  $db_password = undef, # deprecated
   $jdbc_maestro = {
     url => "jdbc:postgresql://localhost/maestro",
     driver => "org.postgresql.Driver",
@@ -56,8 +56,8 @@ class maestro::maestro(
     driver => "org.postgresql.Driver",
     username => "maestro",
   },
-  $db_version = undef,
-  $db_allowed_rules = [],
+  $db_version = undef, # deprecated
+  $db_allowed_rules = undef, # deprecated
   $initmemory = '512',
   $maxmemory = '1536',
   $permsize = '384m',
@@ -68,8 +68,8 @@ class maestro::maestro(
   $jmxport = '9001',
   $rmi_server_hostname = 'localhost',
   $lucee_url = 'http://localhost:8080/lucee/api/v0/',
-  $lucee_password = 'maestro',
-  $lucee_username = 'maestro',
+  $lucee_password = undef, # deprecated
+  $lucee_username = undef, # deprecated
   $jetty_forwarded = $::jetty_forwarded,
   $maestro_context_path = "/",
   $lucee_context_path = "/lucee",
@@ -81,16 +81,34 @@ class maestro::maestro(
   $ga_property_id = '',
   $logging_level = $maestro::params::logging_level) inherits maestro::params {
 
-  $srcdir = '/usr/local/src'
   $installdir = '/usr/local'
   $basedir = $maestro::params::user_home
   $homedir = '/usr/local/maestro'
 
 
-  Exec { path => '/bin/:/usr/bin', }
   File {
     owner => $maestro::params::user,
     group => $maestro::params::group,
+  }
+
+  # Deprecate a number of variables moved to params
+  if $db_version != undef {
+    warning("maestro::maestro::db_version is deprecated, use maestro::params::db_version")
+  }
+  if $db_server_password != undef {
+    warning("maestro::maestro::db_server_password is deprecated, use maestro::params::db_server_password")
+  }
+  if $db_password != undef {
+    warning("maestro::maestro::db_password is deprecated, use maestro::params::db_password")
+  }
+  if $db_allowed_rules != undef {
+    warning("maestro::maestro::db_allowed_rules is deprecated, use maestro::params::db_allowed_rules")
+  }
+  if $lucee_username != undef {
+    warning("maestro::maestro::lucee_username is deprecated, use maestro::params::lucee_username")
+  }
+  if $lucee_password != undef {
+    warning("maestro::maestro::lucee_password is deprecated, use maestro::params::lucee_password")
   }
 
   # Create user and group
@@ -150,6 +168,8 @@ class maestro::maestro(
       password            => $db_password,
       before              => Service['maestro'],
       metrics_enabled     => $metrics_enabled,
+      lucee_username      => $lucee_username ? {undef => undef, default => $lucee_username},
+      lucee_password      => $lucee_password ? {undef => undef, default => $lucee_password},
     }
 
     # plugin folder
@@ -162,10 +182,22 @@ class maestro::maestro(
     }
   }
 
-  class { 'maestro::maestro::db':  } ->
+  class { 'maestro::maestro::db':
+    version         => $db_version ? {undef => undef, default => $db_version},
+    password        => $db_server_password ? {undef => undef, default => $db_server_password},
+    db_password     => $db_password ? {undef => undef, default => $db_password},
+    allowed_rules   => $db_allowed_rules ? {undef => undef, default => $db_allowed_rules},
+  } ->
   class { 'maestro::maestro::package': } ->
   class { 'maestro::maestro::securityconfig': } ->
-  class { 'maestro::maestro::config': } ->
+  class { 'maestro::maestro::config':
+    db_version         => $db_version ? {undef => undef, default => $db_version},
+    db_server_password => $db_server_password ? {undef => undef, default => $db_server_password},
+    db_password        => $db_password ? {undef => undef, default => $db_password},
+    db_allowed_rules   => $db_allowed_rules ? {undef => undef, default => $db_allowed_rules},
+    lucee_username     => $lucee_username ? {undef => undef, default => $lucee_username},
+    lucee_password     => $lucee_password ? {undef => undef, default => $lucee_password},
+  } ->
   class { 'maestro::maestro::service': }
 
 }

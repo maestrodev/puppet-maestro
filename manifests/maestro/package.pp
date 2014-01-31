@@ -3,9 +3,9 @@ class maestro::maestro::package(
   $repo = $maestro::maestro::repo,
   $version = $maestro::maestro::version,
   $base_version = $maestro::maestro::base_version,
-  $srcdir = $maestro::maestro::srcdir,
+  $srcdir = $maestro::params::srcdir,
   $homedir = $maestro::maestro::homedir,
-  $basedir = $maestro::maestro::basedir) {
+  $basedir = $maestro::maestro::basedir) inherits maestro::params {
 
   case $type {
     'tarball': {

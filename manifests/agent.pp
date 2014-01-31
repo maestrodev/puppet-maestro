@@ -33,7 +33,6 @@ class maestro::agent(
   $rmi_server_hostname = $ipaddress) inherits maestro::params {
 
   $basedir = '/usr/local/maestro-agent'
-  $srcdir = '/usr/local/src'
 
 
   # Note that later pieces assume basedir ends in maestro-agent, would need a
@@ -49,7 +48,7 @@ class maestro::agent(
       }
     }
 
-    if $::osfamily == 'Darwin' {
+    if $::operatingsystem == 'Darwin' {
       # User creation is broken in Mountain Lion
       # user { $maestro::params::agent_user:
       #  ensure     => present,
@@ -74,8 +73,6 @@ class maestro::agent(
       }
     }
   }
-
-  Exec { path => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ] }
 
   class { 'maestro::agent::package': } -> class { 'maestro::agent::config': } -> class { 'maestro::agent::service': }
 

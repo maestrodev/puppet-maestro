@@ -1,10 +1,10 @@
 class maestro::maestro::db(
-  $version             = $maestro::maestro::db_version,
-  $password            = $maestro::maestro::db_server_password,
-  $db_password         = $maestro::maestro::db_password,
-  $allowed_rules       = $maestro::maestro::db_allowed_rules,
+  $version             = $maestro::params::db_version,
+  $password            = $maestro::params::db_server_password,
+  $db_password         = $maestro::params::db_password,
+  $allowed_rules       = $maestro::params::db_allowed_rules,
   $manage_package_repo = true,
-  $enabled             = true) {
+  $enabled             = true) inherits maestro::params {
 
   if ($version == '' or $version == unset) {
     $version_real = $::postgres_default_version

@@ -1,5 +1,5 @@
 class maestro::agent::config(
-  $srcdir = $maestro::agent::srcdir,
+  $srcdir = $maestro::params::srcdir,
   $basedir = $maestro::agent::basedir,
   $agent_user_home = $maestro::agent::agent_user_home,
   $agent_user = $maestro::agent::agent_user,

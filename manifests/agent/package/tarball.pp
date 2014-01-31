@@ -2,11 +2,11 @@ class maestro::agent::package::tarball(
   $repo,
   $base_version,
   $timestamp_version,
-  $srcdir,
+  $srcdir = $maestro::params::srcdir,
   $basedir,
   $agent_user,
   $agent_group,
-  $agent_user_home) {
+  $agent_user_home) inherits maestro::params {
 
   file { $basedir:
     ensure  => directory,
@@ -28,7 +28,6 @@ class maestro::agent::package::tarball(
     command => "tar zxf ${srcdir}/agent-${timestamp_version}-bin.tar.gz && chown -R ${agent_user}:${agent_group} maestro-agent ${agent_user_home}",
     creates => "${basedir}/lib",
     cwd     => '/usr/local', # TODO use $basedir instead of hardcoded
-    path    => '/bin/:/usr/bin:/usr/sbin',
     notify  => Service['maestro-agent'],
   } ->
   file { "${basedir}/logs":

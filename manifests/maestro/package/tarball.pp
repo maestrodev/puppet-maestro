@@ -2,10 +2,10 @@ class maestro::maestro::package::tarball(
   $repo,
   $version,
   $base_version,
-  $srcdir,
+  $srcdir = $maestro::params::srcdir,
   $homedir,
-  $basedir)
-{
+  $basedir) inherits maestro::params {
+
   $installdir = $maestro::maestro::installdir
 
   ensure_resource('file', $srcdir, {'ensure' => 'directory' })
