@@ -23,14 +23,14 @@ class maestro::lucee(
     group   => root,
     content => template('maestro/lucee/maestro_lucee.json.erb'),
     notify  => Service['maestro'],
-    require => Class['maestro::package'],
+    require => Anchor['maestro::maestro::package::end'],
   }
 
   # Remove legacy file.
   if $config_dir != '/etc' {
     file { '/etc/maestro_lucee.json':
       ensure => absent,
-      require => Class['maestro::package'],
+      require => Anchor['maestro::maestro::package::end'],
     }
   }
 }
