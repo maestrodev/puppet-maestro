@@ -18,7 +18,7 @@ class maestro::agent::absent(
 
     user { $user:
       ensure     => absent,
-      managehome => true,
+      managehome => $::operatingsystem ? { 'Darwin' => undef, default => true },
       require    => Service['maestro-agent'],
     } ->
     file { $user_home_real:

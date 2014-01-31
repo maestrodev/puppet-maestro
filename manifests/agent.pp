@@ -64,7 +64,7 @@ class maestro::agent(
     {
       user { $maestro::params::agent_user:
         ensure     => present,
-        managehome => true,
+        managehome => $::operatingsystem ? { 'Darwin' => undef, default => true },
         home       => $maestro::params::agent_user_home,
         shell      => '/bin/bash',
         gid        => $maestro::params::agent_group,
