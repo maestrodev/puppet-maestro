@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'maestro::maestro' do
-  include_context :centos
 
   let(:params) {{
       :version => '4.18.0',
@@ -23,7 +22,7 @@ describe 'maestro::maestro' do
     end
     it { should contain_file("/usr/local/src") }
 
-    it "should have default context paths" do
+    it "should have default context paths", :compile do
       should contain_file("/var/local/maestro/conf/jetty.xml")
       content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
       content.should =~ %r[<Set name="contextPath">/lucee</Set>]
@@ -64,7 +63,7 @@ describe 'maestro::maestro' do
       content.should =~ %r[psql -h localhost]
     end
 
-    context "when creating a sysconfig file" do
+    context "when creating a sysconfig file", :compile do
       let(:content) { subject.resource('file', '/etc/sysconfig/maestro').send(:parameters)[:content] }
       it { content.should =~ %r{^export HOME=/var/local/maestro$} }
       it { content.should =~ %r{^export MAESTRO_BASE=/var/local/maestro$} }
@@ -103,7 +102,7 @@ describe 'maestro::maestro' do
   end
 
 
-  context "when using rpm package" do
+  context "when using rpm package", :compile do
     let(:params) { super().merge({
       :package_type => 'rpm'
     }) }
@@ -115,7 +114,7 @@ describe 'maestro::maestro' do
     it { should_not contain_file('/var/local/maestro/conf/webdefault.xml') }
   end
 
-  context "when using tarball package" do
+  context "when using tarball package", :compile do
     let(:params) { super().merge({
       :package_type => 'tarball'
     }) }
@@ -124,7 +123,7 @@ describe 'maestro::maestro' do
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
   end
 
-  context "when installing on Maestro up to 4.11.0" do
+  context "when installing on Maestro up to 4.11.0", :compile do
     let(:params) { super().merge({
       :version => "4.11.0",
     }) }
@@ -135,7 +134,7 @@ describe 'maestro::maestro' do
     it { should contain_package('libxslt-devel').with_ensure('present') }
   end
 
-  context "when installing Maestro 4.12.0+" do
+  context "when installing Maestro 4.12.0+", :compile do
     let(:params) { super().merge({
       :version => "4.12.0",
     }) }
@@ -146,7 +145,7 @@ describe 'maestro::maestro' do
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("link") }
   end
 
-  context "when installing Maestro 4.13.0+" do
+  context "when installing Maestro 4.13.0+", :compile do
     let(:params) { super().merge({
       :version => "4.13.0",
     }) }
@@ -155,7 +154,7 @@ describe 'maestro::maestro' do
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
   end
 
-  context "when installing Maestro 4.13.0+ SNAP" do
+  context "when installing Maestro 4.13.0+ SNAP", :compile do
     let(:params) { super().merge({
       :version => "4.13.0-SNAPSHOT",
     }) }
@@ -164,10 +163,10 @@ describe 'maestro::maestro' do
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
   end
 
-  context "when installing Maestro <4.18.0" do
+  context "when installing Maestro <4.18.0", :compile do
     let(:params) { super().merge({ :version => "4.17.3" }) }
 
-    context "with rpm" do
+    context "with rpm", :compile do
       let(:params) { super().merge({ :package_type => "rpm" }) }
       it_behaves_like :pre_4_18
       it_behaves_like :rpm
@@ -175,7 +174,7 @@ describe 'maestro::maestro' do
       it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
     end
 
-    context "with tarball" do
+    context "with tarball", :compile do
       let(:params) { super().merge({ :package_type => "tarball" }) }
       it_behaves_like :tarball
       it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
@@ -183,7 +182,7 @@ describe 'maestro::maestro' do
   end
 
 
-  context "google analytics configuration" do
+  context "google analytics configuration", :compile do
     let(:params) { super().merge({
          :ga_property_id => "ABC123",
      }) }
@@ -194,14 +193,14 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when using default web properties configuration" do
+  context "when using default web properties configuration", :compile do
     it "should create a maestro.properties file" do
       content = subject.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
       content.should_not =~ /^feature\.dashboard\.enabled = true$/
     end
   end
 
-  context "when using web properties configuration" do
+  context "when using web properties configuration", :compile do
     let(:params) { super().merge({
       :web_config_properties => {
         "feature.dashboard.enabled" => "true"
@@ -214,7 +213,7 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when using custom lucee password" do
+  context "when using custom lucee password", :compile do
     let(:params) { super().merge({
         :lucee_username => "lucee",
         :lucee_password => "my-lucee-passwd",
@@ -233,18 +232,18 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when using a custom home directory" do
+  context "when using a custom home directory", :compile do
     let(:pre_condition) { %Q[
       class { 'maestro::params': user_home => '/var/local/u' } 
     ]}
-    let(:facts) { super().merge({:hostname => 'test-host-name'}) }
+    let(:facts) {{ :hostname => 'test-host-name' }}
 
     it { should contain_file('/var/local/u/.maestro/plugins') }
     it { should_not contain_file('/home/maestro/.maestro/plugins') }
     it { should contain_file('/etc/sysconfig/maestro').with_content(%r[export HOME=/var/local/u]) }
   end
 
-  context "when using a custom home directory without lucee" do
+  context "when using a custom home directory without lucee", :compile do
 
     let(:pre_condition) { %Q[
       class { 'maestro::params': user_home => '/var/local/u' } 
@@ -258,7 +257,7 @@ describe 'maestro::maestro' do
     it { should contain_file('/etc/sysconfig/maestro').with_content(%r[export HOME=/var/local/u]) }
   end
 
-  context "when using a reverse proxy" do
+  context "when using a reverse proxy", :compile do
     let(:params) { super().merge({
       :jetty_forwarded => true
     }) }
@@ -267,12 +266,12 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when context paths are customised" do
+  context "when context paths are customised", :compile do
     let(:params) { super().merge({
         :maestro_context_path => "/foo",
         :lucee_context_path => "/bar",
     })}
-    it "should have default context paths" do
+    it "should have default context paths", :compile do
       should contain_file("/var/local/maestro/conf/jetty.xml")
       content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
       content.should =~ %r[<Set name="contextPath">/foo</Set>]
@@ -282,7 +281,7 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when not using LDAP for security" do
+  context "when not using LDAP for security", :compile do
     # as some defaults are interpolated with spring, they must be set
     # regardless of being used
     it "should still populate the required default properties" do
@@ -296,7 +295,7 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when using a different JDBC URL" do
+  context "when using a different JDBC URL", :compile do
     let(:params) { super().merge({
       :jdbc_users => {
         'url' => "jdbc:postgresql://anotherhost/users",

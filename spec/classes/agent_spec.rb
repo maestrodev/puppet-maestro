@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'maestro::agent' do
-  include_context :centos
 
   let(:user) { "maestro_agent" }
   let(:agent_version) { '2.1.0' }
@@ -14,35 +13,29 @@ describe 'maestro::agent' do
       },
       :agent_version => agent_version,
   }}
-  
-  it { should contain_file("/var/local/maestro-agent").with(
-    :ensure => :directory,
-    :owner  => user)
-  }
+  let(:agent_config) { "maestro_agent.json" }
+  let(:agent_config_file) { "/var/local/maestro-agent/conf/maestro_agent.json" }
 
-  # context "when using custom basedir" do
-  #   let(:params) { DEFAULT_PARAMS.merge({
-  #     :basedir => '/tmp/maestro-agent',
-  #   }) }
-  #   it { should contain_exec("agent").with_cwd('/tmp') }
-  # end
+  context "when using default parameters", :compile do
+    it { should contain_file("/var/local/maestro-agent").with(
+      :ensure => :directory,
+      :owner  => user)
+    }
+    it { should contain_user(user).with_groups('root') }
+  end
 
-  it { should contain_user(user).with_groups('root') }
-
-  agent_config = "maestro_agent.json"
-  agent_config_file = "/var/local/maestro-agent/conf/maestro_agent.json"
-  context "with a default support address" do
+  context "with a default support address", :compile do
     it { should contain_file(agent_config).with_path(agent_config_file) }
     it { should contain_file(agent_config).with_content(%r["to": "support@maestrodev.com"]) }
   end
   
-  context "with a configured support address" do
+  context "with a configured support address", :compile do
     let(:params) { super().merge({:support_email => "support@example.com"})}
     it { should contain_file(agent_config).with_path(agent_config_file) }
     it { should contain_file(agent_config).with_content(%r["to": "support@example.com"]) }
   end
 
-  context "when using a different username" do
+  context "when using a different username", :compile do
     let(:user) { 'agent' }
     let(:pre_condition) { "class { 'maestro::params': agent_user => #{user} }" }
 
@@ -52,7 +45,7 @@ describe 'maestro::agent' do
 
   # ================================================ Tarball install =========================================
 
-  context "when installing from a tarball" do
+  context "when installing from a tarball", :compile do
     let(:params) { super().merge({ :package_type => 'tarball' }) }
 
     it { should contain_file("/var/local") }
@@ -60,7 +53,7 @@ describe 'maestro::agent' do
     it { should contain_file('/etc/init.d/maestro-agent').with_ensure('link') }
     it { should contain_exec("unpack-agent").with_cwd('/usr/local') }
 
-    context "when passing only agent snapshot version" do
+    context "when passing only agent snapshot version", :compile do
       let(:agent_version) { '2.1.1-20120430.110153-41' }
       it { should contain_wget__authfetch("fetch-agent").with(
         'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.1-SNAPSHOT/agent-2.1.1-20120430.110153-41-bin.tar.gz",
@@ -68,7 +61,7 @@ describe 'maestro::agent' do
       )}
     end
 
-    context "when passing a release version" do
+    context "when passing a release version", :compile do
       let(:agent_version) { '2.1.0' }
       it { should contain_wget__authfetch("fetch-agent").with(
         'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.0/agent-2.1.0-bin.tar.gz",
@@ -79,7 +72,7 @@ describe 'maestro::agent' do
   
   # ================================================ rpm install =========================================
 
-  context "when installing from an rpm" do
+  context "when installing from an rpm", :compile do
     let(:params) { super().merge({:package_type => 'rpm'}) }
 
     shared_examples :rpm do
@@ -91,18 +84,18 @@ describe 'maestro::agent' do
       it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
     end
 
-    context "when installing a release version" do
+    context "when installing a release version", :compile do
       let(:base_version) { agent_version }
       it_behaves_like :rpm
     end
 
-    context "when installing a snapshot version" do
+    context "when installing a snapshot version", :compile do
       let(:base_version) { "2.1.0-SNAPSHOT" }
       let(:agent_version) { "2.1.0-20120430.110153-41" }
       it_behaves_like :rpm
     end
 
-    context "when installing an older version" do
+    context "when installing an older version", :compile do
       let(:agent_version) { '2.0.0' }
       it { should contain_file('/var/local/maestro-agent/conf/wrapper.conf').with_ensure('link') }
       it { should contain_file('/etc/init.d/maestro-agent').with_ensure('link') }
@@ -111,7 +104,7 @@ describe 'maestro::agent' do
 
   # ================================================ Linux ================================================
 
-  context "when running on CentOS" do
+  context "when running on CentOS", :compile do
     let(:params) { super().merge({:package_type => 'rpm'}) }
 
     it { should_not contain_file("/etc/init.d/maestro-agent") }
@@ -123,7 +116,7 @@ describe 'maestro::agent' do
     }) }
     it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
 
-    context "when installing an older version" do
+    context "when installing an older version", :compile do
       let(:agent_version) { '2.0.0' }
       it { should contain_file("/etc/init.d/maestro-agent") }
     end
@@ -131,7 +124,7 @@ describe 'maestro::agent' do
 
   # ================================================ OS X ================================================
 
-  context "when running on OS X" do
+  context "when running on OS X", :compile do
     let(:facts) { {:operatingsystem => 'Darwin', :kernel => 'Darwin', :osfamily => 'Darwin'} }
 
     it { should_not contain_file("/etc/init.d/maestro-agent") }

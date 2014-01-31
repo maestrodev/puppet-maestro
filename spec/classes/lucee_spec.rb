@@ -9,8 +9,12 @@ describe 'maestro::lucee' do
       :config_dir          => "/var/local/maestro/conf",
       :agent_auto_activate => false,
   } }
+  let(:pre_condition) { [
+    "anchor { 'maestro::maestro::package::end': }",
+    "service { 'maestro': }"
+  ] }
 
-  context "with default config" do
+  context "with default config", :compile do
     it "should set the defaults correctly" do
       should contain_file(lucee_config_file)
       content = subject.resource('file', lucee_config_file).send(:parameters)[:content]
@@ -29,26 +33,24 @@ describe 'maestro::lucee' do
     it { should contain_file('/etc/maestro_lucee.json').with_ensure("absent") }
   end
 
-  context "with different configuration directory" do
+  context "with different configuration directory", :compile do
     let(:params) { super().merge( { :config_dir => "/etc" } ) }
     it { should contain_file('/etc/maestro_lucee.json') }
   end
 
-  context "with different logging level" do
+  context "with different logging level", :compile do
     let(:params) { super().merge( { :logging_level => "ERROR" } ) }
 
     it { should contain_file(lucee_config_file).with_content(/"level": "ERROR"$/) }
   end
 
-  context "with different logging level via maestro::params" do
-    let(:pre_condition) {
-      'class { "maestro::params": logging_level => "WARN" }'
-    }
+  context "with different logging level via maestro::params", :compile do
+    let(:pre_condition) { super() << 'class { "maestro::params": logging_level => "WARN" }' }
 
     it { should contain_file(lucee_config_file).with_content(/"level": "WARN"$/) }
   end
 
-  context "with different database" do
+  context "with different database", :compile do
     let(:params) { super().merge( { 
       :username => "username",
       :password => "password",
@@ -70,9 +72,9 @@ describe 'maestro::lucee' do
     }
   end
 
-  context "with different database via maestro::lucee::db" do
+  context "with different database via maestro::lucee::db", :compile do
     let(:pre_condition) {
-      %Q[class { 'maestro::lucee::db':
+      super() << %Q[class { 'maestro::lucee::db':
            username => "username",
            password => "password",
            host => "host",

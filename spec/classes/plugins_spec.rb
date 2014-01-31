@@ -9,7 +9,7 @@ describe 'maestro::plugins' do
     "exec { 'startup_wait': command => '/bin/startup_wait' }"
   ] }
 
-  context "when using defaults" do
+  context "when using defaults", :compile do
     # Test that defaults are created by picking a plugin always likely to be
     # there
     it { should contain_maestro__plugin("maestro-ssh-plugin") }

@@ -6,4 +6,25 @@ RSpec.configure do |c|
     Puppet::Util::Log.level = :warning
     Puppet::Util::Log.newdestination(:console)
   end
+  c.treat_symbols_as_metadata_keys_with_true_values = true
+  c.default_facts = {
+    :operatingsystem => 'CentOS',
+    :kernel => 'Linux',
+    :osfamily => 'RedHat',
+    :postgres_default_version => '8.4',
+    :concat_basedir => '/tmp/concat'
+  }
+
+  c.before do
+    # work around https://tickets.puppetlabs.com/browse/PUP-1547
+    # ensure that there's at least one provider available by emulating that any command exists
+    require 'puppet/confine/exists'
+    Puppet::Confine::Exists.any_instance.stubs(:which => '')
+    # avoid "Only root can execute commands as other users"
+    Puppet.features.stubs(:root? => true)
+  end
+end
+
+shared_examples :compile, :compile => true do
+  it { should compile.with_all_deps }
 end

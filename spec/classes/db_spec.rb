@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'pp'
 
 describe 'maestro::maestro::db' do
-  include_context :centos
 
   let(:params) { {
     :version     => '',
