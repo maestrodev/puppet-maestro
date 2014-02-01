@@ -1,7 +1,7 @@
 class maestro::maestro::config($repo = $maestro::maestro::repo,
     $version = $maestro::maestro::version,
     $ldap = $maestro::maestro::ldap,
-    $enabled = $maestro::maestro::enabled,
+    $enabled = $maestro::params::enabled,
     $lucee = $maestro::maestro::lucee,
     $admin = $maestro::maestro::admin,
     $admin_password = $maestro::maestro::admin_password,

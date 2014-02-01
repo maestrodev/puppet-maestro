@@ -38,7 +38,7 @@ class maestro::maestro(
   $version = $maestro_version,
   $package_type = 'tarball',
   $ldap = {},
-  $enabled = $maestro::params::enabled,
+  $enabled = undef,
   $lucee = true,
   $metrics_enabled = false,
   $admin = 'admin',
@@ -92,6 +92,9 @@ class maestro::maestro(
   }
 
   # Deprecate a number of variables moved to params
+  if $enabled != undef {
+    warning("maestro::maestro::enabled is deprecated and ignored, use maestro::params::enabled")
+  }
   if $db_version != undef {
     warning("maestro::maestro::db_version is deprecated, use maestro::params::db_version")
   }
