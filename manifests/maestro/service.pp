@@ -1,6 +1,6 @@
 class maestro::maestro::service(
-  $enabled     = $maestro::maestro::enabled,
-  $db_password = $maestro::maestro::db_password,
+  $enabled     = $maestro::params::enabled,
+  $db_password = $maestro::params::db_password,
   $jdbc_users  = $maestro::maestro::jdbc_users,
   $basedir     = $maestro::maestro::basedir,
   $port        = $maestro::maestro::port,
