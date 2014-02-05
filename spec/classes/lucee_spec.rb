@@ -51,48 +51,68 @@ describe 'maestro::lucee' do
   end
 
   context "with different database", :compile do
-    let(:params) { super().merge( { 
-      :username => "username",
-      :password => "password",
-      :host => "host",
-      :type => "mysql",
-      :port => "1234",
-      :database => "database",
-    } ) }
 
-    it {
-      content = subject.resource('file', lucee_config_file).send(:parameters)[:content]
-      config = JSON.parse(content)
-      config["lucee"]["database"]["server"].should eq "mysql"
-      config["lucee"]["database"]["host"].should eq "host"
-      config["lucee"]["database"]["port"].should eq 1234
-      config["lucee"]["database"]["user"].should eq "username"
-      config["lucee"]["database"]["pass"].should eq "password"
-      config["lucee"]["database"]["database_name"].should eq "database"
-    }
+    shared_examples :db do
+      it "should create the json file" do
+        content = subject.resource('file', lucee_config_file).send(:parameters)[:content]
+        config = JSON.parse(content)
+        config["lucee"]["database"]["server"].should eq "mysql"
+        config["lucee"]["database"]["host"].should eq "host"
+        config["lucee"]["database"]["port"].should eq 1234
+        config["lucee"]["database"]["user"].should eq "username"
+        config["lucee"]["database"]["pass"].should eq "password"
+        config["lucee"]["database"]["database_name"].should eq "database"
+      end
+    end
+
+    context "via parameters" do
+      let(:params) { super().merge( { 
+        :username => "username",
+        :password => "password",
+        :host => "host",
+        :type => "mysql",
+        :port => "1234",
+        :database => "database",
+      } ) }
+
+      it_behaves_like :db
+    end
+
+    context "via maestro::lucee::db", :compile do
+      let(:pre_condition) {
+        super() << %Q[
+          class { 'maestro::lucee::db':
+             username => "username",
+             password => "password",
+             host => "host",
+             type => "mysql",
+             port => "1234",
+             database => "database",
+          }
+        ]
+      }
+
+      it_behaves_like :db
+    end
+
+    context "via maestro::params", :compile do
+      let(:pre_condition) {
+        super() << %Q[
+          class { 'maestro::params':
+             db_username => "username",
+             db_password => "password",
+             db_host => "host",
+             db_port => "1234",
+          }
+          class { 'maestro::lucee::db':
+             type => "mysql",
+             database => "database",
+          }
+        ]
+      }
+
+      it_behaves_like :db
+    end
   end
 
-  context "with different database via maestro::lucee::db", :compile do
-    let(:pre_condition) {
-      super() << %Q[class { 'maestro::lucee::db':
-           username => "username",
-           password => "password",
-           host => "host",
-           type => "mysql",
-           port => "1234",
-           database => "database",
-         }]
-    }
-
-    it {
-      content = subject.resource('file', lucee_config_file).send(:parameters)[:content]
-      config = JSON.parse(content)
-      config["lucee"]["database"]["server"].should eq "mysql"
-      config["lucee"]["database"]["host"].should eq "host"
-      config["lucee"]["database"]["port"].should eq 1234
-      config["lucee"]["database"]["user"].should eq "username"
-      config["lucee"]["database"]["pass"].should eq "password"
-      config["lucee"]["database"]["database_name"].should eq "database"
-    }
-  end
 end

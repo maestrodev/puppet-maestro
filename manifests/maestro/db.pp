@@ -33,7 +33,7 @@ class maestro::maestro::db(
   if $enabled {
 
     Postgresql::Db {
-      user     => 'maestro',
+      user     => $maestro::params::db_username,
       password => $db_password,
       require => Class['postgresql::server'],
     }

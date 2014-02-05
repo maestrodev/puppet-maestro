@@ -7,10 +7,10 @@
 #   "database_name": "<%= db_name %>"
 # },
 class maestro::lucee::db(
-  $username = 'maestro',
-  $password = 'maestro',
+  $username = $maestro::params::db_username,
+  $password = $maestro::params::db_password,
   $type = 'postgres',
-  $host = 'localhost',
-  $port = 5432,
+  $host = $maestro::params::db_host,
+  $port = $maestro::params::db_port,
   $database = 'luceedb') inherits maestro::params {
 }

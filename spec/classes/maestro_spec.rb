@@ -2,10 +2,14 @@ require 'spec_helper'
 
 describe 'maestro::maestro' do
 
+  let(:pre_condition) { %Q[
+    class { 'maestro::params':
+      db_server_password => 'myserverpassword',
+      db_password => "mydbpassword",
+    }]
+  }
   let(:params) {{
       :version => '4.18.0',
-      :db_server_password => 'myserverpassword',
-      :db_password => 'mydbpassword',
       :admin_password => 'myadminpassword',
       :repo => {
           'id' => 'maestro-mirror',
@@ -14,25 +18,26 @@ describe 'maestro::maestro' do
           'url' => 'https://repo.maestrodev.com/archiva/repository/all'
       }
   }}
+  let(:jetty_xml) { "/var/local/maestro/conf/jetty.xml" }
 
   shared_examples :default do
     it "should not enable fowarding in jetty.xml" do
-      should contain_file("/var/local/maestro/conf/jetty.xml")
-      should_not contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
+      should contain_file(jetty_xml)
+      should_not contain_file(jetty_xml).with_content =~ %r[<Set name="forwarded">true</Set>]
     end
     it { should contain_file("/usr/local/src") }
 
     it "should have default context paths", :compile do
-      should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      should contain_file(jetty_xml)
+      content = subject.resource('file', jetty_xml).send(:parameters)[:content]
       content.should =~ %r[<Set name="contextPath">/lucee</Set>]
       content.should =~ %r[<Set name="contextPath">/</Set>]
     end
 
     it "should use database defaults and configured password" do
-      should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
-      content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost/maestro"/></Set>]
+      should contain_file(jetty_xml)
+      content = subject.resource('file', jetty_xml).send(:parameters)[:content]
+      content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://localhost:5432/maestro"/></Set>]
       content.should =~ %r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>]
       content.should =~ %r[<Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>]
       content.should =~ %r[<Set name="password"><SystemProperty name="database.password" default="mydbpassword"/></Set>]
@@ -213,22 +218,35 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when using custom lucee password", :compile do
-    let(:params) { super().merge({
-        :lucee_username => "lucee",
-        :lucee_password => "my-lucee-passwd",
-    }) }
+  context "when using custom lucee password" do
+    shared_examples :lucee do
+      it "should create the right LuCEE configuration" do
+        content = subject.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
+        content.should =~ /"username": "lucee",$/
+        content.should =~ /"password": "my-lucee-passwd",$/
+      end
 
-    it "should create the right LuCEE configuration" do
-      content = subject.resource('file', '/var/local/maestro/conf/maestro_lucee.json').send(:parameters)[:content]
-      content.should =~ /"username": "lucee",$/
-      content.should =~ /"password": "my-lucee-passwd",$/
+      it "should create the right LuCEE client configuration" do
+        content = subject.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
+        content.should =~ /"username": "lucee",$/
+        content.should =~ /"password": "my-lucee-passwd"$/
+      end
     end
-
-    it "should create the right LuCEE client configuration" do
-      content = subject.resource('file', '/var/local/maestro/conf/lucee-lib.json').send(:parameters)[:content]
-      content.should =~ /"username": "lucee",$/
-      content.should =~ /"password": "my-lucee-passwd"$/
+    context "via parameters", :compile do
+      let(:params) { super().merge({
+          :lucee_username => "lucee",
+          :lucee_password => "my-lucee-passwd",
+      }) }
+      it_behaves_like :lucee
+    end
+    context "via maestro::params", :compile do
+      let(:pre_condition) { %Q[
+        class { 'maestro::params':
+          lucee_username => 'lucee',
+          lucee_password => 'my-lucee-passwd',
+        }
+      ]}
+      it_behaves_like :lucee
     end
   end
 
@@ -262,7 +280,7 @@ describe 'maestro::maestro' do
       :jetty_forwarded => true
     }) }
     it "should enable fowarding in jetty.xml" do
-      should contain_file("/var/local/maestro/conf/jetty.xml").with_content =~ %r[<Set name="forwarded">true</Set>]
+      should contain_file(jetty_xml).with_content =~ %r[<Set name="forwarded">true</Set>]
     end
   end
 
@@ -272,8 +290,8 @@ describe 'maestro::maestro' do
         :lucee_context_path => "/bar",
     })}
     it "should have default context paths", :compile do
-      should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
+      should contain_file(jetty_xml)
+      content = subject.resource('file', jetty_xml).send(:parameters)[:content]
       content.should =~ %r[<Set name="contextPath">/foo</Set>]
       content.should =~ %r[<Set name="contextPath">/bar</Set>]
       content.should_not =~ %r[<Set name="contextPath">/</Set>]
@@ -295,27 +313,44 @@ describe 'maestro::maestro' do
     end
   end
 
-  context "when using a different JDBC URL", :compile do
-    let(:params) { super().merge({
-      :jdbc_users => {
-        'url' => "jdbc:postgresql://anotherhost/users",
-        'driver' => "org.postgresql.Driver",
-        'username' => "maestro",
-      }
-    })}
-    it "should populate jetty.xml" do
-      should contain_file("/var/local/maestro/conf/jetty.xml")
-      content = subject.resource('file', '/var/local/maestro/conf/jetty.xml').send(:parameters)[:content]
-      content.should =~ %r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://anotherhost/users"/></Set>]
-      content.should =~ %r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>]
-      content.should =~ %r[<Set name="username"><SystemProperty name="database.username" default="maestro"/></Set>]
-      content.should =~ %r[<Set name="password"><SystemProperty name="database.password" default="mydbpassword"/></Set>]
+  shared_examples :db do |database|
+    it "should set the db url" do
+      should contain_file(jetty_xml).with_content(%r[<Set name="url"><SystemProperty name="database.url" default="jdbc:postgresql://anotherhost:5432/#{database}"/></Set>])
     end
-    it "should adjust startup_wait.sh" do
-      should contain_file("/tmp/startup_wait.sh")
-      content = subject.resource('file', '/tmp/startup_wait.sh').send(:parameters)[:content]
-      content.should =~ %r[psql -h anotherhost]
+    it "should set the db driver" do
+      should contain_file(jetty_xml).with_content(%r[<Set name="driverClassName"><SystemProperty name="database.driverClassName" default="org.postgresql.Driver"/></Set>])
+    end
+    it "should set the db username" do
+      should contain_file(jetty_xml).with_content(%r[<Set name="username"><SystemProperty name="database.username" default="maestro1"/></Set>])
+    end
+    it "should set the db password" do
+      should contain_file(jetty_xml).with_content(%r[<Set name="password"><SystemProperty name="database.password" default="mydbpassword"/></Set>])
+    end
+    it { should contain_file("/tmp/startup_wait.sh").with_content(%r[psql -h anotherhost]) }
+  end
+
+  context "when using a different database" do
+    context "using a jdbc url", :compile do
+      let(:params) { super().merge({
+        :jdbc_users => {
+          'url' => "jdbc:postgresql://anotherhost:5432/users",
+          'driver' => "org.postgresql.Driver",
+          'username' => "maestro1",
+        }
+      })}
+      it_behaves_like :db, "users"
+    end
+
+    context "using maestro::params", :compile do
+      let(:pre_condition) { %Q[
+        class { 'maestro::params':
+           db_username => "maestro1",
+           db_password => "mydbpassword",
+           db_host => "anotherhost",
+           db_port => "5432"
+        }]
+      }
+      it_behaves_like :db, "maestro"
     end
   end
 end
-

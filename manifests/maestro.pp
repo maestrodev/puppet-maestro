@@ -47,14 +47,14 @@ class maestro::maestro(
   $db_server_password = undef, # deprecated
   $db_password = undef, # deprecated
   $jdbc_maestro = {
-    url => "jdbc:postgresql://localhost/maestro",
+    url => "jdbc:postgresql://${maestro::params::db_host}:${maestro::params::db_port}/maestro",
     driver => "org.postgresql.Driver",
-    username => "maestro",
+    username => $maestro::params::db_username,
   },
   $jdbc_users = {
-    url => "jdbc:postgresql://localhost/maestro",
+    url => "jdbc:postgresql://${maestro::params::db_host}:${maestro::params::db_port}/maestro",
     driver => "org.postgresql.Driver",
-    username => "maestro",
+    username => $maestro::params::db_username,
   },
   $db_version = undef, # deprecated
   $db_allowed_rules = undef, # deprecated
