@@ -10,6 +10,8 @@ class maestro::params(
     'url' => 'https://repo.maestrodev.com/archiva/repository/all'
   },
   $logging_level   = 'INFO',
+  $admin_username  = 'admin',
+  $admin_password  = $maestro_adminpassword ? {undef => "admin1", default => $maestro_adminpassword},
   $lucee_password  = 'maestro',
   $lucee_username  = 'maestro',
 

@@ -41,8 +41,8 @@ class maestro::maestro(
   $enabled = undef,
   $lucee = true,
   $metrics_enabled = false,
-  $admin = 'admin',
-  $admin_password = $maestro_adminpassword,
+  $admin = undef, # deprecated
+  $admin_password = undef, # deprecated
   $master_password = $maestro_master_password,
   $db_server_password = undef, # deprecated
   $db_password = undef, # deprecated
@@ -112,6 +112,12 @@ class maestro::maestro(
   }
   if $lucee_password != undef {
     warning("maestro::maestro::lucee_password is deprecated, use maestro::params::lucee_password")
+  }
+  if $admin != undef {
+    warning("maestro::maestro::admin is deprecated, use maestro::params::admin_username")
+  }
+  if $admin_password != undef {
+    warning("maestro::maestro::admin_password is deprecated, use maestro::params::admin_password")
   }
 
   # Create user and group
@@ -198,6 +204,8 @@ class maestro::maestro(
     db_server_password => $db_server_password ? {undef => undef, default => $db_server_password},
     db_password        => $db_password ? {undef => undef, default => $db_password},
     db_allowed_rules   => $db_allowed_rules ? {undef => undef, default => $db_allowed_rules},
+    admin              => $admin ? {undef => undef, default => $admin},
+    admin_password     => $admin_password ? {undef => undef, default => $admin_password},
     lucee_username     => $lucee_username ? {undef => undef, default => $lucee_username},
     lucee_password     => $lucee_password ? {undef => undef, default => $lucee_password},
   } ->

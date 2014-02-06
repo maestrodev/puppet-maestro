@@ -352,4 +352,32 @@ describe 'maestro::maestro' do
       it_behaves_like :db, "maestro"
     end
   end
+
+  context "when using a custom admin and password" do
+    shared_examples :admin do
+      it "should change the admin user and password" do
+        should contain_augeas('update-default-configurations').with_changes([
+          "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] somepassword",
+          "rm default-configuration/users/*[username/#text != 'admin']",
+          "set default-configuration/users/*/username/#text[../../username/#text = 'admin'] somename"
+        ])
+      end
+    end
+    context "using parameters", :compile do
+      let(:params) {{
+        :admin => 'somename',
+        :admin_password => 'somepassword'
+      }}
+      it_behaves_like :admin
+    end
+    context "using maestro::params", :compile do
+      let(:pre_condition) { %Q[
+        class { 'maestro::params':
+           admin_username => "somename",
+           admin_password => "somepassword",
+        }]
+      }
+      it_behaves_like :admin
+    end
+  end
 end
