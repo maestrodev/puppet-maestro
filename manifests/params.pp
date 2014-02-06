@@ -13,9 +13,9 @@ class maestro::params(
   $lucee_password  = 'maestro',
   $lucee_username  = 'maestro',
 
-  $db_server_password = $maestro_db_server_password,
+  $db_server_password = $maestro_db_server_password ? {undef => "maestro", default => $maestro_db_server_password},
   $db_username        = 'maestro',
-  $db_password        = $maestro_db_password,
+  $db_password        = $maestro_db_password ? {undef => "maestro", default => $maestro_db_password},
   $db_host            = 'localhost',
   $db_port            = 5432,
   $db_version         = undef,

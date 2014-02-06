@@ -10,7 +10,6 @@ describe 'maestro::maestro' do
   }
   let(:params) {{
       :version => '4.18.0',
-      :admin_password => 'myadminpassword',
       :repo => {
           'id' => 'maestro-mirror',
           'username' => 'u',
