@@ -13,6 +13,7 @@ class maestro::agent::config(
   $enable_jpda = $maestro::agent::enable_jpda,
   $support_email = $maestro::agent::support_email,
   $logging_level = $maestro::params::logging_level,
+  $jmxremote = $maestro::agent::jmxremote,
   $jmxport = $maestro::agent::jmxport,
   $rmi_server_hostname = $maestro::agent::rmi_server_hostname) inherits maestro::params {
 
@@ -55,17 +56,32 @@ class maestro::agent::config(
 
   augeas { "maestro-agent-wrapper-debug-and-tmpdir":
     changes   => [
-      # these first 3 not needed for agents >= 2.1.0
+      # not needed for agents >= 2.1.0
       "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
       "set wrapper.java.additional.4 -XX:HeapDumpPath=%MAESTRO_HOME%/logs",
       "set wrapper.java.additional.5 -Djava.io.tmpdir=%MAESTRO_HOME%/tmp",
-
-      "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote=true",
-      "set wrapper.java.additional.7 -Dcom.sun.management.jmxremote.port=${jmxport}",
-      "set wrapper.java.additional.8 -Dcom.sun.management.jmxremote.authenticate=false",
-      "set wrapper.java.additional.9 -Dcom.sun.management.jmxremote.ssl=false",
-      "set wrapper.java.additional.10 -Djava.rmi.server.hostname=${rmi_server_hostname}",
     ],
+  }
+
+  if $jmxremote {
+    augeas { "maestro-agent-wrapper-jmxremote":
+      changes   => [
+        "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote",
+        "set wrapper.java.additional.7 -Dcom.sun.management.jmxremote.port=${jmxport}",
+        "set wrapper.java.additional.8 -Dcom.sun.management.jmxremote.authenticate=false",
+        "set wrapper.java.additional.9 -Dcom.sun.management.jmxremote.ssl=false",
+        "set wrapper.java.additional.10 -Djava.rmi.server.hostname=${rmi_server_hostname}",
+      ],
+    }
+  } else {
+    augeas { "maestro-agent-wrapper-jmxremote-disable":
+    incl      => '/var/local/maestro-agent/conf/wrapper.conf',
+    lens      => "Properties.lns",
+      changes   => [
+        "rm *[. =~ regexp('-Dcom.sun.management.jmxremote.*')]",
+        "rm *[. =~ regexp('-Djava.rmi.server.hostname.*')]",
+      ],
+    }
   }
 
   if $enable_jpda {

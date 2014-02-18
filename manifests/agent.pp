@@ -29,6 +29,7 @@ class maestro::agent(
   $maxmemory = '128',
   $enable_jpda = false,
   $support_email = "support@maestrodev.com",
+  $jmxremote = false,
   $jmxport = '9002',
   $rmi_server_hostname = $ipaddress) inherits maestro::params {
 
