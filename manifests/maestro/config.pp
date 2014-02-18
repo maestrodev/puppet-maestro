@@ -50,8 +50,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
 
   Augeas {
     lens      => "Properties.lns",
-    load_path => '/tmp/augeas/maestro',
-    require   => [Anchor['maestro::maestro::package::end'], File['/tmp/augeas/maestro/properties.aug']],
+    require   => [Anchor['maestro::maestro::package::end']],
     notify    => Service['maestro'],
   }
 
@@ -133,19 +132,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
       target  => "${homedir}/conf/default-configurations.xml",
       require => [Class['maestro::maestro::package'], File[$configdir]],
     }
-  }
-
-  # Until Augeas has the properties files fixes, use a custom version
-  # Just a basic approach - for more complete management of lenses consider https://github.com/camptocamp/puppet-augeas
-  if !defined(File['/tmp/augeas']) {
-    file { '/tmp/augeas': ensure => directory }
-  }
-  file { '/tmp/augeas/maestro':
-    ensure => directory,
-    require => File['/tmp/augeas'],
-  } ->
-  file { "/tmp/augeas/maestro/properties.aug":
-    source => "puppet:///modules/maestro/properties.aug"
   }
 
   # Tweak the files provided in the distribution as these cannot be templated easily or in a portable fashion.

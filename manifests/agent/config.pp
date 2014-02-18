@@ -39,15 +39,6 @@ class maestro::agent::config(
     notify  => Service['maestro-agent'],
   }
 
-  # prepare the augeas lens
-  if !defined(File['/tmp/augeas']) {
-    file { '/tmp/augeas': ensure => directory }
-  }
-  file { "/tmp/augeas/maestro-agent": ensure => directory } ->
-  file { "/tmp/augeas/maestro-agent/properties.aug":
-    source => "puppet:///modules/maestro/properties.aug"
-  }->
-
   # adjust wrapper.conf
   augeas { "maestro-agent-wrapper-maxmemory":
     lens      => "Properties.lns",
@@ -55,7 +46,6 @@ class maestro::agent::config(
     changes   => [
       "set wrapper.java.maxmemory ${maxmemory}",
     ],
-    load_path => '/tmp/augeas/maestro-agent',
     require   => Anchor['maestro::agent::package::end'],
     notify    => Service['maestro-agent'],
   } ->
@@ -75,7 +65,6 @@ class maestro::agent::config(
       "set wrapper.java.additional.9 -Dcom.sun.management.jmxremote.ssl=false",
       "set wrapper.java.additional.10 -Djava.rmi.server.hostname=${rmi_server_hostname}",
     ],
-    load_path => '/tmp/augeas/maestro-agent',
     notify    => Service['maestro-agent'],
   }
 
@@ -86,7 +75,6 @@ class maestro::agent::config(
       changes   => [
         "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
       ],
-      load_path => '/tmp/augeas/maestro-agent',
       require   => Anchor['maestro::agent::package::end'],
       notify    => Service['maestro-agent'],
     }
