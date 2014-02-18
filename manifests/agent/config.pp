@@ -18,6 +18,13 @@ class maestro::agent::config(
 
   $wrapper = "${agent_user_home}/conf/wrapper.conf"
 
+  Augeas {
+    incl      => $wrapper,
+    lens      => "Properties.lns",
+    require   => [Anchor['maestro::agent::package::end']],
+    notify    => Service['maestro-agent'],
+  }
+
   case $::operatingsystem {
     'Darwin': {
       $java_home ='/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home'
@@ -41,18 +48,12 @@ class maestro::agent::config(
 
   # adjust wrapper.conf
   augeas { "maestro-agent-wrapper-maxmemory":
-    lens      => "Properties.lns",
-    incl      => $wrapper,
     changes   => [
       "set wrapper.java.maxmemory ${maxmemory}",
     ],
-    require   => Anchor['maestro::agent::package::end'],
-    notify    => Service['maestro-agent'],
   } ->
 
   augeas { "maestro-agent-wrapper-debug-and-tmpdir":
-    lens      => "Properties.lns",
-    incl      => $wrapper,
     changes   => [
       # these first 3 not needed for agents >= 2.1.0
       "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
@@ -65,18 +66,13 @@ class maestro::agent::config(
       "set wrapper.java.additional.9 -Dcom.sun.management.jmxremote.ssl=false",
       "set wrapper.java.additional.10 -Djava.rmi.server.hostname=${rmi_server_hostname}",
     ],
-    notify    => Service['maestro-agent'],
   }
 
   if $enable_jpda {
     augeas { "maestro-agent-wrapper-jpda":
-      lens      => "Properties.lns",
-      incl      => $wrapper,
       changes   => [
         "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
       ],
-      require   => Anchor['maestro::agent::package::end'],
-      notify    => Service['maestro-agent'],
     }
   }
 
