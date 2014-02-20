@@ -8,11 +8,11 @@ describe 'maestro::maestro::db' do
     :db_password => 'defaultpassword',
   } }
 
-  context "with default postgres version" do
+  context "with default postgres version", :compile do
     it { should contain_class('postgresql::params').with_version('8.4') }
   end
 
-  context "with custom postgres version" do
+  context "with custom postgres version", :compile do
     let(:params) { {
       :version => '9.0',
       :db_password => 'defaultpassword',

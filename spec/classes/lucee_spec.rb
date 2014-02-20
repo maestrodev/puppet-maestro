@@ -65,7 +65,7 @@ describe 'maestro::lucee' do
       end
     end
 
-    context "via parameters" do
+    context "via parameters", :compile do
       let(:params) { super().merge( { 
         :username => "username",
         :password => "password",
