@@ -9,9 +9,9 @@ RSpec.configure do |c|
   c.treat_symbols_as_metadata_keys_with_true_values = true
   c.default_facts = {
     :operatingsystem => 'CentOS',
+    :operatingsystemrelease => '6.5',
     :kernel => 'Linux',
     :osfamily => 'RedHat',
-    :postgres_default_version => '8.4',
     :concat_basedir => '/tmp/concat'
   }
 

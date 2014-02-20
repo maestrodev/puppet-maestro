@@ -1,5 +1,5 @@
 name 'maestrodev-maestro'
-version '1.4.8'
+version '1.5.0'
 
 author 'maestrodev'
 license 'Apache License, Version 2.0'
@@ -11,4 +11,4 @@ description 'Install and configure Maestro from MaestroDev'
 dependency 'maestrodev/wget',       '>=1.3.0'
 dependency 'maestrodev/maven',      '>=1.0.0'
 dependency 'puppetlabs/stdlib',     '>=3.2.0'
-dependency 'puppetlabs/postgresql', '>=2.0.1 <3.0.0'
+dependency 'puppetlabs/postgresql', '>=3.0.0'
