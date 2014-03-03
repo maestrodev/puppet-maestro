@@ -24,15 +24,13 @@ class maestro::maestro::db(
 
   if $enabled {
 
-    Postgresql::Server::Db {
-      user     => $maestro::params::db_username,
-      password => $db_password,
-      require => Class['postgresql::server'],
+    postgresql::server::role { $maestro::params::db_username:
+      password_hash => postgresql_password($maestro::params::db_username, $db_password),
     }
 
-    postgresql::server::db{ 'maestro': }
-    postgresql::server::db{ 'luceedb': }
-    postgresql::server::db{ 'users': }
+    maestro::maestro::maestro_db { 'maestro': }
+    maestro::maestro::maestro_db { 'luceedb': }
+    maestro::maestro::maestro_db { 'users': }
   }
   else {
     service { 'postgresql':
