@@ -6,7 +6,7 @@ class maestro::maestro::db(
   $manage_package_repo = true,
   $enabled             = true) inherits maestro::params {
 
-  if !($version == '' or $version == unset) {
+  if !($version == '' or $version == undef) {
     class { 'postgresql::globals':
       version             => $version,
       manage_package_repo => $manage_package_repo,
