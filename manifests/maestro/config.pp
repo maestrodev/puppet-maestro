@@ -31,7 +31,9 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     $jmxport = $maestro::maestro::jmxport,
     $rmi_server_hostname = $maestro::maestro::rmi_server_hostname,
     $web_config_properties = $maestro::maestro::web_config_properties,
-    $ga_property_id = $maestro::maestro::ga_property_id) inherits maestro::params {
+    $ga_property_id = $maestro::maestro::ga_property_id,
+    $logging_level = $maestro::maestro::logging_level,
+) inherits maestro::params {
 
   $configdir = "${basedir}/conf"
   $wrapper = "${configdir}/wrapper.conf"
@@ -144,6 +146,18 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     ],
     incl    => "${basedir}/conf/default-configurations.xml",
     lens    => 'Xml.lns',
+  }
+
+  # Only works with log4j.xml when no DTD
+  if versioncmp($version, "5.0.3") >= 0 {
+    $level = downcase($logging_level)
+    augeas { 'update-log4j':
+      changes => [
+        "set log4j:configuration/root/level/#attribute/value $level",
+      ],
+      incl    => "${homedir}/apps/maestro/WEB-INF/classes/log4j.xml",
+      lens    => 'Xml.lns',
+    }
   }
 
   augeas { 'show-snapshot-version':

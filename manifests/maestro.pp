@@ -208,6 +208,7 @@ class maestro::maestro(
     admin_password     => $admin_password ? {undef => undef, default => $admin_password},
     lucee_username     => $lucee_username ? {undef => undef, default => $lucee_username},
     lucee_password     => $lucee_password ? {undef => undef, default => $lucee_password},
+    logging_level      => $logging_level,
   } ->
   class { 'maestro::maestro::service': }
 
