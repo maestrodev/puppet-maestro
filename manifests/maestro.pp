@@ -58,10 +58,10 @@ class maestro::maestro(
   },
   $db_version = undef, # deprecated
   $db_allowed_rules = undef, # deprecated
-  $initmemory = '512',
-  $maxmemory = '1536',
-  $permsize = '384m',
-  $maxpermsize = '384m',
+  $initmemory = undef,
+  $maxmemory = undef,
+  $permsize = undef,
+  $maxpermsize = undef,
   $port = '8080',
   $agent_auto_activate = false,
   $enable_jpda = false,

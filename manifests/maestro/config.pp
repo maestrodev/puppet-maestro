@@ -165,15 +165,31 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     changes   => "set artifactVersion ${version}",
   }
 
-  augeas { 'maestro-wrapper':
-    incl      => $wrapper,
-    changes   => [
-      "set wrapper.java.initmemory ${initmemory}",
-      "set wrapper.java.maxmemory ${maxmemory}",
-      "set *[. =~ regexp('-XX:PermSize=.*')] -XX:PermSize=${permsize}",
-      "set *[. =~ regexp('-XX:MaxPermSize=.*')] -XX:MaxPermSize=${maxpermsize}",
-    ],
+  if $initmemory != undef {
+    augeas { 'maestro-wrapper-initmemory':
+      incl      => $wrapper,
+      changes   => [ "set wrapper.java.initmemory ${initmemory}" ],
+    }
   }
+  if $maxmemory != undef {
+    augeas { 'maestro-wrapper-maxmemory':
+      incl      => $wrapper,
+      changes   => [ "set wrapper.java.maxmemory ${maxmemory}" ],
+    }
+  }
+  if $permsize != undef {
+    augeas { 'maestro-wrapper-permsize':
+      incl      => $wrapper,
+      changes   => [ "set *[. =~ regexp('-XX:PermSize=.*')] -XX:PermSize=${permsize}" ],
+    }
+  }
+  if $maxpermsize != undef {
+    augeas { 'maestro-wrapper-maxpermsize':
+      incl      => $wrapper,
+      changes   => [ "set *[. =~ regexp('-XX:MaxPermSize=.*')] -XX:MaxPermSize=${maxpermsize}" ],
+    }
+  }
+
   if $enable_jpda {
     # TODO: make more flexible by calculating the right number for the
     # parameter instead of hard-coding 13. Will require a Ruby function. Add
