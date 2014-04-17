@@ -26,7 +26,7 @@ class maestro::agent(
   $stomp_host = '',
   $maven_servers = '',
   $agent_name = 'maestro_agent',
-  $maxmemory = '128',
+  $maxmemory = undef,
   $enable_jpda = false,
   $support_email = "support@maestrodev.com",
   $jmxremote = false,

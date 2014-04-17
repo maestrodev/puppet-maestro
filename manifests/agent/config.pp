@@ -48,11 +48,13 @@ class maestro::agent::config(
   }
 
   # adjust wrapper.conf
-  augeas { "maestro-agent-wrapper-maxmemory":
-    changes   => [
-      "set wrapper.java.maxmemory ${maxmemory}",
-    ],
-  } ->
+  if $maxmemory != undef {
+    augeas { "maestro-agent-wrapper-maxmemory":
+      changes   => [
+        "set wrapper.java.maxmemory ${maxmemory}",
+      ],
+    }
+  }
 
   augeas { "maestro-agent-wrapper-debug-and-tmpdir":
     changes   => [

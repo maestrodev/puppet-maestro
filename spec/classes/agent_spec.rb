@@ -22,6 +22,7 @@ describe 'maestro::agent' do
       :owner  => user)
     }
     it { should contain_user(user).with_groups('root') }
+    it { should_not contain_augeas("maestro-agent-wrapper-maxmemory") }
   end
 
   context "with a default support address", :compile do
@@ -40,6 +41,11 @@ describe 'maestro::agent' do
     let(:pre_condition) { "class { 'maestro::params': agent_user => #{user} }" }
 
     it { should contain_file('/etc/sysconfig/maestro-agent').with_content(/^RUN_AS_USER=#{user}$/) }
+  end
+
+  context "when setting the maxmemory", :compile do
+    let(:params) { super().merge({:maxmemory => 512})}
+    it { should contain_augeas("maestro-agent-wrapper-maxmemory").with_changes(["set wrapper.java.maxmemory 512"]) }
   end
 
 
@@ -114,7 +120,6 @@ describe 'maestro::agent' do
       :ensure => 'running',
       :enable => true
     }) }
-    it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
 
     context "when installing an older version", :compile do
       let(:agent_version) { '2.0.0' }
@@ -133,6 +138,5 @@ describe 'maestro::agent' do
       :ensure => 'running',
       :enable => true
     }) }
-    it { should contain_augeas("maestro-agent-wrapper-maxmemory") }
   end
 end
