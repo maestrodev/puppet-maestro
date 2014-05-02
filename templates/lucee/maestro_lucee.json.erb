@@ -25,8 +25,8 @@
     "stomp": {
       "host": "127.0.0.1",
       "port": 61613,
-      "user": "",
-      "passcode": "",
+      "user": "<%= @activemq_username %>",
+      "passcode": "<%= @activemq_password %>",
       "reliable": true,
       "messenger_debugging": <%= @messenger_debugging || false %>
     },

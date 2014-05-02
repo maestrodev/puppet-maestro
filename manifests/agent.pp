@@ -18,9 +18,9 @@
 # [rmi_server_hostname] The ip address the JMX server will listen on (default $ipaddress)
 #
 class maestro::agent(
-  $agent_version,
+  $agent_version = 'present',
   $repo = $maestro::params::repo,
-  $package_type = 'tarball',
+  $package_type = $maestro::params::package_type,
   $enabled = true,
   $facter = true,
   $stomp_host = '',

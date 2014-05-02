@@ -2,7 +2,7 @@ class maestro::agent::absent(
   $version = '0.1.0',
   $user = 'agent',
   $user_home = undef,
-  $basedir = '/var/maestro-agent') {
+  $basedir = '/var/maestro-agent') inherits maestro::params {
 
   service { 'maestro-agent':
     ensure => stopped,
@@ -33,7 +33,7 @@ class maestro::agent::absent(
     require => Service['maestro-agent'],
   }
 
-  file { ['/root/.gemrc', "/usr/local/src/agent-${version}.tar.gz", '/usr/local/src/maestro-agent.version', '/etc/init.d/maestro-agent']:
+  file { ['/root/.gemrc', "${maestro::params::srcdir}/agent-${version}.tar.gz", "${maestro::params::srcdir}/maestro-agent.version", '/etc/init.d/maestro-agent']:
     ensure  => absent,
     require => Service['maestro-agent'],
   } ->

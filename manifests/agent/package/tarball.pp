@@ -8,6 +8,8 @@ class maestro::agent::package::tarball(
   $agent_group,
   $agent_user_home) inherits maestro::params {
 
+  include wget
+
   file { $basedir:
     ensure  => directory,
     owner   => $agent_user,

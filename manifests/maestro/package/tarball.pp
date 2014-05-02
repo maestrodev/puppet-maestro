@@ -8,7 +8,7 @@ class maestro::maestro::package::tarball(
 
   $installdir = $maestro::maestro::installdir
 
-  ensure_resource('file', $srcdir, {'ensure' => 'directory' })
+  include wget
 
   wget::authfetch { 'fetch-maestro':
     user        => $repo['username'],

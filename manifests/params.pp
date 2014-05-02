@@ -14,6 +14,8 @@ class maestro::params(
   $admin_password  = $maestro_adminpassword ? {undef => "admin1", default => $maestro_adminpassword},
   $lucee_password  = 'maestro',
   $lucee_username  = 'maestro',
+  $activemq_username = 'maestro',
+  $activemq_password = 'maestro',
 
   $db_server_password = $maestro_db_server_password ? {undef => "maestro", default => $maestro_db_server_password},
   $db_username        = 'maestro',
@@ -27,6 +29,11 @@ class maestro::params(
 
   Exec {
     path => '/bin/:/usr/bin:/usr/sbin',
+  }
+
+  $package_type = $::osfamily ? {
+    'RedHat' => 'rpm',
+    default  => 'tarball',
   }
 
 }

@@ -80,29 +80,24 @@ describe 'maestro::maestro' do
   shared_examples :tarball do
     it_behaves_like :default
     it_behaves_like :wrapper
-    it_behaves_like :pre_4_18
     it { should contain_exec("unpack-maestro") }
     it { should_not contain_package("maestro") }
     it { should contain_wget__authfetch("fetch-maestro") }
     it { should contain_exec("unpack-maestro").with_cwd("/usr/local") }
+    it { should contain_file('/var/local/maestro') }
+    it { should contain_file('/var/local/maestro/conf/wrapper.conf').with_ensure('link') }
+    it { should contain_file('/var/local/maestro/conf/webdefault.xml').with_ensure('link') }
+    it { should contain_file('/var/local/maestro/conf/default-configurations.xml').with_ensure('link') }
   end
 
   shared_examples :rpm do
     it_behaves_like :default
     it { should_not contain_exec("unpack-maestro") }
     it { should contain_package("maestro") }
-    it { should contain_wget__authfetch("fetch-maestro-rpm") }
   end
 
   shared_examples :wrapper do
     it { should contain_file('/etc/init.d/maestro').with_content(%r{\. "/etc/sysconfig/\$APP_NAME"}) }
-  end
-
-  shared_examples :pre_4_18 do
-    it { should contain_file('/var/local/maestro') }
-    it { should contain_file('/var/local/maestro/conf/wrapper.conf').with_ensure('link') }
-    it { should contain_file('/var/local/maestro/conf/webdefault.xml').with_ensure('link') }
-    it { should contain_file('/var/local/maestro/conf/default-configurations.xml').with_ensure('link') }
   end
 
 
@@ -127,64 +122,23 @@ describe 'maestro::maestro' do
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
   end
 
-  context "when installing on Maestro up to 4.11.0", :compile do
-    let(:params) { super().merge({
-      :version => "4.11.0",
-    }) }
-
-    it_behaves_like :tarball
-    it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("link") }
-    it { should contain_package('libxml2-devel').with_ensure('present') }
-    it { should contain_package('libxslt-devel').with_ensure('present') }
-  end
-
-  context "when installing Maestro 4.12.0+", :compile do
-    let(:params) { super().merge({
-      :version => "4.12.0",
-    }) }
-
-    it_behaves_like :tarball
-    it { should_not contain_package('libxml2-devel') }
-    it { should_not contain_package('libxslt-devel') }
-    it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("link") }
-  end
-
-  context "when installing Maestro 4.13.0+", :compile do
+  context "when installing Maestro", :compile do
     let(:params) { super().merge({
       :version => "4.13.0",
     }) }
 
-    it_behaves_like :tarball
+    it_behaves_like :rpm
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
   end
 
-  context "when installing Maestro 4.13.0+ SNAP", :compile do
+  context "when installing Maestro SNAPSHOT", :compile do
     let(:params) { super().merge({
       :version => "4.13.0-SNAPSHOT",
     }) }
 
-    it_behaves_like :tarball
+    it_behaves_like :rpm
     it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
   end
-
-  context "when installing Maestro <4.18.0", :compile do
-    let(:params) { super().merge({ :version => "4.17.3" }) }
-
-    context "with rpm", :compile do
-      let(:params) { super().merge({ :package_type => "rpm" }) }
-      it_behaves_like :pre_4_18
-      it_behaves_like :rpm
-      it_behaves_like :wrapper
-      it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
-    end
-
-    context "with tarball", :compile do
-      let(:params) { super().merge({ :package_type => "tarball" }) }
-      it_behaves_like :tarball
-      it { should contain_file('/var/maestro/lucee-lib.json').with_ensure("absent") }
-    end
-  end
-
 
   context "google analytics configuration", :compile do
     let(:params) { super().merge({

@@ -50,7 +50,6 @@ On the agent node(s), install the agent.
     class { 'java': package => 'java-1.6.0-openjdk-devel' }
 
     class { 'maestro::agent':
-      repo           => $repo,
       agent_version  => $agent_version,
     }
     Package['java'] -> Service['maestro-agent']

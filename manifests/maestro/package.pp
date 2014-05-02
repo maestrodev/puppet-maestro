@@ -7,6 +7,8 @@ class maestro::maestro::package(
   $homedir = $maestro::maestro::homedir,
   $basedir = $maestro::maestro::basedir) inherits maestro::params {
 
+  ensure_resource('file', $srcdir, {'ensure' => 'directory' })
+
   case $type {
     'tarball': {
       anchor { 'maestro::maestro::package::begin': } -> Class['maestro::maestro::package::tarball'] -> anchor { 'maestro::maestro::package::end': }
@@ -23,9 +25,7 @@ class maestro::maestro::package(
     'rpm': {
       anchor { 'maestro::maestro::package::begin': } -> Class['maestro::maestro::package::rpm'] -> anchor { 'maestro::maestro::package::end': }
       class { 'maestro::maestro::package::rpm':
-        repo         => $repo,
-        version      => $version,
-        base_version => $base_version,
+        version => $version,
       }
     }
     default: {

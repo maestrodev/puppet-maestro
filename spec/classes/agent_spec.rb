@@ -82,12 +82,10 @@ describe 'maestro::agent' do
     let(:params) { super().merge({:package_type => 'rpm'}) }
 
     shared_examples :rpm do
-      let(:agent_rpm_source) { "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/#{base_version}/agent-#{agent_version}-rpm.rpm" }
       it { should_not contain_exec("unpack-agent") }
       it { should_not contain_file('/var/local/maestro-agent/conf/wrapper.conf') }
       it { should_not contain_file('/etc/init.d/maestro-agent') }
-      it { should contain_package("maestro-agent").with({'source' => "/usr/local/src/agent-#{agent_version}.rpm", 'provider' => 'rpm' } )}
-      it { should contain_wget__authfetch("fetch-agent-rpm").with_source(agent_rpm_source) }
+      it { should contain_package("maestro-agent") }
     end
 
     context "when installing a release version", :compile do

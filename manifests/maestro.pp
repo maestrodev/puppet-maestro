@@ -35,8 +35,8 @@
 #
 class maestro::maestro(
   $repo = $maestro::params::repo,
-  $version = $maestro_version,
-  $package_type = 'tarball',
+  $version = 'present',
+  $package_type = 'rpm',
   $ldap = {},
   $enabled = undef,
   $lucee = true,
