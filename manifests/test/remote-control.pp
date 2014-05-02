@@ -9,7 +9,7 @@ class maestro::test::remote-control(
   $user = $maestro::params::user
   $group = $maestro::params::group
 
-  wget::authfetch { 'fetch-test-remote-control':
+  wget::fetch { 'fetch-test-remote-control':
     user        => $repo['username'],
     password    => $repo['password'],
     source      => "${repo['url']}/com/maestrodev/maestro/test/rpm/maestro-test-remote-control/${version}/maestro-test-remote-control-${version}.rpm",

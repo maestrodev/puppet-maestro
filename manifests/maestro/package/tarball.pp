@@ -10,7 +10,7 @@ class maestro::maestro::package::tarball(
 
   include wget
 
-  wget::authfetch { 'fetch-maestro':
+  wget::fetch { 'fetch-maestro':
     user        => $repo['username'],
     password    => $repo['password'],
     source      => "${repo['url']}/com/maestrodev/maestro/maestro-jetty/${base_version}/maestro-jetty-${version}-bin.tar.gz",

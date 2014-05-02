@@ -82,7 +82,7 @@ describe 'maestro::maestro' do
     it_behaves_like :wrapper
     it { should contain_exec("unpack-maestro") }
     it { should_not contain_package("maestro") }
-    it { should contain_wget__authfetch("fetch-maestro") }
+    it { should contain_wget__fetch("fetch-maestro") }
     it { should contain_exec("unpack-maestro").with_cwd("/usr/local") }
     it { should contain_file('/var/local/maestro') }
     it { should contain_file('/var/local/maestro/conf/wrapper.conf').with_ensure('link') }

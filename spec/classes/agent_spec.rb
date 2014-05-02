@@ -61,7 +61,7 @@ describe 'maestro::agent' do
 
     context "when passing only agent snapshot version", :compile do
       let(:agent_version) { '2.1.1-20120430.110153-41' }
-      it { should contain_wget__authfetch("fetch-agent").with(
+      it { should contain_wget__fetch("fetch-agent").with(
         'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.1-SNAPSHOT/agent-2.1.1-20120430.110153-41-bin.tar.gz",
         'destination' => "/usr/local/src/agent-2.1.1-20120430.110153-41-bin.tar.gz"
       )}
@@ -69,7 +69,7 @@ describe 'maestro::agent' do
 
     context "when passing a release version", :compile do
       let(:agent_version) { '2.1.0' }
-      it { should contain_wget__authfetch("fetch-agent").with(
+      it { should contain_wget__fetch("fetch-agent").with(
         'source' => "https://repo.maestrodev.com/archiva/repository/all/com/maestrodev/lucee/agent/2.1.0/agent-2.1.0-bin.tar.gz",
         'destination' => "/usr/local/src/agent-2.1.0-bin.tar.gz"
       )}

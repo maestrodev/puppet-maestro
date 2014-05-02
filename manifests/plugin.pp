@@ -20,7 +20,7 @@ define maestro::plugin($version, $dir = 'com/maestrodev') {
     $plugin_file = "${name}-${version}-bin.zip"
 
     # download the plugin to /usr/local/src
-    wget::authfetch { "fetch-maestro-plugin-${name}":
+    wget::fetch { "fetch-maestro-plugin-${name}":
       user        => $maestro::params::repo['username'],
       password    => $maestro::params::repo['password'],
       source      => "${maestro::params::repo['url']}/${dir}/${name}/${base_version}/${name}-${version}-bin.zip",

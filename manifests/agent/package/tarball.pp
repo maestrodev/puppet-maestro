@@ -16,7 +16,7 @@ class maestro::agent::package::tarball(
     group   => $agent_group,
   }
 
-  wget::authfetch { 'fetch-agent':
+  wget::fetch { 'fetch-agent':
     user        => $repo['username'],
     password    => $repo['password'],
     source      => "${repo['url']}/com/maestrodev/lucee/agent/${base_version}/agent-${timestamp_version}-bin.tar.gz",
