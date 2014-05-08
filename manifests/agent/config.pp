@@ -8,6 +8,8 @@ class maestro::agent::config(
   $timestamp_version = $maestro::agent::agent_version,
   $facter = $maestro::agent::facter,
   $stomp_host = $maestro::agent::stomp_host,
+  $stomp_username = $maestro::params::stomp_username,
+  $stomp_password = $maestro::params::stomp_password,
   $maven_servers = $maestro::agent::maven_servers,
   $agent_name = $maestro::agent::agent_name,
   $enable_jpda = $maestro::agent::enable_jpda,
