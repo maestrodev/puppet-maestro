@@ -165,7 +165,7 @@
             <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="<%= @jdbc_maestro['driver'] %>"/></Set>
             <Set name="url"><SystemProperty name="database.url" default="<%= @jdbc_maestro['url'] %>"/></Set>
             <Set name="username"><SystemProperty name="database.username" default="<%= @jdbc_maestro['username'] %>"/></Set>
-            <Set name="password"><SystemProperty name="database.password" default="<%= @jdbc_maestro['password'] %>"/></Set>
+            <Set name="password"><SystemProperty name="database.password" default="<%= @jdbc_maestro['password'].nil? ? @db_password : @jdbc_maestro['password'] %>"/></Set>
             <Set name="testOnBorrow">true</Set>
             <Set name="validationQuery">select 1</Set>
           </New>
@@ -194,7 +194,7 @@
             <Set name="driverClassName"><SystemProperty name="database.driverClassName" default="<%= @jdbc_users['driver'] %>"/></Set>
             <Set name="url"><SystemProperty name="database.url" default="<%= @jdbc_users['url'] %>"/></Set>
             <Set name="username"><SystemProperty name="database.username" default="<%= @jdbc_users['username'] %>"/></Set>
-            <Set name="password"><SystemProperty name="database.password" default="<%= @jdbc_users['password'] %>"/></Set>
+            <Set name="password"><SystemProperty name="database.password" default="<%= @jdbc_users['password'].nil? ? @db_password : @jdbc_users['password'] %>"/></Set>
             <Set name="testOnBorrow">true</Set>
             <Set name="validationQuery">select 1</Set>
           </New>

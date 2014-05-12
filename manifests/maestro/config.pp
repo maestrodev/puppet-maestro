@@ -38,13 +38,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   $configdir = "${basedir}/conf"
   $wrapper = "${configdir}/wrapper.conf"
 
-  if $jdbc_maestro['password'] == undef {
-    $jdbc_maestro['password'] = $db_password
-  }
-  if $jdbc_users['password'] == undef {
-    $jdbc_users['password'] = $db_password
-  }
-
   File {
     owner => $maestro::params::user,
     group => $maestro::params::group,
