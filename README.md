@@ -6,35 +6,24 @@ Puppet module for installing Maestro and related software
 Simple configuration
 --------------------
 
-First, declare the variables that will be used across both nodes.
+First, declare the yum repository
 
-    $maestro_version = '4.11.0'
-    $agent_version   = '1.6.0'
-    
-    # Choose the following passwords as you wish  
-    # note that admin password needs to validate against the password rules (letters+numbers by default)
-    $maestro_db_server_password = '...'   # Password on the Postgres admin user
-    $maestro_db_password        = '...'   # Password on the Maestro database user
-    $maestro_master_password    = '...'   # Password used to encrypt other passwords
-    $maestro_adminpassword      = '...'   # Initial Maestro administrator user password
-    
     # Use credentials provided by MaestroDev for trial / subscription
-    $repo = {
-      url      => 'https://repo.maestrodev.com/archiva/repository/all/',
-      username => '...',
-      password => '...',
+    class { 'maestro::yumrepo':
+      username => $maestrodev_username,
+      password => $maestrodev_password,
     }
 
 
 On the Maestro node, you'll need Maestro and ActiveMQ:
 
     class { 'java': package => 'java-1.6.0-openjdk-devel' }
-    
-    include maestro
-    
-    class { 'maestro::maestro' :
-      repo      => $repo,
-      version   => $maestro_version,
+        
+    class { 'maestro::maestro':
+      admin_password     => "admin1",
+      master_password    => "admin1",
+      db_server_password => "admin1",
+      db_password        => "admin1",
     }
     
     # ActiveMQ, with Stomp connector enabled
@@ -49,9 +38,7 @@ On the agent node(s), install the agent.
 
     class { 'java': package => 'java-1.6.0-openjdk-devel' }
 
-    class { 'maestro::agent':
-      agent_version  => $agent_version,
-    }
+    class { 'maestro::agent': }
     Package['java'] -> Service['maestro-agent']
 
 
@@ -72,6 +59,11 @@ Maestro:
       driver => "org.postgresql.Driver",
       username => "maestro",
       password => $maestro_db_password,
+    }
+    $repo = {
+      url      => 'https://repo.maestrodev.com/archiva/repository/all/',
+      username => '...',
+      password => '...',
     }
     class { archiva:
       repo => $repo,

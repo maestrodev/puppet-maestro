@@ -1,8 +1,6 @@
 notify { "using MAESTRODEV_USERNAME=$maestrodev_username": }
 
-# Use credentials provided by MaestroDev for trial / subscription
-$repo = {
-  url      => 'https://repo.maestrodev.com/archiva/repository/all/',
+class { 'maestro::yumrepo':
   username => $maestrodev_username,
   password => $maestrodev_password,
 }
@@ -15,4 +13,3 @@ firewall { '900 enable ssh':
   dport => "22",
   proto => "tcp",
 }
-
