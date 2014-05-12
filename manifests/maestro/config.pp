@@ -160,11 +160,6 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
     }
   }
 
-  augeas { 'show-snapshot-version':
-    incl      => "${homedir}/apps/maestro/WEB-INF/classes/filterValues.properties",
-    changes   => "set artifactVersion ${version}",
-  }
-
   if $initmemory != undef {
     augeas { 'maestro-wrapper-initmemory':
       incl      => $wrapper,
