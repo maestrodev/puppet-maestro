@@ -52,7 +52,7 @@ describe 'maestro::maestro' do
 
     it "should create a maestro.properties file" do
       content = subject.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
-      content.should =~ /^google\.analytics\.propertyId = $/
+      content.should =~ /^client.google.analytics.propertyId = $/
     end
 
     it "should create the right LuCEE client configuration" do
@@ -147,7 +147,7 @@ describe 'maestro::maestro' do
 
     it "should create a maestro.properties file" do
       content = subject.resource('file', '/var/local/maestro/conf/maestro.properties').send(:parameters)[:content]
-      content.should =~ /^google\.analytics\.propertyId = ABC123$/
+      content.should =~ /^client.google.analytics.propertyId = ABC123$/
     end
   end
 
