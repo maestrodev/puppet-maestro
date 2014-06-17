@@ -134,7 +134,7 @@ class maestro::maestro::config($repo = $maestro::maestro::repo,
   augeas { 'update-default-configurations':
     changes => [
       "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] ${admin_password}",
-      "rm default-configuration/users/*[username/#text != 'admin']",
+      "rm default-configuration/users/*[username/#text != 'admin' and username/#text != 'guest']",
       "set default-configuration/users/*/username/#text[../../username/#text = 'admin'] ${admin}",
     ],
     incl    => "${basedir}/conf/default-configurations.xml",
