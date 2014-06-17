@@ -312,7 +312,7 @@ describe 'maestro::maestro' do
       it "should change the admin user and password" do
         should contain_augeas('update-default-configurations').with_changes([
           "set default-configuration/users/*/password/#text[../../username/#text = 'admin'] somepassword",
-          "rm default-configuration/users/*[username/#text != 'admin']",
+          "rm default-configuration/users/*[username/#text != 'admin' and username/#text != 'guest']",
           "set default-configuration/users/*/username/#text[../../username/#text = 'admin'] somename"
         ])
       end
