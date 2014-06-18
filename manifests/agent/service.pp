@@ -7,6 +7,9 @@ class maestro::agent::service {
     'RedHat', 'Debian': {
       include maestro::agent::service::linux
     }
+    'windows': {
+      include maestro::agent::service::windows
+    }
     default: {
       fail("Unsupported operating system family: ${::osfamily}")
     }

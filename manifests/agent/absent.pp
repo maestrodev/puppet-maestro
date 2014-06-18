@@ -4,6 +4,8 @@ class maestro::agent::absent(
   $user_home = undef,
   $basedir = '/var/maestro-agent') inherits maestro::params {
 
+  # TODO: support Windows
+
   service { 'maestro-agent':
     ensure => stopped,
     enable => false,

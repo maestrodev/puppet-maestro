@@ -21,26 +21,6 @@ class maestro::agent::config(
 
   $wrapper = "${agent_user_home}/conf/wrapper.conf"
 
-  Augeas {
-    incl      => $wrapper,
-    lens      => "Properties.lns",
-    require   => [Anchor['maestro::agent::package::end']],
-    notify    => Service['maestro-agent'],
-  }
-
-  case $::operatingsystem {
-    'Darwin': {
-      $java_home ='/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home'
-      $managehome = false
-      $sed_suffix = " ''"
-    }
-    default: {
-      $sed_suffix = ''
-      $java_home='/usr/lib/jvm/java'
-      $managehome = true
-    }
-  }
-
   file { 'maestro_agent.json':
     path    => "${agent_user_home}/conf/maestro_agent.json",
     content => template('maestro/agent/maestro_agent.json.erb'),
@@ -49,50 +29,63 @@ class maestro::agent::config(
     notify  => Service['maestro-agent'],
   }
 
-  # adjust wrapper.conf
-  if $maxmemory != undef {
-    augeas { "maestro-agent-wrapper-maxmemory":
-      changes   => [
-        "set wrapper.java.maxmemory ${maxmemory}",
-      ],
-    }
-  }
-
-  augeas { "maestro-agent-wrapper-debug-and-tmpdir":
-    changes   => [
-      # not needed for agents >= 2.1.0
-      "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
-      "set wrapper.java.additional.4 -XX:HeapDumpPath=%MAESTRO_HOME%/logs",
-      "set wrapper.java.additional.5 -Djava.io.tmpdir=%MAESTRO_HOME%/tmp",
-    ],
-  }
-
-  if $jmxremote {
-    augeas { "maestro-agent-wrapper-jmxremote":
-      changes   => [
-        "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote",
-        "set wrapper.java.additional.7 -Dcom.sun.management.jmxremote.port=${jmxport}",
-        "set wrapper.java.additional.8 -Dcom.sun.management.jmxremote.authenticate=false",
-        "set wrapper.java.additional.9 -Dcom.sun.management.jmxremote.ssl=false",
-        "set wrapper.java.additional.10 -Djava.rmi.server.hostname=${rmi_server_hostname}",
-      ],
-    }
+  if $::osfamily == 'Windows' {
+    # TODO: a way to install augeas on Windows, or just do it differently?
+    notice('wrapper.conf modifications not yet supported on Windows')
   } else {
-    augeas { "maestro-agent-wrapper-jmxremote-disable":
-    incl      => '/var/local/maestro-agent/conf/wrapper.conf',
-    lens      => "Properties.lns",
+
+    Augeas {
+      incl      => $wrapper,
+      lens      => "Properties.lns",
+      require   => [Anchor['maestro::agent::package::end']],
+      notify    => Service['maestro-agent'],
+    }
+
+    # adjust wrapper.conf
+    if $maxmemory != undef {
+      augeas { "maestro-agent-wrapper-maxmemory":
+        changes   => [
+          "set wrapper.java.maxmemory ${maxmemory}",
+        ],
+      }
+    }
+
+    augeas { "maestro-agent-wrapper-debug-and-tmpdir":
       changes   => [
-        "rm *[. =~ regexp('-Dcom.sun.management.jmxremote.*')]",
-        "rm *[. =~ regexp('-Djava.rmi.server.hostname.*')]",
+        # not needed for agents >= 2.1.0
+        "set wrapper.java.additional.3 -XX:+HeapDumpOnOutOfMemoryError",
+        "set wrapper.java.additional.4 -XX:HeapDumpPath=%MAESTRO_HOME%/logs",
+        "set wrapper.java.additional.5 -Djava.io.tmpdir=%MAESTRO_HOME%/tmp",
       ],
     }
-  }
 
-  if $enable_jpda {
-    augeas { "maestro-agent-wrapper-jpda":
-      changes   => [
-        "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
-      ],
+    if $jmxremote {
+      augeas { "maestro-agent-wrapper-jmxremote":
+        changes   => [
+          "set wrapper.java.additional.6 -Dcom.sun.management.jmxremote",
+          "set wrapper.java.additional.7 -Dcom.sun.management.jmxremote.port=${jmxport}",
+          "set wrapper.java.additional.8 -Dcom.sun.management.jmxremote.authenticate=false",
+          "set wrapper.java.additional.9 -Dcom.sun.management.jmxremote.ssl=false",
+          "set wrapper.java.additional.10 -Djava.rmi.server.hostname=${rmi_server_hostname}",
+        ],
+      }
+    } else {
+      augeas { "maestro-agent-wrapper-jmxremote-disable":
+      incl      => '/var/local/maestro-agent/conf/wrapper.conf',
+      lens      => "Properties.lns",
+        changes   => [
+          "rm *[. =~ regexp('-Dcom.sun.management.jmxremote.*')]",
+          "rm *[. =~ regexp('-Djava.rmi.server.hostname.*')]",
+        ],
+      }
+    }
+
+    if $enable_jpda {
+      augeas { "maestro-agent-wrapper-jpda":
+        changes   => [
+          "set wrapper.java.additional.11 -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n",
+        ],
+      }
     }
   }
 
@@ -121,12 +114,12 @@ class maestro::agent::config(
     }
   }
 
-  file { "${srcdir}/maestro-agent.version":
-    content => "${timestamp_version}\n",
-  }
-
   # tarballs and older rpms
   if ($maestro::agent::package_type == 'tarball') or (versioncmp($maestro::agent::agent_version, '2.1.0') < 0) {
+
+    file { "${srcdir}/maestro-agent.version":
+      content => "${timestamp_version}\n",
+    }
 
     file { $wrapper:
       ensure  => link,
