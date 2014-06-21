@@ -40,6 +40,7 @@ class maestro::agent::package(
         agent_group       => $agent_group,
         agent_user_home   => $agent_user_home,
       }
+      contain 'maestro::agent::package::tarball'
     }
     'rpm': {
       anchor { 'maestro::agent::package::begin': } -> Class['maestro::agent::package::rpm'] -> anchor { 'maestro::agent::package::end': }
@@ -47,11 +48,13 @@ class maestro::agent::package(
       class { 'maestro::agent::package::rpm':
         version => $version,
       }
+      contain 'maestro::agent::package::rpm'
     }
     'windows': {
       anchor { 'maestro::agent::package::begin': } -> Class['maestro::agent::package::windows'] -> anchor { 'maestro::agent::package::end': }
 
       class { 'maestro::agent::package::windows': }
+      contain 'maestro::agent::package::windows'
     }
     default: {
       fail("Invalid Maestro package type: ${type}")
